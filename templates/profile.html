@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}My Profile — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+
+    <!-- Page header -->
+    <div class="profile-header">
+        <div class="profile-header-left">
+            <i data-lucide="user"></i>
+            <h1 class="profile-title">My Profile</h1>
+        </div>
+        <p class="profile-subtitle">Manage your account and view your spending</p>
+    </div>
+
+    <!-- User info card -->
+    <div class="profile-card">
+        <div class="avatar-circle">{{ user.initials }}</div>
+        <div class="profile-card-info">
+            <h2 class="profile-name">{{ user.name }}</h2>
+            <p class="profile-email">{{ user.email }}</p>
+            <p class="profile-since">Member since {{ user.member_since }}</p>
+        </div>
+        <div class="profile-card-actions">
+            <button class="btn-ghost btn-disabled" disabled>Change password</button>
+        </div>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <i data-lucide="credit-card" class="stat-icon"></i>
+            <span class="stat-value">{{ stats.total_spent }}</span>
+            <span class="stat-label">Total spent this month</span>
+        </div>
+        <div class="stat-card">
+            <i data-lucide="list" class="stat-icon"></i>
+            <span class="stat-value">{{ stats.transaction_count }}</span>
+            <span class="stat-label">Transactions</span>
+        </div>
+        <div class="stat-card">
+            <i data-lucide="tag" class="stat-icon"></i>
+            <span class="stat-value">{{ stats.top_category }}</span>
+            <span class="stat-label">Top category</span>
+        </div>
+    </div>
+
+    <!-- Two-column grid: transactions + category breakdown -->
+    <div class="profile-grid">
+
+        <!-- Transaction history -->
+        <div class="tx-table-wrap">
+            <h3 class="section-heading">Recent Transactions</h3>
+            <table class="tx-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th class="tx-amount-col">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tx in transactions %}
+                    <tr>
+                        <td class="tx-date">{{ tx.date }}</td>
+                        <td>{{ tx.description }}</td>
+                        <td>
+                            <span class="badge badge--{{ tx.category | lower }}">{{ tx.category }}</span>
+                        </td>
+                        <td class="tx-amount">{{ tx.amount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Category breakdown -->
+        <div class="category-breakdown">
+            <h3 class="section-heading">Spending by Category</h3>
+            <div class="category-list">
+                {% for cat in categories %}
+                <div class="category-row cat--{{ cat.name | lower }}">
+                    <div class="category-row-top">
+                        <span class="category-name">{{ cat.name }}</span>
+                        <span class="category-amount">{{ cat.amount }}</span>
+                    </div>
+                    <div class="category-bar-track">
+                        <div class="category-bar-fill" style="--pct: {{ cat.pct }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>lucide.createIcons();</script>
+{% endblock %}
