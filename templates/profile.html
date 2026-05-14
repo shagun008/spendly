@@ -30,6 +30,33 @@
         </div>
     </div>
 
+    <!-- Date filter bar -->
+    <div class="filter-bar">
+        <div class="filter-presets">
+            <a href="{{ url_for('profile') }}"
+               class="filter-btn{% if active_preset == 'all_time' %} filter-btn--active{% endif %}">All Time</a>
+            <a href="{{ url_for('profile', date_from=presets.this_month[0], date_to=presets.this_month[1]) }}"
+               class="filter-btn{% if active_preset == 'this_month' %} filter-btn--active{% endif %}">This Month</a>
+            <a href="{{ url_for('profile', date_from=presets.last_3_months[0], date_to=presets.last_3_months[1]) }}"
+               class="filter-btn{% if active_preset == 'last_3_months' %} filter-btn--active{% endif %}">Last 3 Months</a>
+            <a href="{{ url_for('profile', date_from=presets.last_6_months[0], date_to=presets.last_6_months[1]) }}"
+               class="filter-btn{% if active_preset == 'last_6_months' %} filter-btn--active{% endif %}">Last 6 Months</a>
+        </div>
+        <form class="filter-custom" method="get" action="{{ url_for('profile') }}">
+            <input type="date" name="date_from" value="{{ date_from }}" class="filter-input">
+            <span class="filter-sep">to</span>
+            <input type="date" name="date_to" value="{{ date_to }}" class="filter-input">
+            <button type="submit" class="filter-btn filter-btn--apply">Apply</button>
+        </form>
+    </div>
+    {% if date_from or date_to %}
+    <p class="filter-notice">
+        Showing results
+        {% if date_from %} from <strong>{{ date_from }}</strong>{% endif %}
+        {% if date_to %} to <strong>{{ date_to }}</strong>{% endif %}
+    </p>
+    {% endif %}
+
     <!-- Summary stats -->
     <div class="stats-row">
         <div class="stat-card">

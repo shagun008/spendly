@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import check_password_hash
 from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
@@ -106,6 +107,14 @@ def logout():
     return redirect(url_for("landing"))
 
 
+def _parse_date(value):
+    try:
+        datetime.strptime(value, "%Y-%m-%d")
+        return value
+    except (ValueError, TypeError):
+        return ""
+
+
 @app.route("/profile")
 def profile():
     if not session.get("user_id"):
@@ -113,10 +122,33 @@ def profile():
 
     user_id = session["user_id"]
 
+    date_from = _parse_date(request.args.get("date_from", ""))
+    date_to   = _parse_date(request.args.get("date_to", ""))
+
+    if date_from and date_to and date_from > date_to:
+        flash("Start date must be before end date.")
+        date_from = date_to = ""
+
+    date_from = date_from or None
+    date_to   = date_to or None
+
+    today = date.today()
+    presets = {
+        "this_month":    (today.replace(day=1).isoformat(), today.isoformat()),
+        "last_3_months": ((today - timedelta(days=90)).isoformat(), today.isoformat()),
+        "last_6_months": ((today - timedelta(days=180)).isoformat(), today.isoformat()),
+    }
+
+    active_preset = "all_time"
+    for name, (pf, pt) in presets.items():
+        if date_from == pf and date_to == pt:
+            active_preset = name
+            break
+
     user = get_user_by_id(user_id)
-    stats = get_summary_stats(user_id)
-    transactions = get_recent_transactions(user_id)
-    categories = get_category_breakdown(user_id)
+    stats = get_summary_stats(user_id, date_from=date_from, date_to=date_to)
+    transactions = get_recent_transactions(user_id, date_from=date_from, date_to=date_to)
+    categories = get_category_breakdown(user_id, date_from=date_from, date_to=date_to)
 
     return render_template(
         "profile.html",
@@ -124,6 +156,10 @@ def profile():
         stats=stats,
         transactions=transactions,
         categories=categories,
+        date_from=date_from or "",
+        date_to=date_to or "",
+        presets=presets,
+        active_preset=active_preset,
     )
 
 
