@@ -1,3 +1,4 @@
+import math
 import sqlite3
 from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, flash, session
@@ -8,10 +9,13 @@ from database.queries import (
     get_recent_transactions,
     get_summary_stats,
     get_category_breakdown,
+    insert_expense,
 )
 
 app = Flask(__name__)
 app.secret_key = "spendly-dev-secret"
+
+VALID_CATEGORIES = ["Food", "Transport", "Bills", "Health", "Entertainment", "Shopping", "Other"]
 
 with app.app_context():
     init_db()
@@ -163,9 +167,58 @@ def profile():
     )
 
 
-@app.route("/expenses/add")
+@app.route("/analytics")
+def analytics():
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+    return render_template("analytics.html")
+
+
+@app.route("/expenses/add", methods=["GET", "POST"])
 def add_expense():
-    return "Add expense — coming in Step 7"
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    if request.method == "GET":
+        today = date.today().isoformat()
+        return render_template("add_expense.html", today=today,
+                               categories=VALID_CATEGORIES)
+
+    raw_amount  = request.form.get("amount", "").strip()
+    category    = request.form.get("category", "").strip()
+    raw_date    = request.form.get("date", "").strip()
+    description = request.form.get("description", "").strip() or None
+
+    error = None
+    try:
+        amount = float(raw_amount)
+        if amount <= 0 or not math.isfinite(amount):
+            raise ValueError
+    except ValueError:
+        error = "Amount must be a number greater than 0."
+
+    if not error and category not in VALID_CATEGORIES:
+        error = "Please select a valid category."
+
+    if not error:
+        try:
+            datetime.strptime(raw_date, "%Y-%m-%d")
+        except (ValueError, TypeError):
+            error = "Please enter a valid date."
+
+    if not error and description and len(description) > 200:
+        error = "Description must be 200 characters or fewer."
+
+    if error:
+        flash(error)
+        return render_template("add_expense.html",
+                               categories=VALID_CATEGORIES,
+                               form=request.form,
+                               today=date.today().isoformat())
+
+    insert_expense(session["user_id"], amount, category, raw_date, description)
+    flash("Expense added.", "success")
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/edit")

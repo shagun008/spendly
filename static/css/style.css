@@ -103,6 +103,10 @@ a { color: inherit; text-decoration: none; }
 .nav-links a { color: var(--ink-muted); transition: color 0.2s; }
 .nav-links a:hover { color: var(--ink); }
 
+.nav-link { color: var(--ink-muted); transition: color 0.2s; }
+.nav-link:hover { color: var(--ink); }
+.nav-link--active { color: var(--accent) !important; font-weight: 600; }
+
 .nav-cta {
     background: var(--ink) !important;
     color: var(--paper) !important;
@@ -595,4 +599,10 @@ a { color: inherit; text-decoration: none; }
     font-family: var(--font-body);
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
+}
+
+.flash-message--success {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent);
 }
