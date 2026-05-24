@@ -435,3 +435,28 @@
     color: var(--ink-muted);
     margin-bottom: 1rem;
 }
+
+.tx-actions {
+    white-space: nowrap;
+}
+
+.tx-delete-form {
+    display: inline;
+    margin: 0;
+}
+
+.tx-delete-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 0.75rem;
+    cursor: pointer;
+    color: var(--danger);
+    font-size: inherit;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+
+.tx-delete-btn:hover {
+    text-decoration: underline;
+}

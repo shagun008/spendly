@@ -1,8 +1,7 @@
-"""Read-only query helpers for the profile page.
+"""Query helpers for the profile page and expense mutations.
 
 Each helper opens its own sqlite3 connection via get_db(), executes a
-parameterised query, formats the result for direct rendering by
-templates/profile.html, and closes the connection before returning.
+parameterised query, and closes the connection before returning.
 """
 
 from datetime import datetime
@@ -173,3 +172,14 @@ def update_expense(expense_id, user_id, amount, category, expense_date, descript
     )
     conn.commit()
     conn.close()
+
+
+def delete_expense(expense_id, user_id):
+    conn = get_db()
+    cursor = conn.execute(
+        "DELETE FROM expenses WHERE id = ? AND user_id = ?",
+        (expense_id, user_id),
+    )
+    conn.commit()
+    conn.close()
+    return cursor.rowcount
