@@ -4,6 +4,7 @@ Each helper opens its own sqlite3 connection via get_db(), executes a
 parameterised query, formats the result for direct rendering by
 templates/profile.html, and closes the connection before returning.
 """
+
 from datetime import datetime
 
 from database.db import get_db
@@ -52,7 +53,7 @@ def get_user_by_id(user_id):
 def get_recent_transactions(user_id, limit=10, date_from=None, date_to=None):
     clause, params = _date_clause(date_from, date_to)
     sql = (
-        "SELECT date, description, category, amount FROM expenses "
+        "SELECT id, date, description, category, amount FROM expenses "
         "WHERE user_id = ?"
     )
     if clause:
@@ -63,6 +64,7 @@ def get_recent_transactions(user_id, limit=10, date_from=None, date_to=None):
     conn.close()
     return [
         {
+            "id": row["id"],
             "date": datetime.strptime(row["date"], "%Y-%m-%d").strftime("%b %d, %Y"),
             "description": row["description"],
             "category": row["category"],
@@ -139,6 +141,35 @@ def get_category_breakdown(user_id, date_from=None, date_to=None):
         categories[0]["pct"] += 100 - pct_sum
 
     return [
-        {"name": c["name"], "amount": c["amount"], "pct": c["pct"]}
-        for c in categories
+        {"name": c["name"], "amount": c["amount"], "pct": c["pct"]} for c in categories
     ]
+
+
+def get_expense_by_id(expense_id, user_id):
+    conn = get_db()
+    row = conn.execute(
+        "SELECT id, amount, category, date, description "
+        "FROM expenses WHERE id = ? AND user_id = ?",
+        (expense_id, user_id),
+    ).fetchone()
+    conn.close()
+    if row is None:
+        return None
+    return {
+        "id": row["id"],
+        "amount": row["amount"],
+        "category": row["category"],
+        "date": row["date"],
+        "description": row["description"] or "",
+    }
+
+
+def update_expense(expense_id, user_id, amount, category, expense_date, description):
+    conn = get_db()
+    conn.execute(
+        "UPDATE expenses SET amount=?, category=?, date=?, description=? "
+        "WHERE id = ? AND user_id = ?",
+        (amount, category, expense_date, description, expense_id, user_id),
+    )
+    conn.commit()
+    conn.close()
