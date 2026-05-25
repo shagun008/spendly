@@ -12,6 +12,20 @@
 </head>
 <body>
 
+    {% macro nav_links(base_class, cta_class, username_class) %}
+        {% if session.get("user_id") %}
+        <a href="{{ url_for('add_expense') }}"
+           class="{{ base_class }}{% if request.endpoint == 'add_expense' %} nav-link--active{% endif %}">Add Expense</a>
+        <a href="{{ url_for('analytics') }}"
+           class="{{ base_class }}{% if request.endpoint == 'analytics' %} nav-link--active{% endif %}">Analytics</a>
+        <a href="{{ url_for('profile') }}" class="{{ base_class }} {{ username_class }}">{{ session["user_name"] }}</a>
+        <a href="{{ url_for('logout') }}" class="{{ base_class }} {{ cta_class }}">Logout</a>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="{{ base_class }}">Sign in</a>
+        <a href="{{ url_for('register') }}" class="{{ base_class }} {{ cta_class }}">Get started</a>
+        {% endif %}
+    {% endmacro %}
+
     <nav class="navbar">
         <div class="nav-inner">
             <a href="{{ url_for('landing') }}" class="nav-brand">
@@ -19,18 +33,15 @@
                 <span class="brand-name">Spendly</span>
             </a>
             <div class="nav-links">
-                {% if session.get("user_id") %}
-                <a href="{{ url_for('add_expense') }}"
-                   class="nav-link{% if request.endpoint == 'add_expense' %} nav-link--active{% endif %}">Add Expense</a>
-                <a href="{{ url_for('analytics') }}"
-                   class="nav-link{% if request.endpoint == 'analytics' %} nav-link--active{% endif %}">Analytics</a>
-                <a href="{{ url_for('profile') }}" class="nav-username">{{ session["user_name"] }}</a>
-                <a href="{{ url_for('logout') }}" class="nav-cta">Logout</a>
-                {% else %}
-                <a href="{{ url_for('login') }}">Sign in</a>
-                <a href="{{ url_for('register') }}" class="nav-cta">Get started</a>
-                {% endif %}
+                {{ nav_links('nav-link', 'nav-cta', 'nav-username') }}
             </div>
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <div class="nav-mobile-menu" id="nav-mobile-menu" aria-hidden="true">
+            {{ nav_links('nav-mobile-link', 'nav-mobile-cta', 'nav-mobile-username') }}
         </div>
     </nav>
 
