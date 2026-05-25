@@ -28,6 +28,8 @@
     --radius-sm: 6px;
     --radius-md: 12px;
     --radius-lg: 20px;
+
+    --nav-height: 60px;
 }
 
 /* ------------------------------------------------------------------ */
@@ -69,7 +71,7 @@ a { color: inherit; text-decoration: none; }
 .nav-inner {
     max-width: var(--max-width);
     margin: 0 auto;
-    height: 60px;
+    height: var(--nav-height);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -579,8 +581,87 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 600px) {
-    .nav-links a:not(.nav-cta) { display: none; }
+    .nav-links { display: none; }
     .hero { padding: 3rem 1rem 2rem; }
+
+    .nav-hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.3rem;
+        width: 36px;
+        height: 36px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+    }
+
+    .nav-hamburger span {
+        display: block;
+        height: 2px;
+        width: 100%;
+        background: var(--ink);
+        border-radius: 2px;
+        transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .nav-hamburger[aria-expanded="true"] span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(2) {
+        opacity: 0;
+    }
+    .nav-hamburger[aria-expanded="true"] span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .nav-mobile-menu {
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        z-index: 99;
+        background: var(--paper);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 1.5rem 1.5rem;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .nav-mobile-menu.is-open { display: flex; }
+
+    .nav-mobile-link {
+        display: block;
+        padding: 0.65rem 0.5rem;
+        color: var(--ink-muted);
+        font-size: 1rem;
+        font-weight: 500;
+        border-bottom: 1px solid var(--border);
+        transition: color 0.2s;
+    }
+
+    .nav-mobile-link:last-child { border-bottom: none; }
+    .nav-mobile-link:hover { color: var(--ink); }
+    .nav-mobile-link.nav-link--active { color: var(--accent); }
+
+    .nav-mobile-username {
+        color: var(--ink);
+        font-weight: 600;
+    }
+
+    .nav-mobile-link.nav-mobile-cta {
+        margin-top: 0.5rem;
+        text-align: center;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.6rem 1rem;
+        border-radius: var(--radius-sm);
+        border-bottom: none;
+    }
+
+    .nav-mobile-link.nav-mobile-cta:hover { background: var(--accent); color: var(--paper); }
 }
 
 /* ── Flash messages ────────────────────────────────────── */
