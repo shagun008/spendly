@@ -1,0 +1,432 @@
+## Feature Spec Summary — **Feature Requests Page + Public Feature Discovery**
+
+### Objective
+
+Create a **Feature Requests system** where logged-in users can suggest product improvements/features for specific app pages. These requests should also be publicly discoverable on the Home Page and a dedicated "All Features" page, with voting, popularity indicators, and privacy protection.
+
+---
+
+# 1. New Header Navigation Item
+
+### Add Navigation Link
+
+Show a new top-header menu item:
+
+**`Features`**
+
+### Visibility Rules
+
+* **Visible only when user is logged in**
+* Clicking opens the new **Feature Requests Page**
+
+---
+
+# 2. Feature Requests Page (Logged-in Users)
+
+## Layout
+
+Two-column layout:
+
+### Left Panel — Existing Feature Requests List
+
+Display all submitted feature requests.
+
+Each feature card should show:
+
+* Page Tag / Category
+* Feature Title
+* Short Description Preview
+* Vote Count (thumbs up)
+* View/Open Count
+* Submission Status badge (optional: Submitted / Under Review / Planned / Completed)
+* User Avatar Initials only (NOT full name)
+* Timestamp (e.g., "5 min ago")
+
+Allow:
+
+* Sorting:
+
+  * Latest
+  * Most Upvoted
+  * Most Viewed
+  * Trending
+
+* Filtering by Page
+
+---
+
+### Right Panel — Add Feature Request Form
+
+Form fields:
+
+#### Field 1 — Page Selector
+
+**Type:** Dropdown
+
+Purpose:
+Allows users to specify which app page the feature belongs to.
+
+Populate dynamically from existing application pages.
+
+Example values:
+
+* Home Page
+* Dashboard
+* Profile
+* Issues Page
+* Notifications
+* Settings
+* Analytics
+* etc.
+
+---
+
+#### Field 2 — Feature Title
+
+**Type:** Text Input
+
+Validation:
+
+* Required
+* Max 120 characters
+
+Example:
+
+> "Add dark mode toggle"
+
+---
+
+#### Field 3 — Feature Description
+
+**Type:** Textarea
+
+Validation:
+
+* Required
+* Min 20 characters
+* Max 1000 characters
+
+Example:
+
+> "Allow users to switch between light and dark theme globally."
+
+---
+
+### Submit Button
+
+On submit:
+
+1. Validate form
+2. Create feature request
+3. Save to database
+4. Refresh list instantly
+5. Show success toast/message
+
+---
+
+# 3. Data Model
+
+### FeatureRequest
+
+```ts
+FeatureRequest {
+  id: UUID
+
+  page: string
+  title: string
+  description: text
+
+  createdBy: UserID
+
+  upvotes: number
+  views: number
+
+  status:
+    - submitted
+    - under_review
+    - planned
+    - completed
+
+  createdAt
+  updatedAt
+}
+```
+
+---
+
+### FeatureVote
+
+Prevent duplicate voting.
+
+```ts
+FeatureVote {
+  id: UUID
+  featureId: UUID
+  userId: UUID
+  createdAt
+}
+```
+
+---
+
+### FeatureViewTracking
+
+Track popularity.
+
+```ts
+FeatureView {
+  id: UUID
+  featureId: UUID
+  userId | sessionId
+  viewedAt
+}
+```
+
+---
+
+# 4. Home Page Updates
+
+## Add New Section: **Latest Features**
+
+Similar styling/behavior to screenshots provided.
+
+Display:
+
+### Category Filters
+
+Show all available page categories.
+
+Example:
+
+* All Features
+* Home
+* Dashboard
+* Profile
+* Settings
+* Analytics
+* Notifications
+* etc.
+
+---
+
+### Feature Cards Grid
+
+Display **latest 6 feature requests**.
+
+Each card should include:
+
+* Page Category Label
+* Feature Title
+* Short Description
+* Status Badge
+* Initials Avatar only
+* Time Ago
+* Thumbs Up Count
+* Open/View Count
+
+### Privacy Rule
+
+Do **NOT** display submitter's full name.
+
+Only show:
+
+* User initials avatar
+
+Examples:
+
+✅ **JD**
+✅ **SK**
+
+NOT:
+
+❌ John Doe
+
+---
+
+### View All Features CTA
+
+Button:
+
+**"View All Features →"**
+
+Opens dedicated public listing page.
+
+---
+
+# 5. Public "All Features" Page
+
+Accessible by everyone.
+
+Inspired by Screenshot 2.
+
+## Display
+
+Show complete feature request directory.
+
+Capabilities:
+
+### Search
+
+Search by:
+
+* Title
+* Description
+* Page
+
+---
+
+### Filters
+
+Filter by:
+
+* Page Category
+* Status
+* Most Recent
+* Most Upvoted
+* Trending
+
+---
+
+### Feature Card Content
+
+Each card contains:
+
+* Page Label
+* Feature Title
+* Description snippet
+* Status badge
+* Initials avatar only
+* Relative timestamp
+* 👍 Upvotes
+* 👁 View/Open count
+
+---
+
+### Voting (Thumbs Up)
+
+Users can upvote features.
+
+Rules:
+
+* 1 vote per user per feature
+* Toggle support:
+
+  * Upvote
+  * Remove vote
+
+Immediately update count.
+
+Purpose:
+
+Surface **top trending feature requests**.
+
+---
+
+### View/Open Tracking
+
+Whenever a feature card/detail is opened:
+
+Increment **view count**.
+
+Used for:
+
+* Trending calculations
+* Popularity ranking
+
+---
+
+# 6. Trending Logic
+
+Trending ranking should consider both:
+
+```text
+Trending Score =
+(upvotes * weight)
++
+(recent views * weight)
++
+(recency bonus)
+```
+
+Example:
+
+```text
+score =
+(upvotes × 5)
++
+(views × 1)
++
+(newness multiplier)
+```
+
+Used on:
+
+* Home Page
+* All Features page sorting
+
+---
+
+# 7. Privacy Requirements
+
+Mandatory:
+
+### Public Pages
+
+Never expose:
+
+* Full name
+* Email
+* Username
+
+Only show:
+
+* Generated initials avatar
+
+Example generation:
+
+```text
+John Doe → JD
+Sarah Neal → SN
+```
+
+Internal ownership remains stored in database.
+
+---
+
+# 8. UX / UI Notes
+
+Match existing visual style from screenshots:
+
+* Retro/editorial card design
+* Category badges
+* Strong borders
+* Compact metadata row
+* Multi-filter buttons
+* Grid layout
+
+Maintain consistency with existing **Issues** module.
+
+---
+
+# 9. Acceptance Criteria
+
+### Functional
+
+✅ Logged-in users see **Features** menu in header
+✅ Users can submit feature requests
+✅ Page dropdown exists and is required
+✅ Home page shows latest 6 features
+✅ "View All Features" opens full listing page
+✅ Public pages show all features
+✅ Upvoting works with duplicate prevention
+✅ View/open tracking works
+✅ Sorting/filtering supported
+✅ Privacy enforced (initials only)
+
+### Non-Functional
+
+✅ Responsive layout
+✅ Fast filtering/searching
+✅ Optimistic UI updates for voting
+✅ Secure API validation
+✅ Accessible forms and buttons

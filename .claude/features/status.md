@@ -8,7 +8,9 @@ Nothing in progress
 Nothing in review
 
 ## 📋 Planned — ready to spec
-Nothing planned yet
+- **11.1** DB, Submission, and /features Page (Core)
+- **11.2** Upvoting and Trending
+- **11.3** Home Page "Latest Features" Section
 
 ## 💡 Captured — needs release planning
 Nothing captured yet
