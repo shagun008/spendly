@@ -96,6 +96,18 @@ approves.
 
 ---
 
+## Step 4: Update Status
+
+After presenting the report (regardless of verdict):
+1. Read `.claude/features/registry.md`
+2. Find the release sub-row whose Specs column matches `$ARGUMENTS`
+3. If the release sub-row status is not already `👀 In Review`, update it to `👀 In Review`
+4. Update the parent feature row status if needed
+5. Rewrite `.claude/features/status.md` by reading the full registry and
+   regenerating all sections grouped by status. Set "Last updated" to today's date.
+
+---
+
 ## Rules
 - Do NOT edit any files before user approval
 - Do NOT start one reviewer before the other — 
