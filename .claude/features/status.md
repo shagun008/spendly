@@ -2,20 +2,20 @@
 Last updated: 2026-05-25
 
 ## 🔧 In Progress
-_Nothing currently in progress._
+Nothing in progress
 
 ## 👀 In Review
-_Nothing currently in review._
+Nothing in review
 
 ## 📋 Planned — ready to spec
-_No releases planned yet. Run `/plan-release <number>` after capturing a thought._
+Nothing planned yet
 
 ## 💡 Captured — needs release planning
-_No thoughts captured yet. Run `/capture-thoughts` to add a new idea._
+Nothing captured yet
 
 ## ✅ Recently Shipped (last 5)
-- **10** Mobile Nav
-- **09** Delete Expense
-- **08** Edit Expense
-- **07** Add Expense
-- **06** Date Filter on Profile
+- **10.1** Mobile Nav
+- **09.1** Delete Expense
+- **08.1** Edit Expense
+- **07.1** Add Expense
+- **06.1** Date Filter on Profile
