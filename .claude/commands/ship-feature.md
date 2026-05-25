@@ -98,6 +98,18 @@ git branch -D CURRENT_BRANCH
 ```
 Report: "✓ Local branch deleted"
 
+## Step 9b — Update registry and status
+
+1. Read `.claude/features/registry.md`
+2. Derive the spec filename from CURRENT_BRANCH slug — find the matching release
+   sub-row whose Specs column contains that slug
+3. Update that release sub-row Status to `✅ Shipped`
+4. Check if all release sub-rows for this parent feature are now `✅ Shipped`
+   - If yes: update the parent feature row Status to `✅ Shipped`
+   - If no: update the parent feature row Status to reflect the least-complete remaining release
+5. Rewrite `.claude/features/status.md` by reading the full registry and
+   regenerating all sections grouped by status. Set "Last updated" to today's date.
+
 ## Final summary
 Print:
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌

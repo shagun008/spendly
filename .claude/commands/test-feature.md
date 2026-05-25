@@ -95,3 +95,19 @@ summary:
 One of:
 - ✅ Ready for code review — all tests pass
 - ❌ Needs fixes — list the failing tests and their root causes
+
+---
+
+## Status Update
+
+If tests pass (verdict is ✅):
+1. Read `.claude/features/registry.md`
+2. Find the release sub-row whose Specs column matches `$ARGUMENTS`
+   (e.g. if $ARGUMENTS is `11.1-budget-alerts-mvp`, find the row with that in Specs)
+3. Update that release sub-row Status to `👀 In Review`
+4. Update the parent feature row Status to `👀 In Review` if all active releases
+   are at In Review or better
+5. Rewrite `.claude/features/status.md` by reading the full registry and
+   regenerating all sections grouped by status. Set "Last updated" to today's date.
+
+If tests fail: skip the status update — status remains `🔧 In Progress`.
