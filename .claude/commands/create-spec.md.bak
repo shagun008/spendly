@@ -35,54 +35,35 @@ From $ARGUMENTS extract:
 If you cannot infer these from $ARGUMENTS, ask the user
 to clarify before proceeding.
 
-## Step 3 — Check step number is sequential
-List all existing spec files in `.claude/specs/`.
-Extract the highest existing step number.
-If `step_number` skips more than one step ahead of the highest
-existing step, warn the user and ask them to confirm before
-continuing. Example: if the highest existing spec is 10,
-creating spec 12 should trigger a warning.
-
-## Step 4 — Check previous step is merged
-Run `git branch -r` and `git branch` to check that the branch
-for the previous step (e.g. `feature/<previous-slug>`) is not
-still open. If it is, warn the user that the previous feature
-branch has not been merged and ask them to confirm before
-continuing.
-
-## Step 5 — Check branch name is not taken
+## Step 3 — Check branch name is not taken
 Run `git branch` to list existing branches.
 If `branch_name` is already taken, append a number:
 `feature/registration-01`, `feature/registration-02` etc.
 
-## Step 6 — Switch to main and pull latest
+## Step 4 — Switch to main and pull latest
 Run:
 ```
 git checkout main
 git pull origin main
 ```
 
-## Step 7 — Create and switch to the feature branch
+## Step 5 — Create and switch to the feature branch
 Run:
 ```
 git checkout -b <branch_name>
 ```
 
-## Step 8 — Research the codebase
+## Step 6 — Research the codebase
 Read these files before writing the spec:
-- `CLAUDE.md` — roadmap, conventions, schema (if it exists)
-- `app.py` — existing routes and structure; note every route
-  already defined so the spec does not duplicate them
-- `database/db.py` — existing schema and functions; note every
-  table and column already defined
-- All templates in `templates/` — note existing templates so
-  the spec does not create duplicates
+- `CLAUDE.md` — roadmap, conventions, schema
+- `app.py` — existing routes and structure
+- `database/db.py` — existing schema and functions
 - All files in `.claude/specs/` — avoid duplicating existing specs
 
 Check `CLAUDE.md` to confirm the requested step is not already
 marked complete. If it is, warn the user and stop.
 
-## Step 9 — Write the spec
+## Step 7 — Write the spec
 Generate a spec document with this exact structure:
 
 ---
@@ -96,15 +77,14 @@ it exists at this stage of the Spendly roadmap.
 Which previous steps this feature requires to be complete.
 
 ## Routes
-Every new route needed (do not include routes already in app.py):
+Every new route needed:
 - `METHOD /path` — description — access level (public/logged-in)
 
 If no new routes: state "No new routes".
 
 ## Database changes
 Any new tables, columns, or constraints needed.
-Always verify against `database/db.py` before writing this —
-do not list tables or columns that already exist.
+Always verify against `database/db.py` before writing this.
 If none: state "No database changes".
 
 ## Templates
@@ -120,26 +100,8 @@ Every new file that will be created.
 ## New dependencies
 Any new pip packages. If none: state "No new dependencies".
 
-## Error handling
-Specific error cases this feature must handle gracefully:
-- Invalid or missing form input
-- Unauthorised access attempts
-- Database errors or constraint violations
-- Any feature-specific edge cases
-
-## UI/UX notes
-- Form validation feedback (inline errors or flash messages)
-- Redirect behaviour after successful actions
-- Flash message copy for success and error states
-- Accessibility requirements: all forms must have labels,
-  buttons must have descriptive text, colour contrast must
-  meet WCAG AA
-- Responsive design: all new UI must work on mobile screen
-  sizes; use existing CSS breakpoints from `static/css/style.css`
-
 ## Rules for implementation
-Read `CLAUDE.md` for the full list of project constraints.
-If `CLAUDE.md` does not exist, apply these defaults:
+Specific constraints Claude must follow. Always include:
 - No SQLAlchemy or ORMs
 - Parameterised queries only
 - Passwords hashed with werkzeug
@@ -147,15 +109,14 @@ If `CLAUDE.md` does not exist, apply these defaults:
 - All templates extend `base.html`
 
 ## Definition of done
-A specific testable checklist. Each item must be verifiable
-by running the app, and each item must have a corresponding
-pytest test case in the `tests/` directory.
+A specific testable checklist. Each item must be
+something that can be verified by running the app.
 ---
 
-## Step 10 — Save the spec
+## Step 8 — Save the spec
 Save to: `.claude/specs/<step_number>-<feature_slug>.md`
 
-## Step 11 — Report to the user
+## Step 9 — Report to the user
 Print a short summary in this exact format:
 ```
 Branch:    <branch_name>
@@ -165,6 +126,6 @@ Title:     <feature_title>
 
 Then tell the user:
 "Review the spec at `.claude/specs/<step_number>-<feature_slug>.md`
-then enter Plan Mode to begin implementation."
+then enter Plan Mode with Shift+Tab twice to begin implementation."
 
 Do not print the full spec in chat unless explicitly asked.
