@@ -259,6 +259,7 @@ def get_feature_requests(
         "latest": "fr.created_at DESC, fr.id DESC",
         "most_upvoted": "vote_count DESC, fr.created_at DESC, fr.id DESC",
         "most_viewed": "fr.views DESC, fr.created_at DESC, fr.id DESC",
+        "trending": "(vote_count * 5 + fr.views * 1 + MAX(0, 7 - (julianday('now') - julianday(fr.created_at)))) DESC, fr.id DESC",
     }.get(sort, "fr.created_at DESC, fr.id DESC")
 
     sql = f"""
@@ -377,3 +378,27 @@ def increment_feature_view(feature_id, viewer_id):
     conn.commit()
     conn.close()
     return bool(cursor.rowcount)
+
+
+def toggle_feature_vote(feature_id, user_id):
+    conn = get_db()
+    cursor = conn.execute(
+        "INSERT OR IGNORE INTO feature_votes (feature_id, user_id) VALUES (?, ?)",
+        (feature_id, user_id),
+    )
+    if cursor.rowcount == 1:
+        voted = True
+    else:
+        conn.execute(
+            "DELETE FROM feature_votes WHERE feature_id = ? AND user_id = ?",
+            (feature_id, user_id),
+        )
+        voted = False
+    conn.commit()
+    row = conn.execute(
+        "SELECT COUNT(*) FROM feature_votes WHERE feature_id = ?",
+        (feature_id,),
+    ).fetchone()
+    vote_count = row[0]
+    conn.close()
+    return voted, vote_count
