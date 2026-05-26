@@ -237,6 +237,13 @@ def _fr_row_to_dict(row):
     }
 
 
+# Trending score: (votes * 5) + views + recency bonus (max +7 for requests < 7 days old)
+_TRENDING_ORDER = (
+    "(vote_count * 5 + fr.views + MAX(0, 7 - (julianday('now') - julianday(fr.created_at)))) DESC,"
+    " fr.id DESC"
+)
+
+
 def get_feature_requests(
     page_filter=None, status_filter=None, sort="latest", exclude_user_id=None
 ):
@@ -259,6 +266,7 @@ def get_feature_requests(
         "latest": "fr.created_at DESC, fr.id DESC",
         "most_upvoted": "vote_count DESC, fr.created_at DESC, fr.id DESC",
         "most_viewed": "fr.views DESC, fr.created_at DESC, fr.id DESC",
+        "trending": _TRENDING_ORDER,
     }.get(sort, "fr.created_at DESC, fr.id DESC")
 
     sql = f"""
@@ -377,3 +385,38 @@ def increment_feature_view(feature_id, viewer_id):
     conn.commit()
     conn.close()
     return bool(cursor.rowcount)
+
+
+def toggle_feature_vote(feature_id, user_id):
+    conn = get_db()
+    conn.execute("BEGIN")
+    cursor = conn.execute(
+        "INSERT OR IGNORE INTO feature_votes (feature_id, user_id) VALUES (?, ?)",
+        (feature_id, user_id),
+    )
+    if cursor.rowcount == 1:
+        voted = True
+    else:
+        conn.execute(
+            "DELETE FROM feature_votes WHERE feature_id = ? AND user_id = ?",
+            (feature_id, user_id),
+        )
+        voted = False
+    conn.commit()
+    row = conn.execute(
+        "SELECT COUNT(*) FROM feature_votes WHERE feature_id = ?",
+        (feature_id,),
+    ).fetchone()
+    vote_count = row[0]
+    conn.close()
+    return voted, vote_count
+
+
+def get_voted_feature_ids(user_id):
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT feature_id FROM feature_votes WHERE user_id = ?",
+        (user_id,),
+    ).fetchall()
+    conn.close()
+    return {row["feature_id"] for row in rows}

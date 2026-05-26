@@ -21,6 +21,8 @@
                 {% if sort == 'most_upvoted' %}selected{% endif %}>Most Upvoted</option>
         <option value="{{ url_for('features', sort='most_viewed', page_filter=page_filter, status_filter=status_filter) }}"
                 {% if sort == 'most_viewed' %}selected{% endif %}>Most Viewed</option>
+        <option value="{{ url_for('features', sort='trending', page_filter=page_filter, status_filter=status_filter) }}"
+                {% if sort == 'trending' %}selected{% endif %}>Trending</option>
     </select>
 </div>
 
@@ -36,7 +38,9 @@
          data-initials="{{ fr.initials }}"
          data-time-ago="{{ fr.time_ago }}"
          data-vote-count="{{ fr.vote_count }}"
-         data-views="{{ fr.views }}">
+         data-views="{{ fr.views }}"
+         data-voted="{{ 'true' if fr.id in voted_ids else 'false' }}"
+         data-is-own="{{ 'true' if session.get('user_id') and fr.user_id == session.get('user_id') else 'false' }}">
         <div class="fr-card-top">
             <span class="fr-page-badge">{{ fr.page }}</span>
             <span class="fr-status-badge fr-status-badge--{{ fr.status }}">{{ fr.status | replace('_', ' ') | title }}</span>
@@ -46,7 +50,22 @@
         <div class="fr-card-meta">
             <span class="fr-avatar">{{ fr.initials }}</span>
             <span>{{ fr.time_ago }}</span>
-            <span class="fr-meta-count">👍 {{ fr.vote_count }}</span>
+            {% if session.get("user_id") and fr.user_id == session.get("user_id") %}
+            <button class="fr-vote-btn fr-vote-btn--disabled" disabled
+                    title="You can't vote for your own request"
+                    aria-label="You can't vote for your own request"
+                    onclick="event.stopPropagation()">
+                👍 <span class="fr-vote-count">{{ fr.vote_count }}</span>
+            </button>
+            {% else %}
+            <button class="fr-vote-btn{% if fr.id in voted_ids %} fr-vote-btn--voted{% endif %}"
+                    data-feature-id="{{ fr.id }}"
+                    aria-label="Upvote this feature request"
+                    aria-pressed="{{ 'true' if fr.id in voted_ids else 'false' }}"
+                    onclick="event.stopPropagation(); handleVote(this)">
+                👍 <span class="fr-vote-count">{{ fr.vote_count }}</span>
+            </button>
+            {% endif %}
             <span class="fr-meta-count">👁 <span class="fr-views-count">{{ fr.views }}</span></span>
         </div>
     </div>

@@ -24,7 +24,7 @@
 
             {% if own_requests %}
                 {% for fr in own_requests %}
-                <div class="fr-own-card">
+                <div class="fr-own-card" data-is-own="true">{# read by tests to assert own-request cards carry this attribute #}
                     <div class="fr-own-card-top">
                         <span class="fr-own-card-title">{{ fr.title }}</span>
                         <div class="fr-own-card-actions">
@@ -97,8 +97,9 @@
 
 </div>
 
-{# Base URL for view-count endpoint — read by JS to avoid hardcoded paths #}
+{# Base URLs for AJAX endpoints — read by JS to avoid hardcoded paths #}
 <span id="fr-view-base" data-url="{{ url_for('view_feature_request', id=0) }}" hidden></span>
+<span id="fr-vote-base" data-url="{{ url_for('vote_feature_request', id=0) }}" hidden></span>
 
 {# ---- Detail modal ---- #}
 <div class="fr-modal-overlay" id="fr-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="fr-modal-title-text">
@@ -149,17 +150,32 @@
 
         const viewsSpan = makeEl('span', null, d.views);
         viewsSpan.id = 'fr-modal-views';
-        const votesSpan = makeEl('span', null, d.voteCount);
-        votesSpan.id = 'fr-modal-votes';
-        const voteCount = makeEl('span', 'fr-meta-count');
-        voteCount.append('👍 ', votesSpan);
         const viewCount = makeEl('span', 'fr-meta-count');
         viewCount.append('👁 ', viewsSpan);
+
+        const isOwn = d.isOwn === 'true';
+        const isVoted = d.voted === 'true';
+        let voteBtn;
+        if (isOwn) {
+            voteBtn = makeEl('button', 'fr-vote-btn fr-vote-btn--disabled', null);
+            voteBtn.disabled = true;
+            voteBtn.title = "You can't vote for your own request";
+            voteBtn.setAttribute('aria-label', "You can't vote for your own request");
+        } else {
+            voteBtn = makeEl('button', 'fr-vote-btn' + (isVoted ? ' fr-vote-btn--voted' : ''), null);
+            voteBtn.setAttribute('data-feature-id', d.id);
+            voteBtn.setAttribute('aria-pressed', isVoted ? 'true' : 'false');
+            voteBtn.setAttribute('aria-label', 'Upvote this feature request');
+            voteBtn.onclick = function() { handleVote(this); };
+        }
+        const modalVoteCount = makeEl('span', 'fr-vote-count');
+        modalVoteCount.textContent = d.voteCount;
+        voteBtn.append('👍 ', modalVoteCount);
 
         modalMeta.textContent = '';
         modalMeta.appendChild(makeEl('span', 'fr-avatar', d.initials));
         modalMeta.appendChild(makeEl('span', null, d.timeAgo));
-        modalMeta.appendChild(voteCount);
+        modalMeta.appendChild(voteBtn);
         modalMeta.appendChild(viewCount);
 
         overlay.classList.add('fr-modal--open');
@@ -236,7 +252,40 @@
             });
         });
     }
+
 })();
+
+// Global — must be accessible from inline onclick on card buttons
+function handleVote(btn) {
+    const voteBaseEl = document.getElementById('fr-vote-base');
+    if (!voteBaseEl) return;
+    const featureId = btn.getAttribute('data-feature-id');
+    if (!featureId) return;
+    const url = voteBaseEl.dataset.url.replace('/0/', '/' + featureId + '/');
+    fetch(url, { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(r => {
+            if (r.status === 401) { window.location.href = '/login'; return null; }
+            if (!r.ok) return null;
+            return r.json();
+        })
+        .then(json => {
+            if (!json) return;
+            document.querySelectorAll('.fr-vote-btn[data-feature-id="' + featureId + '"]').forEach(b => {
+                b.classList.toggle('fr-vote-btn--voted', json.voted);
+                b.setAttribute('aria-pressed', json.voted ? 'true' : 'false');
+                const countEl = b.querySelector('.fr-vote-count');
+                if (countEl) countEl.textContent = json.upvotes;
+            });
+            // Keep card's data-voted and data-vote-count in sync so openModal
+            // reads the correct state if opened after a vote toggle
+            const card = document.querySelector('.fr-card[data-id="' + featureId + '"]');
+            if (card) {
+                card.dataset.voted = json.voted ? 'true' : 'false';
+                card.dataset.voteCount = json.upvotes;
+            }
+        })
+        .catch(() => {});
+}
 </script>
 <script>lucide.createIcons();</script>
 {% endblock %}

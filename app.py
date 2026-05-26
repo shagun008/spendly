@@ -32,6 +32,8 @@ from database.queries import (
     delete_feature_request,
     count_user_feature_requests,
     increment_feature_view,
+    toggle_feature_vote,
+    get_voted_feature_ids,
 )
 
 app = Flask(__name__)
@@ -57,6 +59,8 @@ VALID_PAGES = [
 ]
 
 MAX_FEATURE_REQUESTS_PER_USER = 5
+
+VALID_SORTS = ["latest", "most_upvoted", "most_viewed", "trending"]
 
 VALID_STATUSES = ["submitted", "under_review", "planned", "completed"]
 
@@ -355,6 +359,8 @@ def delete_expense_route(id):
 def features():
     user_id = session.get("user_id")
     sort = request.args.get("sort", "latest")
+    if sort not in VALID_SORTS:
+        sort = "latest"
     page_filter = request.args.get("page_filter", "")
     status_filter = request.args.get("status_filter", "")
 
@@ -393,10 +399,13 @@ def features():
     )
     own_requests = get_own_feature_requests(user_id) if user_id else []
 
+    voted_ids = get_voted_feature_ids(user_id) if user_id else set()
+
     return render_template(
         "features.html",
         all_requests=all_requests,
         own_requests=own_requests,
+        voted_ids=voted_ids,
         valid_pages=VALID_PAGES,
         sort=sort,
         page_filter=page_filter,
@@ -469,6 +478,19 @@ def view_feature_request(id):
     increment_feature_view(id, session["user_id"])
     updated = get_feature_request_by_id(id)
     return jsonify({"views": updated["views"]})
+
+
+@app.route("/features/<int:id>/vote", methods=["POST"])
+def vote_feature_request(id):
+    if not session.get("user_id"):
+        abort(401)
+    feature = get_feature_request_by_id(id)
+    if feature is None:
+        abort(404)
+    if feature["user_id"] == session["user_id"]:
+        abort(403)
+    voted, vote_count = toggle_feature_vote(id, session["user_id"])
+    return jsonify({"voted": voted, "upvotes": vote_count})
 
 
 if __name__ == "__main__":

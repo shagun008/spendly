@@ -566,6 +566,52 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Upvote button                                                        */
+/* ------------------------------------------------------------------ */
+
+.fr-vote-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--paper-card);
+    color: var(--ink-muted);
+    font-size: 0.78rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    position: relative;
+    z-index: 1;
+}
+
+.fr-vote-btn:hover:not(:disabled) {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.fr-vote-btn--voted {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-color: var(--accent);
+    font-weight: 600;
+}
+
+.fr-vote-btn--voted:hover:not(:disabled) {
+    background: var(--paper-warm);
+    color: var(--ink-muted);
+    border-color: var(--border);
+}
+
+.fr-vote-btn--disabled,
+.fr-vote-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------ */
 /* Responsive                                                           */
 /* ------------------------------------------------------------------ */
 
