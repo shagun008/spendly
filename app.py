@@ -11,6 +11,7 @@ from flask import (
     flash,
     session,
     abort,
+    jsonify,
 )
 from werkzeug.security import check_password_hash
 from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
@@ -23,6 +24,14 @@ from database.queries import (
     get_expense_by_id,
     update_expense,
     delete_expense,
+    get_feature_requests,
+    get_own_feature_requests,
+    get_feature_request_by_id,
+    insert_feature_request,
+    update_feature_request,
+    delete_feature_request,
+    count_user_feature_requests,
+    increment_feature_view,
 )
 
 app = Flask(__name__)
@@ -37,6 +46,34 @@ VALID_CATEGORIES = [
     "Shopping",
     "Other",
 ]
+
+VALID_PAGES = [
+    "Home",
+    "Profile",
+    "Analytics",
+    "Add Expense",
+    "Edit Expense",
+    "Other",
+]
+
+MAX_FEATURE_REQUESTS_PER_USER = 5
+
+VALID_STATUSES = ["submitted", "under_review", "planned", "completed"]
+
+
+def _validate_feature_request_form(page, title, description):
+    if page not in VALID_PAGES:
+        return "Please select a valid page."
+    if not title:
+        return "Title is required."
+    if len(title) > 120:
+        return "Title must be 120 characters or fewer."
+    if len(description) < 20:
+        return "Description must be at least 20 characters."
+    if len(description) > 1000:
+        return "Description must be 1000 characters or fewer."
+    return None
+
 
 with app.app_context():
     init_db()
@@ -312,6 +349,126 @@ def delete_expense_route(id):
     if deleted:
         flash("Expense deleted.", "success")
     return redirect(url_for("profile"))
+
+
+@app.route("/features", methods=["GET", "POST"])
+def features():
+    user_id = session.get("user_id")
+    sort = request.args.get("sort", "latest")
+    page_filter = request.args.get("page_filter", "")
+    status_filter = request.args.get("status_filter", "")
+
+    if page_filter and page_filter not in VALID_PAGES:
+        page_filter = ""
+    if status_filter and status_filter not in VALID_STATUSES:
+        status_filter = ""
+
+    if request.method == "POST":
+        if not user_id:
+            return redirect(url_for("login"))
+
+        page = request.form.get("page", "").strip()
+        title = request.form.get("title", "").strip()
+        description = request.form.get("description", "").strip()
+
+        error = _validate_feature_request_form(page, title, description)
+        if (
+            error is None
+            and count_user_feature_requests(user_id) >= MAX_FEATURE_REQUESTS_PER_USER
+        ):
+            error = f"You have reached the maximum of {MAX_FEATURE_REQUESTS_PER_USER} feature requests."
+
+        if error:
+            flash(error)
+        else:
+            insert_feature_request(user_id, page, title, description)
+            flash("Feature request submitted.", "success")
+            return redirect(url_for("features"))
+
+    all_requests = get_feature_requests(
+        page_filter=page_filter or None,
+        status_filter=status_filter or None,
+        sort=sort,
+        exclude_user_id=user_id,
+    )
+    own_requests = get_own_feature_requests(user_id) if user_id else []
+
+    return render_template(
+        "features.html",
+        all_requests=all_requests,
+        own_requests=own_requests,
+        valid_pages=VALID_PAGES,
+        sort=sort,
+        page_filter=page_filter,
+        status_filter=status_filter,
+        form=request.form if request.method == "POST" else {},
+    )
+
+
+@app.route("/features/<int:id>/edit", methods=["GET", "POST"])
+def edit_feature_request(id):
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    feature = get_feature_request_by_id(id)
+    if feature is None:
+        abort(404)
+    if feature["user_id"] != session["user_id"]:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template(
+            "edit_feature_request.html",
+            feature=feature,
+            valid_pages=VALID_PAGES,
+        )
+
+    page = request.form.get("page", "").strip()
+    title = request.form.get("title", "").strip()
+    description = request.form.get("description", "").strip()
+
+    error = _validate_feature_request_form(page, title, description)
+
+    if error:
+        flash(error)
+        return render_template(
+            "edit_feature_request.html",
+            feature=feature,
+            valid_pages=VALID_PAGES,
+            form=request.form,
+        )
+
+    rows = update_feature_request(id, session["user_id"], page, title, description)
+    if rows == 0:
+        abort(403)
+
+    flash("Feature request updated.", "success")
+    return redirect(url_for("features"))
+
+
+@app.route("/features/<int:id>/delete", methods=["POST"])
+def delete_feature_request_route(id):
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    rows = delete_feature_request(id, session["user_id"])
+    if rows == 0:
+        abort(403)
+
+    flash("Feature request deleted.", "success")
+    return redirect(url_for("features"))
+
+
+@app.route("/features/<int:id>/view", methods=["POST"])
+def view_feature_request(id):
+    if not session.get("user_id"):
+        abort(401)
+    feature = get_feature_request_by_id(id)
+    if feature is None:
+        abort(404)
+    increment_feature_view(id, session["user_id"])
+    updated = get_feature_request_by_id(id)
+    return jsonify({"views": updated["views"]})
 
 
 if __name__ == "__main__":

@@ -13,6 +13,8 @@
 <body>
 
     {% macro nav_links(base_class, cta_class, username_class) %}
+        <a href="{{ url_for('features') }}"
+           class="{{ base_class }}{% if request.endpoint == 'features' %} nav-link--active{% endif %}">Features</a>
         {% if session.get("user_id") %}
         <a href="{{ url_for('add_expense') }}"
            class="{{ base_class }}{% if request.endpoint == 'add_expense' %} nav-link--active{% endif %}">Add Expense</a>

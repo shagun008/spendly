@@ -1,0 +1,57 @@
+{# Shared listing: search bar, filter chips, sort, cards grid #}
+
+<div class="features-controls">
+    <input id="fr-search" type="search" class="features-search"
+           placeholder="Search requests…" aria-label="Search feature requests">
+
+    <div class="features-filter-chips">
+        <a href="{{ url_for('features', sort=sort, status_filter=status_filter) }}"
+           class="filter-chip{% if not page_filter %} filter-chip--active{% endif %}">All Pages</a>
+        {% for p in valid_pages %}
+        <a href="{{ url_for('features', sort=sort, page_filter=p, status_filter=status_filter) }}"
+           class="filter-chip{% if page_filter == p %} filter-chip--active{% endif %}">{{ p }}</a>
+        {% endfor %}
+    </div>
+
+    <select class="features-sort" aria-label="Sort requests"
+            onchange="window.location=this.value">
+        <option value="{{ url_for('features', sort='latest', page_filter=page_filter, status_filter=status_filter) }}"
+                {% if sort == 'latest' %}selected{% endif %}>Latest</option>
+        <option value="{{ url_for('features', sort='most_upvoted', page_filter=page_filter, status_filter=status_filter) }}"
+                {% if sort == 'most_upvoted' %}selected{% endif %}>Most Upvoted</option>
+        <option value="{{ url_for('features', sort='most_viewed', page_filter=page_filter, status_filter=status_filter) }}"
+                {% if sort == 'most_viewed' %}selected{% endif %}>Most Viewed</option>
+    </select>
+</div>
+
+{% if all_requests %}
+<div class="fr-grid">
+    {% for fr in all_requests %}
+    <div class="fr-card"
+         data-id="{{ fr.id }}"
+         data-title="{{ fr.title | e }}"
+         data-page="{{ fr.page | e }}"
+         data-description="{{ fr.description | e }}"
+         data-status="{{ fr.status }}"
+         data-initials="{{ fr.initials }}"
+         data-time-ago="{{ fr.time_ago }}"
+         data-vote-count="{{ fr.vote_count }}"
+         data-views="{{ fr.views }}">
+        <div class="fr-card-top">
+            <span class="fr-page-badge">{{ fr.page }}</span>
+            <span class="fr-status-badge fr-status-badge--{{ fr.status }}">{{ fr.status | replace('_', ' ') | title }}</span>
+        </div>
+        <div class="fr-card-title">{{ fr.title }}</div>
+        <div class="fr-card-desc">{{ fr.description_snippet }}</div>
+        <div class="fr-card-meta">
+            <span class="fr-avatar">{{ fr.initials }}</span>
+            <span>{{ fr.time_ago }}</span>
+            <span class="fr-meta-count">👍 {{ fr.vote_count }}</span>
+            <span class="fr-meta-count">👁 <span class="fr-views-count">{{ fr.views }}</span></span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="fr-empty">No feature requests found.</div>
+{% endif %}

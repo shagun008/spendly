@@ -75,6 +75,8 @@ a { color: inherit; text-decoration: none; }
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 1rem;
 }
 
 .nav-brand {
@@ -97,13 +99,17 @@ a { color: inherit; text-decoration: none; }
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.25rem;
     font-size: 0.9rem;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .nav-links a { color: var(--ink-muted); transition: color 0.2s; }
 .nav-links a:hover { color: var(--ink); }
+
+.nav-hamburger { display: none; }
+.nav-mobile-menu { display: none; }
 
 .nav-link { color: var(--ink-muted); transition: color 0.2s; }
 .nav-link:hover { color: var(--ink); }

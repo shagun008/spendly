@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Edit Feature Request — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/features.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="edit-fr-page">
+    <div class="edit-fr-card">
+        <h1 class="edit-fr-title">Edit Feature Request</h1>
+
+        <form method="POST" action="{{ url_for('edit_feature_request', id=feature.id) }}">
+
+            <div class="fr-form-group">
+                <label class="fr-form-label" for="fr-page">Page</label>
+                <select id="fr-page" name="page" class="fr-form-select" required>
+                    <option value="" disabled>Select a page…</option>
+                    {% for p in valid_pages %}
+                    <option value="{{ p }}"
+                        {% if (form.get('page') if form else feature.page) == p %}selected{% endif %}>
+                        {{ p }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="fr-form-group">
+                <label class="fr-form-label" for="fr-title">Title <span class="fr-form-hint">(max 120)</span></label>
+                <input id="fr-title" name="title" type="text" class="fr-form-input"
+                       maxlength="120" required
+                       value="{{ form.get('title') if form else feature.title }}">
+            </div>
+
+            <div class="fr-form-group">
+                <label class="fr-form-label" for="fr-desc">Description <span class="fr-form-hint">(20–1000 chars)</span></label>
+                <textarea id="fr-desc" name="description" class="fr-form-textarea"
+                          minlength="20" maxlength="1000" required>{{ form.get('description') if form else feature.description }}</textarea>
+                <span class="fr-char-counter" id="fr-char-counter">0 / 1000</span>
+            </div>
+
+            <div class="fr-form-actions">
+                <button type="submit" class="fr-submit-btn">Save Changes</button>
+                <a href="{{ url_for('features') }}" class="fr-cancel-btn">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const textarea = document.getElementById('fr-desc');
+    const counter = document.getElementById('fr-char-counter');
+    if (textarea && counter) {
+        function updateCounter() {
+            const len = textarea.value.length;
+            counter.textContent = `${len} / 1000`;
+            counter.className = 'fr-char-counter' +
+                (len > 1000 ? ' fr-char-counter--over' : len > 900 ? ' fr-char-counter--warn' : '');
+        }
+        textarea.addEventListener('input', updateCounter);
+        updateCounter();
+    }
+})();
+</script>
+<script>lucide.createIcons();</script>
+{% endblock %}
