@@ -33,6 +33,7 @@ from database.queries import (
     count_user_feature_requests,
     increment_feature_view,
     toggle_feature_vote,
+    get_voted_feature_ids,
 )
 
 app = Flask(__name__)
@@ -398,14 +399,7 @@ def features():
     )
     own_requests = get_own_feature_requests(user_id) if user_id else []
 
-    voted_ids = set()
-    if user_id:
-        conn = get_db()
-        rows = conn.execute(
-            "SELECT feature_id FROM feature_votes WHERE user_id = ?", (user_id,)
-        ).fetchall()
-        conn.close()
-        voted_ids = {row["feature_id"] for row in rows}
+    voted_ids = get_voted_feature_ids(user_id) if user_id else set()
 
     return render_template(
         "features.html",

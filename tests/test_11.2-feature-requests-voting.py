@@ -907,7 +907,7 @@ class TestInsertVoteHelper:
 
 
 # ------------------------------------------------------------------ #
-# 12. Vote count accuracy — upvotes vs DB after pre-seeded votes      #
+# 13. Vote count accuracy — upvotes vs DB after pre-seeded votes      #
 # ------------------------------------------------------------------ #
 
 
