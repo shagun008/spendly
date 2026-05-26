@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+{% block title %}Feature Requests — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/features.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="features-page">
+
+    <div class="features-header">
+        <h1 class="features-title">Feature Requests</h1>
+        <p class="features-subtitle">Browse ideas from the community{% if session.get("user_id") %} or submit your own{% endif %}.</p>
+    </div>
+
+    {% if session.get("user_id") %}
+    {# ---- LOGGED-IN: two-column (own requests left, form right) ---- #}
+
+    <div class="features-logged-in">
+
+        {# Left: own requests #}
+        <div class="features-own-panel">
+            <h2 class="features-own-title">Your Requests</h2>
+
+            {% if own_requests %}
+                {% for fr in own_requests %}
+                <div class="fr-own-card">
+                    <div class="fr-own-card-top">
+                        <span class="fr-own-card-title">{{ fr.title }}</span>
+                        <div class="fr-own-card-actions">
+                            <a href="{{ url_for('edit_feature_request', id=fr.id) }}" class="fr-action-btn">Edit</a>
+                            <form method="POST" action="{{ url_for('delete_feature_request_route', id=fr.id) }}" onsubmit="return confirm('Delete this request?')">
+                                <button type="submit" class="fr-action-btn fr-action-btn--danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="fr-own-card-meta">
+                        <span class="fr-page-badge">{{ fr.page }}</span>
+                        <span class="fr-status-badge fr-status-badge--{{ fr.status }}">{{ fr.status | replace('_', ' ') | title }}</span>
+                        <span>{{ fr.time_ago }}</span>
+                        <span class="fr-meta-count">👍 {{ fr.vote_count }}</span>
+                        <span class="fr-meta-count">👁 {{ fr.views }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="fr-empty">You haven't submitted any requests yet.</div>
+            {% endif %}
+        </div>
+
+        {# Right: submission form #}
+        <div class="features-form-panel">
+            <h2 class="features-form-title">Submit a Feature Request</h2>
+            <form method="POST" action="{{ url_for('features') }}">
+
+                <div class="fr-form-group">
+                    <label class="fr-form-label" for="fr-page">Page</label>
+                    <select id="fr-page" name="page" class="fr-form-select" required>
+                        <option value="" disabled {% if not form.get('page') %}selected{% endif %}>Select a page…</option>
+                        {% for p in valid_pages %}
+                        <option value="{{ p }}" {% if form.get('page') == p %}selected{% endif %}>{{ p }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="fr-form-group">
+                    <label class="fr-form-label" for="fr-title">Title <span class="fr-form-hint">(max 120)</span></label>
+                    <input id="fr-title" name="title" type="text" class="fr-form-input"
+                           maxlength="120" required
+                           value="{{ form.get('title', '') }}"
+                           placeholder="e.g. Add dark mode toggle">
+                </div>
+
+                <div class="fr-form-group">
+                    <label class="fr-form-label" for="fr-desc">Description <span class="fr-form-hint">(20–1000 chars)</span></label>
+                    <textarea id="fr-desc" name="description" class="fr-form-textarea"
+                              minlength="20" maxlength="1000" required
+                              placeholder="Describe the feature and why it would be useful…">{{ form.get('description', '') }}</textarea>
+                    <span class="fr-char-counter" id="fr-char-counter">0 / 1000</span>
+                </div>
+
+                <button type="submit" class="fr-submit-btn">Submit Request</button>
+            </form>
+        </div>
+    </div>
+
+    {# All other users' requests below #}
+    <div class="features-all-section">
+        <h2 class="features-all-title">All Community Requests</h2>
+        {% include "_features_listing.html" %}
+    </div>
+
+    {% else %}
+    {# ---- LOGGED-OUT: single column public listing ---- #}
+    {% include "_features_listing.html" %}
+    {% endif %}
+
+</div>
+
+{# Base URL for view-count endpoint — read by JS to avoid hardcoded paths #}
+<span id="fr-view-base" data-url="{{ url_for('view_feature_request', id=0) }}" hidden></span>
+
+{# ---- Detail modal ---- #}
+<div class="fr-modal-overlay" id="fr-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="fr-modal-title-text">
+    <div class="fr-modal" id="fr-modal">
+        <div class="fr-modal-header">
+            <h2 class="fr-modal-title" id="fr-modal-title-text"></h2>
+            <button class="fr-modal-close" id="fr-modal-close" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="fr-modal-badges" id="fr-modal-badges"></div>
+        <p class="fr-modal-desc" id="fr-modal-desc"></p>
+        <div class="fr-modal-meta" id="fr-modal-meta"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const overlay = document.getElementById('fr-modal-overlay');
+    const modalTitle = document.getElementById('fr-modal-title-text');
+    const modalBadges = document.getElementById('fr-modal-badges');
+    const modalDesc = document.getElementById('fr-modal-desc');
+    const modalMeta = document.getElementById('fr-modal-meta');
+    const closeBtn = document.getElementById('fr-modal-close');
+    let lastFocused = null;
+
+    function statusLabel(s) {
+        return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function makeEl(tag, cls, text) {
+        const el = document.createElement(tag);
+        if (cls) el.className = cls;
+        if (text !== undefined) el.textContent = text;
+        return el;
+    }
+
+    function openModal(card) {
+        lastFocused = document.activeElement;
+        const d = card.dataset;
+        modalTitle.textContent = d.title;
+
+        modalBadges.textContent = '';
+        modalBadges.appendChild(makeEl('span', 'fr-page-badge', d.page));
+        modalBadges.appendChild(makeEl('span', `fr-status-badge fr-status-badge--${d.status}`, statusLabel(d.status)));
+
+        modalDesc.textContent = d.description;
+
+        const viewsSpan = makeEl('span', null, d.views);
+        viewsSpan.id = 'fr-modal-views';
+        const votesSpan = makeEl('span', null, d.voteCount);
+        votesSpan.id = 'fr-modal-votes';
+        const voteCount = makeEl('span', 'fr-meta-count');
+        voteCount.append('👍 ', votesSpan);
+        const viewCount = makeEl('span', 'fr-meta-count');
+        viewCount.append('👁 ', viewsSpan);
+
+        modalMeta.textContent = '';
+        modalMeta.appendChild(makeEl('span', 'fr-avatar', d.initials));
+        modalMeta.appendChild(makeEl('span', null, d.timeAgo));
+        modalMeta.appendChild(voteCount);
+        modalMeta.appendChild(viewCount);
+
+        overlay.classList.add('fr-modal--open');
+        overlay.setAttribute('aria-hidden', 'false');
+        closeBtn.focus();
+
+        // increment view count — requires login, silently ignored if logged out
+        const viewUrl = document.getElementById('fr-view-base').dataset.url.replace('/0/', `/${d.id}/`);
+        fetch(viewUrl, { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(r => r.ok ? r.json() : null)
+            .then(json => {
+                if (!json) return;
+                const el = document.getElementById('fr-modal-views');
+                if (el) el.textContent = json.views;
+                const cardViews = card.querySelector('.fr-views-count');
+                if (cardViews) cardViews.textContent = json.views;
+            })
+            .catch(() => {});
+    }
+
+    function closeModal() {
+        overlay.classList.remove('fr-modal--open');
+        overlay.setAttribute('aria-hidden', 'true');
+        if (lastFocused) lastFocused.focus();
+    }
+
+    document.querySelectorAll('.fr-card[data-id]').forEach(card => {
+        card.addEventListener('click', () => openModal(card));
+        card.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(card); }
+        });
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && overlay.classList.contains('fr-modal--open')) closeModal();
+    });
+
+    // focus trap
+    overlay.addEventListener('keydown', e => {
+        if (e.key !== 'Tab') return;
+        const focusable = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+        else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
+    });
+
+    // char counter for submission form
+    const textarea = document.getElementById('fr-desc');
+    const counter = document.getElementById('fr-char-counter');
+    if (textarea && counter) {
+        function updateCounter() {
+            const len = textarea.value.length;
+            counter.textContent = `${len} / 1000`;
+            counter.className = 'fr-char-counter' +
+                (len > 1000 ? ' fr-char-counter--over' : len > 900 ? ' fr-char-counter--warn' : '');
+        }
+        textarea.addEventListener('input', updateCounter);
+        updateCounter();
+    }
+
+    // client-side search
+    const searchInput = document.getElementById('fr-search');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const q = this.value.toLowerCase();
+            document.querySelectorAll('.fr-card[data-id]').forEach(card => {
+                const text = (card.dataset.title + ' ' + card.dataset.description + ' ' + card.dataset.page).toLowerCase();
+                card.style.display = text.includes(q) ? '' : 'none';
+            });
+        });
+    }
+})();
+</script>
+<script>lucide.createIcons();</script>
+{% endblock %}

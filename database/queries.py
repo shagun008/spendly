@@ -4,9 +4,14 @@ Each helper opens its own sqlite3 connection via get_db(), executes a
 parameterised query, and closes the connection before returning.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 from database.db import get_db
+
+
+def _make_initials(name):
+    tokens = name.split()
+    return "".join(t[0] for t in tokens[:2]).upper() if tokens else ""
 
 
 def _date_clause(date_from, date_to):
@@ -35,8 +40,7 @@ def get_user_by_id(user_id):
         return None
 
     name = row["name"]
-    tokens = name.split()
-    initials = "".join(t[0] for t in tokens[:2]).upper() if tokens else ""
+    initials = _make_initials(name)
 
     created_at = row["created_at"].split(" ")[0]
     member_since = datetime.strptime(created_at, "%Y-%m-%d").strftime("%B %Y")
@@ -183,3 +187,193 @@ def delete_expense(expense_id, user_id):
     conn.commit()
     conn.close()
     return cursor.rowcount
+
+
+# ------------------------------------------------------------------ #
+# Feature request helpers                                              #
+# ------------------------------------------------------------------ #
+
+
+def _relative_time(created_at):
+    try:
+        dt = datetime.strptime(created_at[:19], "%Y-%m-%d %H:%M:%S")
+    except (ValueError, TypeError):
+        return created_at
+    delta = datetime.now(timezone.utc).replace(tzinfo=None) - dt
+    seconds = int(delta.total_seconds())
+    if seconds < 60:
+        return "just now"
+    if seconds < 3600:
+        m = seconds // 60
+        return f"{m} min ago"
+    if seconds < 86400:
+        h = seconds // 3600
+        return f"{h} hour{'s' if h != 1 else ''} ago"
+    d = seconds // 86400
+    if d < 30:
+        return f"{d} day{'s' if d != 1 else ''} ago"
+    mo = d // 30
+    if mo < 12:
+        return f"{mo} month{'s' if mo != 1 else ''} ago"
+    yr = d // 365
+    return f"{yr} year{'s' if yr != 1 else ''} ago"
+
+
+def _fr_row_to_dict(row):
+    return {
+        "id": row["id"],
+        "page": row["page"],
+        "title": row["title"],
+        "description": row["description"],
+        "description_snippet": row["description"][:100]
+        + ("…" if len(row["description"]) > 100 else ""),
+        "status": row["status"],
+        "views": row["views"],
+        "vote_count": row["vote_count"],
+        "initials": _make_initials(row["name"]),
+        "time_ago": _relative_time(row["created_at"]),
+        "created_at": row["created_at"],
+        "user_id": row["user_id"],
+    }
+
+
+def get_feature_requests(
+    page_filter=None, status_filter=None, sort="latest", exclude_user_id=None
+):
+    conditions = []
+    params = []
+
+    if page_filter:
+        conditions.append("fr.page = ?")
+        params.append(page_filter)
+    if status_filter:
+        conditions.append("fr.status = ?")
+        params.append(status_filter)
+    if exclude_user_id is not None:
+        conditions.append("fr.user_id != ?")
+        params.append(exclude_user_id)
+
+    where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
+
+    order = {
+        "latest": "fr.created_at DESC, fr.id DESC",
+        "most_upvoted": "vote_count DESC, fr.created_at DESC, fr.id DESC",
+        "most_viewed": "fr.views DESC, fr.created_at DESC, fr.id DESC",
+    }.get(sort, "fr.created_at DESC, fr.id DESC")
+
+    sql = f"""
+        SELECT fr.id, fr.user_id, fr.page, fr.title, fr.description,
+               fr.status, fr.views, fr.created_at,
+               u.name,
+               COUNT(fv.id) AS vote_count
+        FROM feature_requests fr
+        JOIN users u ON u.id = fr.user_id
+        LEFT JOIN feature_votes fv ON fv.feature_id = fr.id
+        {where}
+        GROUP BY fr.id
+        ORDER BY {order}
+    """
+    conn = get_db()
+    rows = conn.execute(sql, params).fetchall()
+    conn.close()
+    return [_fr_row_to_dict(r) for r in rows]
+
+
+def get_own_feature_requests(user_id):
+    sql = """
+        SELECT fr.id, fr.user_id, fr.page, fr.title, fr.description,
+               fr.status, fr.views, fr.created_at,
+               u.name,
+               COUNT(fv.id) AS vote_count
+        FROM feature_requests fr
+        JOIN users u ON u.id = fr.user_id
+        LEFT JOIN feature_votes fv ON fv.feature_id = fr.id
+        WHERE fr.user_id = ?
+        GROUP BY fr.id
+        ORDER BY fr.created_at DESC
+    """
+    conn = get_db()
+    rows = conn.execute(sql, (user_id,)).fetchall()
+    conn.close()
+    return [_fr_row_to_dict(r) for r in rows]
+
+
+def get_feature_request_by_id(feature_id):
+    sql = """
+        SELECT fr.id, fr.user_id, fr.page, fr.title, fr.description,
+               fr.status, fr.views, fr.created_at,
+               u.name,
+               COUNT(fv.id) AS vote_count
+        FROM feature_requests fr
+        JOIN users u ON u.id = fr.user_id
+        LEFT JOIN feature_votes fv ON fv.feature_id = fr.id
+        WHERE fr.id = ?
+        GROUP BY fr.id
+    """
+    conn = get_db()
+    row = conn.execute(sql, (feature_id,)).fetchone()
+    conn.close()
+    if row is None:
+        return None
+    return _fr_row_to_dict(row)
+
+
+def insert_feature_request(user_id, page, title, description):
+    conn = get_db()
+    cursor = conn.execute(
+        "INSERT INTO feature_requests (user_id, page, title, description) VALUES (?, ?, ?, ?)",
+        (user_id, page, title, description),
+    )
+    conn.commit()
+    new_id = cursor.lastrowid
+    conn.close()
+    return new_id
+
+
+def update_feature_request(feature_id, user_id, page, title, description):
+    conn = get_db()
+    cursor = conn.execute(
+        "UPDATE feature_requests SET page=?, title=?, description=?, updated_at=datetime('now') "
+        "WHERE id=? AND user_id=?",
+        (page, title, description, feature_id, user_id),
+    )
+    conn.commit()
+    conn.close()
+    return cursor.rowcount
+
+
+def delete_feature_request(feature_id, user_id):
+    conn = get_db()
+    cursor = conn.execute(
+        "DELETE FROM feature_requests WHERE id=? AND user_id=?",
+        (feature_id, user_id),
+    )
+    conn.commit()
+    conn.close()
+    return cursor.rowcount
+
+
+def count_user_feature_requests(user_id):
+    conn = get_db()
+    row = conn.execute(
+        "SELECT COUNT(*) FROM feature_requests WHERE user_id=?",
+        (user_id,),
+    ).fetchone()
+    conn.close()
+    return row[0]
+
+
+def increment_feature_view(feature_id, viewer_id):
+    conn = get_db()
+    cursor = conn.execute(
+        "INSERT OR IGNORE INTO feature_views (feature_id, viewer_id) VALUES (?, ?)",
+        (feature_id, viewer_id),
+    )
+    if cursor.rowcount:
+        conn.execute(
+            "UPDATE feature_requests SET views = views + 1 WHERE id=?",
+            (feature_id,),
+        )
+    conn.commit()
+    conn.close()
+    return bool(cursor.rowcount)

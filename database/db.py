@@ -2,7 +2,7 @@ import sqlite3
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
-DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'spendly.db')
+DB_PATH = os.path.join(os.path.dirname(__file__), "..", "spendly.db")
 
 
 def get_db():
@@ -32,6 +32,34 @@ def init_db():
             description TEXT,
             created_at  TEXT    DEFAULT (datetime('now'))
         );
+
+        CREATE TABLE IF NOT EXISTS feature_requests (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id     INTEGER NOT NULL REFERENCES users(id),
+            page        TEXT    NOT NULL,
+            title       TEXT    NOT NULL,
+            description TEXT    NOT NULL,
+            status      TEXT    NOT NULL DEFAULT 'submitted',
+            views       INTEGER NOT NULL DEFAULT 0,
+            created_at  TEXT    DEFAULT (datetime('now')),
+            updated_at  TEXT    DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS feature_votes (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            feature_id  INTEGER NOT NULL REFERENCES feature_requests(id),
+            user_id     INTEGER NOT NULL REFERENCES users(id),
+            created_at  TEXT    DEFAULT (datetime('now')),
+            UNIQUE (feature_id, user_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS feature_views (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            feature_id  INTEGER NOT NULL REFERENCES feature_requests(id),
+            viewer_id   INTEGER NOT NULL REFERENCES users(id),
+            viewed_at   TEXT    DEFAULT (datetime('now')),
+            UNIQUE (feature_id, viewer_id)
+        );
     """)
     conn.commit()
     conn.close()
@@ -51,9 +79,7 @@ def create_user(name, email, password):
 
 def get_user_by_email(email):
     conn = get_db()
-    user = conn.execute(
-        "SELECT * FROM users WHERE email = ?", (email,)
-    ).fetchone()
+    user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
     conn.close()
     return user
 
@@ -72,14 +98,14 @@ def seed_db():
     user_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
 
     expenses = [
-        (user_id, 12.50,  "Food",          "2026-04-01", "Lunch at cafe"),
-        (user_id, 35.00,  "Transport",     "2026-04-02", "Monthly bus pass"),
-        (user_id, 120.00, "Bills",         "2026-04-03", "Electricity bill"),
-        (user_id, 45.00,  "Health",        "2026-04-05", "Pharmacy"),
-        (user_id, 20.00,  "Entertainment", "2026-04-07", "Movie ticket"),
-        (user_id, 89.99,  "Shopping",      "2026-04-09", "New shirt"),
-        (user_id, 8.00,   "Food",          "2026-04-11", "Coffee and snack"),
-        (user_id, 15.00,  "Other",         "2026-04-12", "Miscellaneous"),
+        (user_id, 12.50, "Food", "2026-04-01", "Lunch at cafe"),
+        (user_id, 35.00, "Transport", "2026-04-02", "Monthly bus pass"),
+        (user_id, 120.00, "Bills", "2026-04-03", "Electricity bill"),
+        (user_id, 45.00, "Health", "2026-04-05", "Pharmacy"),
+        (user_id, 20.00, "Entertainment", "2026-04-07", "Movie ticket"),
+        (user_id, 89.99, "Shopping", "2026-04-09", "New shirt"),
+        (user_id, 8.00, "Food", "2026-04-11", "Coffee and snack"),
+        (user_id, 15.00, "Other", "2026-04-12", "Miscellaneous"),
     ]
     conn.executemany(
         "INSERT INTO expenses (user_id, amount, category, date, description) VALUES (?, ?, ?, ?, ?)",

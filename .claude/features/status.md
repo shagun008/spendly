@@ -5,10 +5,9 @@ Last updated: 2026-05-25
 Nothing in progress
 
 ## 👀 In Review
-Nothing in review
+- **11.1** DB, Submission, and /features Page (Core)
 
 ## 📋 Planned — ready to spec
-- **11.1** DB, Submission, and /features Page (Core)
 - **11.2** Upvoting and Trending
 - **11.3** Home Page "Latest Features" Section
 

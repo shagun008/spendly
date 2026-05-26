@@ -29,7 +29,7 @@ Three new DB tables: feature_requests, feature_votes, feature_views. Page dropdo
 
 **Public /features page (single route, two states):**
 - Logged-out: standard public listing — search, filter, sort, upvote button (prompts login on click), card detail modal, no submission form.
-- Logged-in: two-column layout — left panel shows all other users' requests (same search/filter/sort/upvote as public view); right panel shows the user's own submitted requests with edit/delete controls and the submission form to add a new request. Upvote button is disabled on the user's own requests.
+- Logged-in: two-column layout — left panel shows the user's own submitted requests with edit/delete controls; right panel shows the submission form to add a new request. Upvote button is disabled on the user's own requests.
 
 **Nav link:** /features is visible in the main nav to all visitors (logged-in and logged-out).
 
