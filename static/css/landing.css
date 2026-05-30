@@ -281,3 +281,152 @@
         text-align: center;
     }
 }
+
+/* ------------------------------------------------------------------ */
+/* Latest Features section                                             */
+/* ------------------------------------------------------------------ */
+
+.lf-section {
+    padding: 4rem 2rem;
+    background: var(--paper-warm);
+}
+
+.lf-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.lf-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.lf-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+}
+
+.lf-subtitle {
+    font-size: 1rem;
+    color: var(--ink-muted);
+}
+
+.lf-see-all {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.lf-see-all:hover { text-decoration: underline; }
+
+.lf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.lf-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.lf-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.lf-card-top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.lf-badge-page {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--accent-light);
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+.lf-badge-status {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--paper-warm);
+    color: var(--ink-muted);
+    white-space: nowrap;
+}
+
+.lf-status-submitted    { background: var(--paper-warm);     color: var(--ink-muted); }
+.lf-status-under_review { background: var(--accent-2-light); color: var(--accent-2); }
+.lf-status-planned      { background: var(--accent-light);   color: var(--accent); }
+.lf-status-completed    { background: var(--accent-light);   color: var(--accent); }
+
+.lf-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.35;
+}
+
+.lf-card-desc {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+    flex: 1;
+}
+
+.lf-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.lf-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .lf-section { padding: 3rem 1.25rem; }
+    .lf-header { flex-direction: column; align-items: flex-start; }
+    .lf-grid { grid-template-columns: 1fr; }
+}

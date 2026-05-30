@@ -103,6 +103,38 @@
     </div>
 </section>
 
+{% if latest_features %}
+<section class="lf-section">
+    <div class="lf-inner">
+        <div class="lf-header">
+            <div class="lf-header-text">
+                <h2 class="lf-title">Shaping Spendly Together</h2>
+                <p class="lf-subtitle">See what the community is building next.</p>
+            </div>
+            <a href="{{ url_for('features') }}" class="lf-see-all">View all requests →</a>
+        </div>
+        <div class="lf-grid">
+            {% for fr in latest_features %}
+            <a href="{{ url_for('features') }}" class="lf-card">
+                <div class="lf-card-top">
+                    <span class="lf-badge-page">{{ fr.page }}</span>
+                    <span class="lf-badge-status lf-status-{{ fr.status }}">{{ fr.status | replace('_', ' ') | title }}</span>
+                </div>
+                <div class="lf-card-title">{{ fr.title }}</div>
+                <div class="lf-card-desc">{{ fr.description_snippet }}</div>
+                <div class="lf-card-meta">
+                    <span class="lf-avatar">{{ fr.initials }}</span>
+                    <span class="lf-time">{{ fr.time_ago }}</span>
+                    <span class="lf-stat">👍 {{ fr.vote_count }}</span>
+                    <span class="lf-stat">👁 {{ fr.views }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <section class="cta-section">
     <div class="cta-inner">
         <h2 class="cta-title">Ready to take control?</h2>

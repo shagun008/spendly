@@ -41,20 +41,20 @@ Release sub-rows (indented with →) show individual release status.
 | 09.1 | → Delete Expense | release | 09 | ✅ Shipped | 09-delete-expense |
 | 10 | Mobile Nav | feature | — | ✅ Shipped | 1 release |
 | 10.1 | → Mobile Nav | release | 10 | ✅ Shipped | 10-mobile-nav |
-| 11 | Feature Requests Page and Public Feature Discovery | new-feature | — | 📋 Planned | 3 releases planned |
-| 11.1 | → DB, Submission, and /features Page (Core) | release | 11 | ✅ Shipped | 11.1-feature-requests-core.md |
-| 11.2 | → Upvoting and Trending | release | 11 | ✅ Shipped | 11.2-feature-requests-voting.md |
-| 11.3 | → Home Page "Latest Features" Section | release | 11 | 📋 Planned | — |
+| 11 | Feature Requests Page and Public Feature Discovery | new-feature | — | 👀 In Review | 3 releases planned |
+| 11-1 | → DB, Submission, and /features Page (Core) | release | 11 | ✅ Shipped | 11-1-feature-requests-core.md |
+| 11-2 | → Upvoting and Trending | release | 11 | ✅ Shipped | 11-2-feature-requests-voting.md |
+| 11-3 | → Home Page "Latest Features" Section | release | 11 | 👀 In Review | 11-3-home-latest-features-section.md |
 
 ## Numbering Rules
 
 **New features** use the next integer: 11, 12, 13 …
 
-**Enhancements** use the parent number with a sub-number suffix:
-- 10.1, 10.2, 10.3 … for enhancements to feature 10
+**Enhancements** use the parent number with a hyphen-separated sub-number:
+- 10-1, 10-2, 10-3 … for enhancements to feature 10
 
-**Multi-release features** use parent + release number:
-- 11.1, 11.2 … for releases of feature 11
+**Multi-release features** use parent + release number (hyphen-separated):
+- 11-1, 11-2 … for releases of feature 11
 
 Sub-numbers increment independently per parent.
 Feature row status always reflects the least-complete release.

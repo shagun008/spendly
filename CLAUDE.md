@@ -148,13 +148,13 @@ These rules apply to every feature. No exceptions.
 
 ## Feature Numbering
 
-Features use dot notation to support multiple releases per feature:
+Features use hyphen notation to support multiple releases per feature:
 
-- `11` — shorthand for a single-release feature (internally treated as `11.1`)
-- `11.1` — Release 1 of feature 11
-- `11.2` — Release 2 of feature 11 (requires `11.1` to exist)
+- `11` — shorthand for a single-release feature (internally treated as `11-1`)
+- `11-1` — Release 1 of feature 11
+- `11-2` — Release 2 of feature 11 (requires `11-1` to exist)
 
-Spec filenames follow the same pattern: `11.1-budget-alerts-mvp.md`
+Spec filenames follow the same pattern: `11-1-budget-alerts-mvp.md`
 
 Branch names use slug only (no number): `feature/budget-alerts-mvp`
 
