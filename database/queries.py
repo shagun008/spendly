@@ -245,7 +245,11 @@ _TRENDING_ORDER = (
 
 
 def get_feature_requests(
-    page_filter=None, status_filter=None, sort="latest", exclude_user_id=None
+    page_filter=None,
+    status_filter=None,
+    sort="latest",
+    exclude_user_id=None,
+    limit=None,
 ):
     conditions = []
     params = []
@@ -269,6 +273,8 @@ def get_feature_requests(
         "trending": _TRENDING_ORDER,
     }.get(sort, "fr.created_at DESC, fr.id DESC")
 
+    limit_clause = f"LIMIT {int(limit)}" if limit is not None else ""
+
     sql = f"""
         SELECT fr.id, fr.user_id, fr.page, fr.title, fr.description,
                fr.status, fr.views, fr.created_at,
@@ -280,6 +286,7 @@ def get_feature_requests(
         {where}
         GROUP BY fr.id
         ORDER BY {order}
+        {limit_clause}
     """
     conn = get_db()
     rows = conn.execute(sql, params).fetchall()

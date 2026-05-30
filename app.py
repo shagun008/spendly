@@ -91,7 +91,8 @@ with app.app_context():
 
 @app.route("/")
 def landing():
-    return render_template("landing.html")
+    latest_features = get_feature_requests(sort="latest", limit=6)
+    return render_template("landing.html", latest_features=latest_features)
 
 
 @app.route("/register", methods=["GET", "POST"])

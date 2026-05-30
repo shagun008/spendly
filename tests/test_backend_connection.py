@@ -4,6 +4,7 @@ Each test points database.db.DB_PATH at a fresh tmp file, runs init_db()
 + seed_db(), and exercises a query helper or the /profile route. The
 production spendly.db is never touched.
 """
+
 import importlib
 import os
 
@@ -13,10 +14,10 @@ import database.db as db_module
 import database.queries as queries
 from database.db import init_db, seed_db, create_user
 
-
 # ------------------------------------------------------------------ #
 # Fixtures                                                            #
 # ------------------------------------------------------------------ #
+
 
 @pytest.fixture
 def seeded_db(tmp_path, monkeypatch):
@@ -49,6 +50,7 @@ def client(tmp_path, monkeypatch):
     seed_db()
 
     import app as app_module
+
     importlib.reload(app_module)
     app_module.app.config["TESTING"] = True
     with app_module.app.test_client() as c:
@@ -58,6 +60,7 @@ def client(tmp_path, monkeypatch):
 # ------------------------------------------------------------------ #
 # Unit tests — get_user_by_id                                         #
 # ------------------------------------------------------------------ #
+
 
 def test_get_user_by_id_valid(seeded_db):
     user = queries.get_user_by_id(1)
@@ -75,6 +78,7 @@ def test_get_user_by_id_missing(seeded_db):
 # ------------------------------------------------------------------ #
 # Unit tests — get_summary_stats                                      #
 # ------------------------------------------------------------------ #
+
 
 def test_get_summary_stats_with_expenses(seeded_db):
     stats = queries.get_summary_stats(1)
@@ -99,6 +103,7 @@ def test_get_summary_stats_no_expenses(empty_user_db):
 # Unit tests — get_recent_transactions                                #
 # ------------------------------------------------------------------ #
 
+
 def test_get_recent_transactions_ordering_and_shape(seeded_db):
     txs = queries.get_recent_transactions(1)
     assert len(txs) == 8
@@ -106,7 +111,7 @@ def test_get_recent_transactions_ordering_and_shape(seeded_db):
     assert txs[0]["date"] == "Apr 12, 2026"
     assert txs[1]["date"] == "Apr 11, 2026"
     for tx in txs:
-        assert set(tx.keys()) == {"date", "description", "category", "amount"}
+        assert set(tx.keys()) == {"id", "date", "description", "category", "amount"}
         assert tx["amount"].startswith("₹")
 
 
@@ -117,6 +122,7 @@ def test_get_recent_transactions_empty(empty_user_db):
 # ------------------------------------------------------------------ #
 # Unit tests — get_category_breakdown                                 #
 # ------------------------------------------------------------------ #
+
 
 def test_get_category_breakdown_ordered_and_sums_to_100(seeded_db):
     cats = queries.get_category_breakdown(1)
@@ -140,6 +146,7 @@ def test_get_category_breakdown_empty(empty_user_db):
 # ------------------------------------------------------------------ #
 # Route tests — GET /profile                                          #
 # ------------------------------------------------------------------ #
+
 
 def test_profile_unauthenticated_redirects_to_login(client):
     resp = client.get("/profile")
@@ -165,8 +172,15 @@ def test_profile_as_seed_user_renders_real_data(client):
     # Newest-first: Apr 12 row appears before Apr 01
     assert body.index("Apr 12, 2026") < body.index("Apr 01, 2026")
     # Category breakdown lists all 7 categories
-    for cat in ("Bills", "Shopping", "Health", "Transport", "Food",
-                "Entertainment", "Other"):
+    for cat in (
+        "Bills",
+        "Shopping",
+        "Health",
+        "Transport",
+        "Food",
+        "Entertainment",
+        "Other",
+    ):
         assert cat in body
 
 
