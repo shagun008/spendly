@@ -1,10 +1,8 @@
-"""Query helpers for the profile page and expense mutations.
-
-Each helper opens its own sqlite3 connection via get_db(), executes a
-parameterised query, and closes the connection before returning.
-"""
+"""Query helpers for the profile page and expense mutations."""
 
 from datetime import datetime, timezone
+
+import psycopg2.extras
 
 from database.db import get_db
 
@@ -15,26 +13,24 @@ def _make_initials(name):
 
 
 def _date_clause(date_from, date_to):
-    """Return a fixed SQL fragment and its bind params for optional date filtering.
-
-    The returned clause string is always a literal SQL keyword fragment — no user
-    data is ever interpolated into it. User-supplied dates travel via ? placeholders.
-    """
     if date_from and date_to:
-        return "AND date BETWEEN ? AND ?", (date_from, date_to)
+        return "AND date BETWEEN %s AND %s", (date_from, date_to)
     if date_from:
-        return "AND date >= ?", (date_from,)
+        return "AND date >= %s", (date_from,)
     if date_to:
-        return "AND date <= ?", (date_to,)
+        return "AND date <= %s", (date_to,)
     return "", ()
 
 
 def get_user_by_id(user_id):
     conn = get_db()
-    row = conn.execute(
-        "SELECT name, email, created_at FROM users WHERE id = ?",
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "SELECT name, email, created_at FROM users WHERE id = %s",
         (user_id,),
-    ).fetchone()
+    )
+    row = cur.fetchone()
+    cur.close()
     conn.close()
     if row is None:
         return None
@@ -42,7 +38,7 @@ def get_user_by_id(user_id):
     name = row["name"]
     initials = _make_initials(name)
 
-    created_at = row["created_at"].split(" ")[0]
+    created_at = str(row["created_at"])[:10]
     member_since = datetime.strptime(created_at, "%Y-%m-%d").strftime("%B %Y")
 
     return {
@@ -57,13 +53,16 @@ def get_recent_transactions(user_id, limit=10, date_from=None, date_to=None):
     clause, params = _date_clause(date_from, date_to)
     sql = (
         "SELECT id, date, description, category, amount FROM expenses "
-        "WHERE user_id = ?"
+        "WHERE user_id = %s"
     )
     if clause:
         sql = sql + " " + clause
-    sql = sql + " ORDER BY date DESC, id DESC LIMIT ?"
+    sql = sql + " ORDER BY date DESC, id DESC LIMIT %s"
     conn = get_db()
-    rows = conn.execute(sql, (user_id, *params, limit)).fetchall()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(sql, (user_id, *params, limit))
+    rows = cur.fetchall()
+    cur.close()
     conn.close()
     return [
         {
@@ -79,15 +78,19 @@ def get_recent_transactions(user_id, limit=10, date_from=None, date_to=None):
 
 def get_summary_stats(user_id, date_from=None, date_to=None):
     clause, params = _date_clause(date_from, date_to)
-    totals_sql = "SELECT COALESCE(SUM(amount), 0) AS total, COUNT(*) AS cnt FROM expenses WHERE user_id = ?"
-    top_sql = "SELECT category, SUM(amount) AS total FROM expenses WHERE user_id = ?"
+    totals_sql = "SELECT COALESCE(SUM(amount), 0) AS total, COUNT(*) AS cnt FROM expenses WHERE user_id = %s"
+    top_sql = "SELECT category, SUM(amount) AS total FROM expenses WHERE user_id = %s"
     if clause:
         totals_sql = totals_sql + " " + clause
         top_sql = top_sql + " " + clause
     top_sql = top_sql + " GROUP BY category ORDER BY total DESC LIMIT 1"
     conn = get_db()
-    totals = conn.execute(totals_sql, (user_id, *params)).fetchone()
-    top = conn.execute(top_sql, (user_id, *params)).fetchone()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(totals_sql, (user_id, *params))
+    totals = cur.fetchone()
+    cur.execute(top_sql, (user_id, *params))
+    top = cur.fetchone()
+    cur.close()
     conn.close()
 
     total = totals["total"]
@@ -103,23 +106,28 @@ def get_summary_stats(user_id, date_from=None, date_to=None):
 
 def insert_expense(user_id, amount, category, expense_date, description):
     conn = get_db()
-    conn.execute(
+    cur = conn.cursor()
+    cur.execute(
         "INSERT INTO expenses (user_id, amount, category, date, description)"
-        " VALUES (?, ?, ?, ?, ?)",
+        " VALUES (%s, %s, %s, %s, %s)",
         (user_id, amount, category, expense_date, description),
     )
     conn.commit()
+    cur.close()
     conn.close()
 
 
 def get_category_breakdown(user_id, date_from=None, date_to=None):
     clause, params = _date_clause(date_from, date_to)
-    sql = "SELECT category, SUM(amount) AS total FROM expenses WHERE user_id = ?"
+    sql = "SELECT category, SUM(amount) AS total FROM expenses WHERE user_id = %s"
     if clause:
         sql = sql + " " + clause
     sql = sql + " GROUP BY category ORDER BY total DESC"
     conn = get_db()
-    rows = conn.execute(sql, (user_id, *params)).fetchall()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(sql, (user_id, *params))
+    rows = cur.fetchall()
+    cur.close()
     conn.close()
 
     if not rows:
@@ -150,11 +158,14 @@ def get_category_breakdown(user_id, date_from=None, date_to=None):
 
 def get_expense_by_id(expense_id, user_id):
     conn = get_db()
-    row = conn.execute(
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
         "SELECT id, amount, category, date, description "
-        "FROM expenses WHERE id = ? AND user_id = ?",
+        "FROM expenses WHERE id = %s AND user_id = %s",
         (expense_id, user_id),
-    ).fetchone()
+    )
+    row = cur.fetchone()
+    cur.close()
     conn.close()
     if row is None:
         return None
@@ -169,24 +180,29 @@ def get_expense_by_id(expense_id, user_id):
 
 def update_expense(expense_id, user_id, amount, category, expense_date, description):
     conn = get_db()
-    conn.execute(
-        "UPDATE expenses SET amount=?, category=?, date=?, description=? "
-        "WHERE id = ? AND user_id = ?",
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE expenses SET amount=%s, category=%s, date=%s, description=%s "
+        "WHERE id = %s AND user_id = %s",
         (amount, category, expense_date, description, expense_id, user_id),
     )
     conn.commit()
+    cur.close()
     conn.close()
 
 
 def delete_expense(expense_id, user_id):
     conn = get_db()
-    cursor = conn.execute(
-        "DELETE FROM expenses WHERE id = ? AND user_id = ?",
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM expenses WHERE id = %s AND user_id = %s",
         (expense_id, user_id),
     )
     conn.commit()
+    rowcount = cur.rowcount
+    cur.close()
     conn.close()
-    return cursor.rowcount
+    return rowcount
 
 
 # ------------------------------------------------------------------ #
@@ -196,9 +212,12 @@ def delete_expense(expense_id, user_id):
 
 def _relative_time(created_at):
     try:
-        dt = datetime.strptime(created_at[:19], "%Y-%m-%d %H:%M:%S")
+        if hasattr(created_at, "strftime"):
+            dt = created_at.replace(tzinfo=None)
+        else:
+            dt = datetime.strptime(str(created_at)[:19], "%Y-%m-%d %H:%M:%S")
     except (ValueError, TypeError):
-        return created_at
+        return str(created_at)
     delta = datetime.now(timezone.utc).replace(tzinfo=None) - dt
     seconds = int(delta.total_seconds())
     if seconds < 60:
@@ -239,7 +258,7 @@ def _fr_row_to_dict(row):
 
 # Trending score: (votes * 5) + views + recency bonus (max +7 for requests < 7 days old)
 _TRENDING_ORDER = (
-    "(vote_count * 5 + fr.views + MAX(0, 7 - (julianday('now') - julianday(fr.created_at)))) DESC,"
+    "(vote_count * 5 + fr.views + GREATEST(0, 7 - EXTRACT(EPOCH FROM (NOW() - fr.created_at)) / 86400)) DESC,"
     " fr.id DESC"
 )
 
@@ -255,13 +274,13 @@ def get_feature_requests(
     params = []
 
     if page_filter:
-        conditions.append("fr.page = ?")
+        conditions.append("fr.page = %s")
         params.append(page_filter)
     if status_filter:
-        conditions.append("fr.status = ?")
+        conditions.append("fr.status = %s")
         params.append(status_filter)
     if exclude_user_id is not None:
-        conditions.append("fr.user_id != ?")
+        conditions.append("fr.user_id != %s")
         params.append(exclude_user_id)
 
     where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
@@ -273,7 +292,9 @@ def get_feature_requests(
         "trending": _TRENDING_ORDER,
     }.get(sort, "fr.created_at DESC, fr.id DESC")
 
-    limit_clause = f"LIMIT {int(limit)}" if limit is not None else ""
+    limit_clause = "LIMIT %s" if limit is not None else ""
+    if limit is not None:
+        params.append(int(limit))
 
     sql = f"""
         SELECT fr.id, fr.user_id, fr.page, fr.title, fr.description,
@@ -284,12 +305,16 @@ def get_feature_requests(
         JOIN users u ON u.id = fr.user_id
         LEFT JOIN feature_votes fv ON fv.feature_id = fr.id
         {where}
-        GROUP BY fr.id
+        GROUP BY fr.id, fr.user_id, fr.page, fr.title, fr.description,
+                 fr.status, fr.views, fr.created_at, u.name
         ORDER BY {order}
         {limit_clause}
     """
     conn = get_db()
-    rows = conn.execute(sql, params).fetchall()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(sql, params)
+    rows = cur.fetchall()
+    cur.close()
     conn.close()
     return [_fr_row_to_dict(r) for r in rows]
 
@@ -303,12 +328,16 @@ def get_own_feature_requests(user_id):
         FROM feature_requests fr
         JOIN users u ON u.id = fr.user_id
         LEFT JOIN feature_votes fv ON fv.feature_id = fr.id
-        WHERE fr.user_id = ?
-        GROUP BY fr.id
+        WHERE fr.user_id = %s
+        GROUP BY fr.id, fr.user_id, fr.page, fr.title, fr.description,
+                 fr.status, fr.views, fr.created_at, u.name
         ORDER BY fr.created_at DESC
     """
     conn = get_db()
-    rows = conn.execute(sql, (user_id,)).fetchall()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(sql, (user_id,))
+    rows = cur.fetchall()
+    cur.close()
     conn.close()
     return [_fr_row_to_dict(r) for r in rows]
 
@@ -322,11 +351,15 @@ def get_feature_request_by_id(feature_id):
         FROM feature_requests fr
         JOIN users u ON u.id = fr.user_id
         LEFT JOIN feature_votes fv ON fv.feature_id = fr.id
-        WHERE fr.id = ?
-        GROUP BY fr.id
+        WHERE fr.id = %s
+        GROUP BY fr.id, fr.user_id, fr.page, fr.title, fr.description,
+                 fr.status, fr.views, fr.created_at, u.name
     """
     conn = get_db()
-    row = conn.execute(sql, (feature_id,)).fetchone()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(sql, (feature_id,))
+    row = cur.fetchone()
+    cur.close()
     conn.close()
     if row is None:
         return None
@@ -335,95 +368,116 @@ def get_feature_request_by_id(feature_id):
 
 def insert_feature_request(user_id, page, title, description):
     conn = get_db()
-    cursor = conn.execute(
-        "INSERT INTO feature_requests (user_id, page, title, description) VALUES (?, ?, ?, ?)",
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "INSERT INTO feature_requests (user_id, page, title, description)"
+        " VALUES (%s, %s, %s, %s) RETURNING id",
         (user_id, page, title, description),
     )
+    new_id = cur.fetchone()["id"]
     conn.commit()
-    new_id = cursor.lastrowid
+    cur.close()
     conn.close()
     return new_id
 
 
 def update_feature_request(feature_id, user_id, page, title, description):
     conn = get_db()
-    cursor = conn.execute(
-        "UPDATE feature_requests SET page=?, title=?, description=?, updated_at=datetime('now') "
-        "WHERE id=? AND user_id=?",
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE feature_requests SET page=%s, title=%s, description=%s, updated_at=NOW() "
+        "WHERE id=%s AND user_id=%s",
         (page, title, description, feature_id, user_id),
     )
     conn.commit()
+    rowcount = cur.rowcount
+    cur.close()
     conn.close()
-    return cursor.rowcount
+    return rowcount
 
 
 def delete_feature_request(feature_id, user_id):
     conn = get_db()
-    cursor = conn.execute(
-        "DELETE FROM feature_requests WHERE id=? AND user_id=?",
+    cur = conn.cursor()
+    cur.execute(
+        "DELETE FROM feature_requests WHERE id=%s AND user_id=%s",
         (feature_id, user_id),
     )
     conn.commit()
+    rowcount = cur.rowcount
+    cur.close()
     conn.close()
-    return cursor.rowcount
+    return rowcount
 
 
 def count_user_feature_requests(user_id):
     conn = get_db()
-    row = conn.execute(
-        "SELECT COUNT(*) FROM feature_requests WHERE user_id=?",
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "SELECT COUNT(*) AS count FROM feature_requests WHERE user_id=%s",
         (user_id,),
-    ).fetchone()
+    )
+    row = cur.fetchone()
+    cur.close()
     conn.close()
-    return row[0]
+    return row["count"]
 
 
 def increment_feature_view(feature_id, viewer_id):
     conn = get_db()
-    cursor = conn.execute(
-        "INSERT OR IGNORE INTO feature_views (feature_id, viewer_id) VALUES (?, ?)",
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO feature_views (feature_id, viewer_id) VALUES (%s, %s)"
+        " ON CONFLICT (feature_id, viewer_id) DO NOTHING",
         (feature_id, viewer_id),
     )
-    if cursor.rowcount:
-        conn.execute(
-            "UPDATE feature_requests SET views = views + 1 WHERE id=?",
+    is_new_view = bool(cur.rowcount)
+    if is_new_view:
+        cur.execute(
+            "UPDATE feature_requests SET views = views + 1 WHERE id=%s",
             (feature_id,),
         )
     conn.commit()
+    cur.close()
     conn.close()
-    return bool(cursor.rowcount)
+    return is_new_view
 
 
 def toggle_feature_vote(feature_id, user_id):
     conn = get_db()
-    conn.execute("BEGIN")
-    cursor = conn.execute(
-        "INSERT OR IGNORE INTO feature_votes (feature_id, user_id) VALUES (?, ?)",
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "INSERT INTO feature_votes (feature_id, user_id) VALUES (%s, %s)"
+        " ON CONFLICT (feature_id, user_id) DO NOTHING",
         (feature_id, user_id),
     )
-    if cursor.rowcount == 1:
+    if cur.rowcount == 1:
         voted = True
     else:
-        conn.execute(
-            "DELETE FROM feature_votes WHERE feature_id = ? AND user_id = ?",
+        cur.execute(
+            "DELETE FROM feature_votes WHERE feature_id = %s AND user_id = %s",
             (feature_id, user_id),
         )
         voted = False
     conn.commit()
-    row = conn.execute(
-        "SELECT COUNT(*) FROM feature_votes WHERE feature_id = ?",
+    cur.execute(
+        "SELECT COUNT(*) AS count FROM feature_votes WHERE feature_id = %s",
         (feature_id,),
-    ).fetchone()
-    vote_count = row[0]
+    )
+    vote_count = cur.fetchone()["count"]
+    cur.close()
     conn.close()
     return voted, vote_count
 
 
 def get_voted_feature_ids(user_id):
     conn = get_db()
-    rows = conn.execute(
-        "SELECT feature_id FROM feature_votes WHERE user_id = ?",
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "SELECT feature_id FROM feature_votes WHERE user_id = %s",
         (user_id,),
-    ).fetchall()
+    )
+    rows = cur.fetchall()
+    cur.close()
     conn.close()
     return {row["feature_id"] for row in rows}

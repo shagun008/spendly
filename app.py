@@ -1,6 +1,6 @@
 import math
 import os
-import sqlite3
+import psycopg2
 from datetime import date, datetime, timedelta
 from flask import (
     Flask,
@@ -13,6 +13,7 @@ from flask import (
     abort,
     jsonify,
 )
+from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
 from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
 from database.queries import (
@@ -36,8 +37,16 @@ from database.queries import (
     get_voted_feature_ids,
 )
 
+load_dotenv()
+
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "spendly-dev-secret")
+_secret_key = os.environ.get("SECRET_KEY")
+if not _secret_key:
+    raise RuntimeError(
+        "SECRET_KEY environment variable is not set. "
+        "Add it to your .env file or Railway Variables."
+    )
+app.secret_key = _secret_key
 
 VALID_CATEGORIES = [
     "Food",
@@ -122,7 +131,7 @@ def register():
 
     try:
         create_user(name, email, password)
-    except sqlite3.IntegrityError:
+    except psycopg2.errors.UniqueViolation:
         flash("Email already registered.")
         return render_template("register.html")
 
