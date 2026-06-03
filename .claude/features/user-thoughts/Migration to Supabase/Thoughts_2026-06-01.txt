@@ -1,0 +1,44 @@
+## Feature Thoughts — Migration to Supabase
+
+### Objective
+
+Migrate the Spendly database from SQLite to Supabase (PostgreSQL) to support persistent storage on Railway and enable a more production-ready setup.
+
+---
+
+### Motivation
+
+- Railway's filesystem is ephemeral — SQLite data is lost on every redeploy
+- Supabase provides managed PostgreSQL with a free tier
+- Enables proper production data persistence without changing hosting provider
+
+---
+
+### Migration Steps Discussed
+
+1. Create a Supabase project and obtain the connection string (manual)
+2. Install `psycopg2-binary` and add to `requirements.txt`
+3. Update `database/db.py` to use psycopg2 instead of sqlite3
+4. Update all queries in `database/queries.py` — replace `?` with `%s`
+5. Recreate schema on Supabase (`SERIAL` instead of `AUTOINCREMENT`, `NOW()` instead of `datetime('now')`)
+6. Migrate existing data from SQLite to Supabase via CSV export/import, then reset sequences
+7. Set `DATABASE_URL` environment variable on Railway
+8. Test locally before deploying
+
+---
+
+### Key Code Changes
+
+- `sqlite3` → `psycopg2`
+- `?` → `%s` placeholders in all queries
+- `INTEGER PRIMARY KEY AUTOINCREMENT` → `SERIAL PRIMARY KEY`
+- `datetime('now')` → `NOW()`
+- `sqlite3.Row` → `RealDictCursor` for dict-like row access
+
+---
+
+### Notes
+
+- Passwords are already hashed — migrate as-is, no re-hashing needed
+- Supabase MCP can automate schema creation and data verification steps
+- Consider using Neon as an alternative to Supabase if needed

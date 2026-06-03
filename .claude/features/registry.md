@@ -41,10 +41,13 @@ Release sub-rows (indented with →) show individual release status.
 | 09.1 | → Delete Expense | release | 09 | ✅ Shipped | 09-delete-expense |
 | 10 | Mobile Nav | feature | — | ✅ Shipped | 1 release |
 | 10.1 | → Mobile Nav | release | 10 | ✅ Shipped | 10-mobile-nav |
-| 11 | Feature Requests Page and Public Feature Discovery | new-feature | — | 👀 In Review | 3 releases planned |
+| 11 | Feature Requests Page and Public Feature Discovery | new-feature | — | ✅ Shipped | 3 releases planned |
 | 11-1 | → DB, Submission, and /features Page (Core) | release | 11 | ✅ Shipped | 11-1-feature-requests-core.md |
 | 11-2 | → Upvoting and Trending | release | 11 | ✅ Shipped | 11-2-feature-requests-voting.md |
-| 11-3 | → Home Page "Latest Features" Section | release | 11 | 👀 In Review | 11-3-home-latest-features-section.md |
+| 11-3 | → Home Page "Latest Features" Section | release | 11 | ✅ Shipped | 11-3-home-latest-features-section.md |
+| 12 | Migration to Supabase | new-feature | — | 📋 Planned | 2 releases planned |
+| 12.1 | → Swap Database Layer | release | 12 | 📋 Planned | — |
+| 12.2 | → Local Data Migration | release | 12 | 📋 Planned | — |
 
 ## Numbering Rules
 
