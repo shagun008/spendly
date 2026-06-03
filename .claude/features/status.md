@@ -2,13 +2,12 @@
 Last updated: 2026-06-02
 
 ## 🔧 In Progress
-Nothing in progress
+- **12.1** Swap Database Layer
 
 ## 👀 In Review
 Nothing in review
 
 ## 📋 Planned — ready to spec
-- **12.1** Swap Database Layer
 - **12.2** Local Data Migration
 
 ## 💡 Captured — needs release planning
