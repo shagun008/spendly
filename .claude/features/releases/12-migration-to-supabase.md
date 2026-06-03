@@ -22,14 +22,13 @@ Spendly currently uses SQLite, which is ephemeral on Railway — all data is los
 - **Depends on:** nothing
 - **Risk:** medium
 
-### Release 2 — Local Data Migration + Dev/Prod Split
+### Release 2 — Local Data Migration
 - **Scope:**
-  - Create a second Supabase project for local development (keeps dev data separate from production)
-  - Update `.env` to point `DATABASE_URL` at the new dev Supabase instance
-  - Railway Variables tab continues to point at the original (prod) Supabase instance — no change needed there
-  - One-off script to export users and expenses from local SQLite to CSV; import CSVs into the **dev** Supabase preserving original IDs; reset Postgres sequences after import (setval to MAX(id)) so new inserts don't collide
-  - Verify migrated data is intact via row counts and spot checks on the dev instance
-  - Document both connection strings clearly (dev vs prod) so future releases know which to use
+  - One-off script to export users and expenses from local `spendly.db` to CSV
+  - Import CSVs into Supabase preserving original IDs
+  - Reset Postgres sequences after import (setval to MAX(id)) so new inserts don't collide
+  - Verify migrated data is intact via row counts and spot checks
+  - Note: `spendly.db` remains as a backup — if anything goes wrong the script can simply be re-run
 - **Spec slug:** supabase-local-data-migration
 - **Spec arg:** `12.2 supabase-local-data-migration`
 - **Depends on:** Release 1
@@ -38,6 +37,7 @@ Spendly currently uses SQLite, which is ephemeral on Railway — all data is los
 ## Deferred / Out of scope
 - Railway data migration — the Railway SQLite DB will be wiped and started fresh on first deploy with Supabase.
 - Neon as an alternative provider — not needed if Supabase works as expected.
+- Dev/prod Supabase split — only needed once Supabase becomes the source of truth and real user data exists in production. Not required for Release 2 since `spendly.db` remains the migration source and can be re-run if needed.
 
 ## Open questions
 None remaining.

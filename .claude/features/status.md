@@ -8,7 +8,7 @@ Nothing in progress
 Nothing in review
 
 ## 📋 Planned — ready to spec
-- **12.2** Local Data Migration + Dev/Prod Split
+- **12.2** Local Data Migration
 
 ## 💡 Captured — needs release planning
 Nothing captured yet

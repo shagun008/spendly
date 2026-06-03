@@ -47,7 +47,7 @@ Release sub-rows (indented with →) show individual release status.
 | 11-3 | → Home Page "Latest Features" Section | release | 11 | ✅ Shipped | 11-3-home-latest-features-section.md |
 | 12 | Migration to Supabase | new-feature | — | 📋 Planned | 2 releases planned |
 | 12.1 | → Swap Database Layer | release | 12 | ✅ Shipped | 12.1-supabase-db-layer.md |
-| 12.2 | → Local Data Migration + Dev/Prod Split | release | 12 | 📋 Planned | — |
+| 12.2 | → Local Data Migration | release | 12 | 📋 Planned | — |
 
 ## Numbering Rules
 
