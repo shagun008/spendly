@@ -1,0 +1,227 @@
+================================================================================
+ORIGINAL BRIEF
+================================================================================
+
+Create a README file for a project on GitHub. The project is a personal expense
+management application, but it was built using a custom coding harness I
+developed to automate and streamline application development. The README should
+be structured as follows: First, introduce the harness—explain what it
+automates, the key steps in the development workflow, and how it evolved. Then,
+introduce the expense management application—what it does, what features it has,
+and what problem it solves. Keep the tone professional and clear. Provide a few
+sections with headings, and include a brief example or workflow diagram idea if
+possible. The final output should be a structured, easy-to-read draft that
+balances both the harness and the project it helped create.
+
+
+================================================================================
+AUDIENCE
+================================================================================
+
+Primary (C-suite and executive):
+  - CEO, COO, CFO, CTO, CIO, CDO, Chief AI Officers
+    Scan for strategic signal: is this person thinking at a systems level?
+    Does this methodology reduce cost, risk, and delivery time? Is AI being
+    used with discipline, not just experimentally?
+
+Primary (business and GTM):
+  - Hiring managers and HR evaluating engineering candidates
+  - Business leaders and industry leaders assessing methodology and output
+  - GTM teams and Forward Deployment teams (and their managers / leaders)
+    who want to understand what was built and how quickly
+
+Secondary (technical):
+  - Software engineers and developers browsing GitHub
+  - Technical interviewers looking at code quality and process
+
+Implication: the README is not a setup guide and not an open-source invite.
+It is a professional showcase. Non-technical and executive readers will scan
+the top third and decide whether to keep reading. Lead with outcomes and
+strategic framing. Technical detail belongs in the lower half, where
+engineers will find it.
+
+Note on contributor sections: Getting Started, Running Tests, and Deployment
+have been intentionally excluded. This project is not open for external
+contribution or replication at this time.
+
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+The following specifics have been pulled from the live project to make this
+brief immediately actionable when passed to /capture-thoughts or used directly
+to write the README.
+
+
+--- HARNESS SECTION ---
+
+The harness is a structured set of Claude Code slash commands that automate
+every stage of feature development. Name each command explicitly in the README:
+
+  /capture-thoughts   — reads free-form notes from user-thoughts/, summarises
+                        them into processed-thoughts/
+  /plan-release       — decomposes a feature into release-sized units, writes
+                        a release plan file
+  /create-spec        — writes a formal spec file and creates a feature branch
+  /test-feature       — generates pytest tests from the spec, then runs them
+  /code-review-feature — launches a security reviewer and quality reviewer in
+                        parallel (two specialised agents running simultaneously)
+  /ship-feature       — commits, opens a PR, squash-merges, and cleans up the
+                        branch
+
+Each feature moves through a tracked status lifecycle:
+
+  💡 Captured → 📋 Planned → 🔧 In Progress → 👀 In Review → ✅ Shipped
+
+Workflow diagram (ASCII — suitable for README code block):
+
+  User notes / screenshot
+          │
+          ▼
+  /capture-thoughts          (💡 Captured)
+          │
+          ▼
+  /plan-release              (📋 Planned)
+          │
+          ▼
+  /create-spec + Plan Mode   (🔧 In Progress)
+          │
+          ▼
+  /test-feature              (👀 In Review)
+          │
+          ▼
+  /code-review-feature       (security + quality agents, parallel)
+          │
+          ▼
+  /ship-feature              (✅ Shipped)
+
+Evolution note worth including: the harness was capable enough to manage a
+non-trivial database migration (SQLite → Supabase PostgreSQL) as two spec'd
+features (12.1 and 12.2), including data migration scripts — not just schema
+changes. For a CFO or COO audience, this is a cost and risk reduction story:
+infrastructure changes handled through the same governed workflow as features,
+not as manual one-offs.
+
+
+--- APP SECTION ---
+
+App name: Spendly
+
+Problem it solves: individuals who want a simple, private way to log and review
+personal expenses without relying on spreadsheets or complex financial tools.
+Built specifically for Indian users — all amounts displayed in ₹.
+
+Features shipped (12 features, 15 spec releases):
+
+  Auth          — register, login, logout with hashed passwords (werkzeug)
+  Profile       — expense list with date-range filters and running totals
+  Expenses      — add, edit, delete expenses across 7 categories
+                  (Food, Transport, Bills, Health, Entertainment, Shopping, Other)
+  Analytics     — visual breakdown of spending by category and over time
+  Feature Requests — community board where users submit, upvote, and discover
+                  feature ideas; trending sorted by votes and unique views
+  Mobile Nav    — hamburger navigation, fully responsive at 600px breakpoint
+
+Tech stack (for the README tech table):
+
+  Backend       Flask 3.x (Python 3)
+  Database      PostgreSQL via Supabase (psycopg2-binary)
+  Auth          werkzeug.security
+  Frontend      Jinja2 templates, vanilla CSS, vanilla JS
+  Icons         Lucide (CDN)
+  Fonts         DM Serif Display + DM Sans (Google Fonts)
+  Testing       pytest + pytest-flask (one test file per feature)
+  Server        gunicorn (Procfile)
+
+Stat line for "Why This Matters" section (tight, scannable):
+  12 features · 15 spec releases · 0 unreviewed merges · 1 DB migration
+  handled as a governed harness feature
+
+
+================================================================================
+RECOMMENDED README OUTLINE
+================================================================================
+
+7 sections. No contributor-facing content (Getting Started, Running Tests, and
+Deployment removed). Designed to be read top-to-bottom by a C-suite executive
+or scanned in 30 seconds by a hiring manager.
+
+  1. Header + one-liner
+     "Spendly is a personal expense tracker — and a proof of concept for
+      structured, governed AI-assisted software delivery."
+
+  2. Why This Matters  [leads for C-suite and executive readers]
+     Strategic framing first — this is a proof of concept for AI integration
+     with built-in governance, not just a side project. Include the stat line:
+       · 12 features shipped across 15 spec releases
+       · Every feature spec'd, tested, and code-reviewed before merge
+       · Infrastructure changes (DB migration) handled through the same
+         governed workflow as features — not manual one-offs
+       · A repeatable system: raw idea to shipped PR with zero untracked steps
+     One-paragraph executive framing:
+     "This project is a proof of concept for AI-assisted software delivery —
+      a repeatable pipeline that takes a feature from raw idea to production
+      code with structured governance (spec, test, parallel code review) built
+      into every step. The application it produced is real and functional; the
+      methodology it demonstrates is the point."
+
+  3. Live Demo / Screenshots
+     Prominent placeholder for a live URL or GIF/screenshots. High on the
+     page — GTM, Forward Deployment, and business readers form their
+     impression visually before reading prose.
+
+  4. About Spendly
+     Problem statement in plain English (one short paragraph).
+     Feature list grouped by area (Auth, Expenses, Analytics, Community,
+     Mobile) — no jargon, no code references.
+
+  5. The Development Harness
+     Open with plain-English narrative for C-suite and business readers:
+     "I designed a structured AI-assisted pipeline that enforces a consistent
+      workflow — from capturing an idea to shipping reviewed, tested code —
+      with no manual steps in between. Every feature follows the same path;
+      nothing merges without a spec, tests, and a parallel security and
+      quality review."
+     Follow with the ASCII workflow diagram (one orienting sentence before it).
+     Then list the six commands with descriptions — supporting detail for
+     technical readers, not the headline.
+     Close with the DB migration evolution note (cost/risk reduction framing
+     for CFO/COO readers).
+
+  6. Tech Stack
+     Markdown table: layer | technology.
+     For technical readers; non-technical readers can skim or skip.
+
+  7. Feature Roadmap
+     Table showing all 12 features with ✅ Shipped status.
+     Signals completeness and velocity. Note: next feature TBD.
+
+
+================================================================================
+TONE NOTES
+================================================================================
+
+- The README is a professional showcase, not a setup guide or contribution
+  invite — write every line with that frame in mind
+- Lead with strategic outcomes: "a repeatable, governed AI delivery pipeline"
+  is the message; Spendly is the evidence
+- "Why This Matters" is the most important section — it must work as a
+  standalone paragraph for a CEO or CDO who reads nothing else
+- For CFO/COO readers: the DB migration story is about risk reduction and
+  process discipline, not technical architecture — name it that way
+- For CAIO/CDO readers: the harness demonstrates structured AI integration
+  into a delivery workflow, not casual AI use — the governance (spec, test,
+  parallel review, tracked status) is the differentiator
+- Quantify wherever possible: "12 features", "15 releases", "0 unreviewed
+  merges" — concrete numbers land harder than adjectives
+- The harness narrative is methodology-first; commands are supporting evidence
+  for technical readers who want to verify the claims
+- Avoid imperative syntax in narrative sections — descriptive language only
+  ("the pipeline enforces a review before any merge" not "run /ship-feature")
+- Screenshots and live link near the top — visual credibility for GTM,
+  Forward Deployment, and business readers before they read a word
+- Technical depth is fully present — positioned in sections 5 and 6, after
+  the value proposition is established
+- No superlatives, no marketing language — let the stat line and feature
+  count do the work
