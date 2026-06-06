@@ -1,14 +1,14 @@
 # Spendly — Feature Status
-Last updated: 2026-06-02
+Last updated: 2026-06-05
 
 ## 🔧 In Progress
-Nothing in progress
+- **12.2** Local Data Migration to Supabase
 
 ## 👀 In Review
 Nothing in review
 
 ## 📋 Planned — ready to spec
-- **12.2** Local Data Migration
+Nothing planned yet
 
 ## 💡 Captured — needs release planning
 Nothing captured yet
