@@ -1,6 +1,6 @@
 ---
 description: Commit, push, create PR, merge, and clean up after a feature is complete
-allowed-tools: Read, Bash, mcp__github__create_pull_request, mcp__github__merge_pull_request, mcp__github__delete_branch
+allowed-tools: Read, Bash, mcp__github__create_pull_request, mcp__github__merge_pull_request, mcp__github__delete_branch, Bash(railway*)
 ---
 
 ## Step 1 — Identify current branch
@@ -122,6 +122,21 @@ Report: "✓ Local branch deleted"
 5. Rewrite `.claude/features/status.md` by reading the full registry and
    regenerating all sections grouped by status. Set "Last updated" to today's date.
 
+## Step 10 — Deploy to Railway
+Run:
+```bash
+railway up
+```
+This streams the full build log live. Wait for Railway to confirm the deployment
+is successful before reporting done.
+
+If the deploy fails:
+- Report the failure with the relevant error lines from the build log
+- Do NOT mark the feature as complete in the summary
+- Tell the user to fix the issue and re-run `railway up` manually
+
+Report: "✓ Deployed to Railway — <deployment URL>"
+
 ## Final summary
 Print:
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
@@ -132,6 +147,7 @@ Print:
 ✓ Remote branch deleted
 ✓ Switched to main
 ✓ Local branch deleted
+✓ Deployed to Railway — <deployment URL>
 Next: run /create-spec for the next feature
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
