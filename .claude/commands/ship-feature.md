@@ -125,7 +125,7 @@ Report: "✓ Local branch deleted"
 ## Step 10 — Deploy to Railway
 Run:
 ```bash
-railway up
+railway up --service expense-tracker
 ```
 This streams the full build log live. Wait for Railway to confirm the deployment
 is successful before reporting done.
