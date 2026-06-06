@@ -8,7 +8,7 @@ Nothing in progress
 Nothing in review
 
 ## 📋 Planned — ready to spec
-- **11-4.1** Session-based view deduplication (enhancement to 11)
+Nothing planned yet
 
 ## 💡 Captured — needs release planning
 Nothing captured yet
