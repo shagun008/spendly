@@ -20,7 +20,9 @@ This project is a proof of concept for AI-assisted software delivery — a repea
 
 ## Live Demo / Screenshots
 
-> Screenshots and live URL coming soon.
+**[https://expense-tracker-production-635c.up.railway.app](https://expense-tracker-production-635c.up.railway.app)**
+
+> Screenshots coming soon.
 
 ---
 
