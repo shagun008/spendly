@@ -45,9 +45,9 @@ Release sub-rows (indented with →) show individual release status.
 | 11-1 | → DB, Submission, and /features Page (Core) | release | 11 | ✅ Shipped | 11-1-feature-requests-core.md |
 | 11-2 | → Upvoting and Trending | release | 11 | ✅ Shipped | 11-2-feature-requests-voting.md |
 | 11-3 | → Home Page "Latest Features" Section | release | 11 | ✅ Shipped | 11-3-home-latest-features-section.md |
-| 12 | Migration to Supabase | new-feature | — | 📋 Planned | 2 releases planned |
+| 12 | Migration to Supabase | new-feature | — | 🔧 In Progress | 2 releases planned |
 | 12.1 | → Swap Database Layer | release | 12 | ✅ Shipped | 12.1-supabase-db-layer.md |
-| 12.2 | → Local Data Migration | release | 12 | 📋 Planned | — |
+| 12.2 | → Local Data Migration | release | 12 | 🔧 In Progress | 12.2-local-data-migration-to-supabase.md |
 
 ## Numbering Rules
 
