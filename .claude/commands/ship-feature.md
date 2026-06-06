@@ -33,6 +33,18 @@ Rules:
 Good: "feat: add delete expense button with confirmation dialog"
 Bad: "feat: added DELETE route to app.py"
 
+## Step 2b — README check
+Before committing, check whether README.md needs updating for this feature:
+- If the feature adds a new user-visible capability: add it to the
+  Features list in the About Spendly section
+- If the feature adds a new entry to the roadmap: add a row to the
+  Feature Roadmap table
+- If the tech stack changed: update the Tech Stack table
+- If none of the above apply: no README update needed
+
+If README.md was updated, stage it with the rest of the changes.
+Report: "✓ README checked — <updated | no changes needed>"
+
 ## Step 3 — Commit
 ```bash
 git add .
