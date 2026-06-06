@@ -198,17 +198,20 @@ Status values tracked at each stage:
 
 ## Feature Roadmap
 
-| Feature | Name                           | Status      |
-|---------|--------------------------------|-------------|
-| 01      | Database setup                 | ✅ Shipped  |
-| 02      | Registration                   | ✅ Shipped  |
-| 03      | Login and logout               | ✅ Shipped  |
-| 04      | Profile page                   | ✅ Shipped  |
-| 05      | Backend routes for profile     | ✅ Shipped  |
-| 06      | Date filter on profile         | ✅ Shipped  |
-| 07      | Add expense                    | ✅ Shipped  |
-| 08      | Edit expense                   | ✅ Shipped  |
-| 09      | Delete expense                 | ✅ Shipped  |
-| 10      | Mobile nav                     | ✅ Shipped  |
+| Feature | Name                                            | Status      |
+|---------|-------------------------------------------------|-------------|
+| 01      | Database setup                                  | ✅ Shipped  |
+| 02      | Registration                                    | ✅ Shipped  |
+| 03      | Login and logout                                | ✅ Shipped  |
+| 04      | Profile page                                    | ✅ Shipped  |
+| 05      | Backend routes for profile                      | ✅ Shipped  |
+| 06      | Date filter on profile                          | ✅ Shipped  |
+| 07      | Add expense                                     | ✅ Shipped  |
+| 08      | Edit expense                                    | ✅ Shipped  |
+| 09      | Delete expense                                  | ✅ Shipped  |
+| 10      | Mobile nav                                      | ✅ Shipped  |
+| 11      | Feature Requests Page and Public Feature Discovery | ✅ Shipped  |
+| 12      | Migration to Supabase                           | ✅ Shipped  |
+| 14      | Add README File                                 | ✅ Shipped  |
 
-Next feature to implement: **11**
+Next feature to implement: **15**

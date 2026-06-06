@@ -122,6 +122,16 @@ Report: "✓ Local branch deleted"
 5. Rewrite `.claude/features/status.md` by reading the full registry and
    regenerating all sections grouped by status. Set "Last updated" to today's date.
 
+## Step 9c — Update CLAUDE.md roadmap table
+Read `.claude/features/registry.md` and rewrite the Feature Roadmap table
+in `CLAUDE.md` to match. Rules:
+- Include only rows where the Parent column is `—` (top-level features only,
+  no release sub-rows)
+- Preserve the exact table format: `| Feature | Name | Status |`
+- Map registry status symbols to the table as-is (e.g. `✅ Shipped`, `🔧 In Progress`)
+- Update the "Next feature to implement" line to the next integer after the
+  highest feature number in the registry
+
 ## Step 10 — Deploy to Railway
 Run:
 ```bash
