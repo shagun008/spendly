@@ -185,6 +185,11 @@ If `CLAUDE.md` does not exist, apply these defaults:
 A specific testable checklist. Each item must be verifiable
 by running the app, and each item must have a corresponding
 pytest test case in the `tests/` directory.
+
+Always include this item at the end of the checklist:
+- [ ] README.md updated if this feature adds, changes, or removes
+  anything user-visible (new route, new feature area, tech stack
+  change, or feature roadmap entry)
 ---
 
 ## Step 10 — Save the spec

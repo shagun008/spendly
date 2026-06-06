@@ -76,7 +76,7 @@ User notes / screenshot
 | `/code-review-feature` | Launches a security reviewer and a quality reviewer in parallel |
 | `/ship-feature` | Commits, opens a pull request, squash-merges, and cleans up the branch |
 
-The pipeline proved capable beyond routine feature work. When the project outgrew SQLite and required a migration to Supabase PostgreSQL — including data migration scripts, not just schema changes — that work was handled as two spec'd pipeline releases (14.1 and 14.2), subject to the same governance as every other feature. Infrastructure changes treated as first-class deliverables, not one-off tasks.
+The pipeline proved capable beyond routine feature work. When the project outgrew SQLite and required a migration to Supabase PostgreSQL — including data migration scripts, not just schema changes — that work was handled as two spec'd pipeline releases (12.1 and 12.2), subject to the same governance as every other feature. Infrastructure changes treated as first-class deliverables, not one-off tasks.
 
 ---
 
