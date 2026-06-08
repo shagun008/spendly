@@ -1,0 +1,65 @@
+Build out the Analytics page, which currently shows a "Coming Soon" placeholder.
+
+The profile page already renders summary stats (total spend, transaction count, average),
+category breakdown, and recent transactions — but it's a data table, not a visual experience.
+Analytics should be the visual, chart-driven counterpart to Profile.
+
+---
+
+## Proposed content for the Analytics page
+
+### 1. Spending over time — line/bar chart
+Show total spend per month (or per week) across the user's full history.
+Lets users spot seasonal patterns or months where they overspent.
+X-axis: month labels. Y-axis: ₹ amount.
+
+### 2. Category breakdown — donut/pie chart
+Visual split of spend by category (Food, Transport, Bills, etc.).
+Same data as get_category_breakdown() already used on the profile page —
+just rendered as a chart instead of a list.
+
+### 3. Top spending days — bar chart or heatmap
+Which days of the week or which dates in a month see the most spend.
+Helps users understand behaviour patterns (e.g. "I overspend on weekends").
+
+### 4. Category trend over time — stacked bar or multi-line chart
+How each category's spend has changed month-over-month.
+More advanced — could be deferred to a later release if scope is too large.
+
+### 5. Summary stat cards (reuse profile pattern)
+Total spend this month, biggest single expense, most expensive category.
+Quick scannable numbers at the top of the page before the charts.
+
+---
+
+## Implementation thoughts
+
+- Use Chart.js (CDN) — lightweight, no build step, works well with Jinja2 templates.
+  Recharts or D3 would require a JS build pipeline which we don't have.
+- Data should come from a new JSON endpoint (e.g. GET /analytics/data) so charts
+  can be rendered client-side without page reloads. Alternatively, pass data as
+  Jinja2 variables and initialise charts inline — simpler for a first release.
+- New query helpers will be needed in queries.py:
+    - get_monthly_spend(user_id) — returns list of {month, total} dicts
+    - get_day_of_week_spend(user_id) — returns spend grouped by day of week
+  Category breakdown can reuse get_category_breakdown() already in queries.py.
+- The analytics.css file already exists (linked in the template) — extend it.
+- No new auth logic needed — same session guard as the profile route.
+
+---
+
+## Scope suggestion
+
+Release 1 (MVP): Summary stat cards + spending over time chart + category donut chart.
+Release 2: Top spending days + category trend over time (stacked bar).
+
+This gives a complete, usable page in Release 1 without over-engineering the first cut.
+
+---
+
+## Decisions
+
+- Charts show all-time data by default. No date filter in Release 1 — charts are most
+  meaningful across the full history. A filter can be added in Release 2.
+- Chart.js loaded only in analytics.html ({% block scripts %}), not globally in base.html.
+  It is ~200KB and only needed on one page.
