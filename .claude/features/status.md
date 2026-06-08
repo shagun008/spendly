@@ -1,5 +1,5 @@
 # Spendly — Feature Status
-Last updated: 2026-06-06
+Last updated: 2026-06-07
 
 ## 🔧 In Progress
 Nothing in progress
@@ -8,7 +8,9 @@ Nothing in progress
 Nothing in review
 
 ## 📋 Planned — ready to spec
-Nothing planned yet
+- **15.1** DB Layer + Pipeline Table
+- **15.2** Expand-in-Place Detail View
+- **15.3** Harness Integration (Live Updates)
 
 ## 💡 Captured — needs release planning
 Nothing captured yet
