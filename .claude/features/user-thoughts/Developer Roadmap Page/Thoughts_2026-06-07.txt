@@ -1,0 +1,83 @@
+Build a public developer roadmap page that shows all logged-in and anonymous users where each feature is in the development cycle.
+
+---
+
+## Goal
+
+A public-facing `/roadmap` page (no auth required) that gives visitors transparency into the Spendly feature pipeline — what's shipped, what's being built, and what's planned.
+
+---
+
+## Decisions made
+
+- **Audience:** Public — no login required. Anyone can see it.
+- **Detail view:** Structured summary cards — key fields (title, status, scope, release notes) rendered as clean UI cards, not raw markdown.
+- **Data source:** New `features` table in the database, seeded from the existing registry. Decoupled from dev artefacts.
+
+---
+
+## Page content
+
+### 1. Pipeline view (main page)
+A table where each row is a feature and each column is a pipeline stage:
+
+| # | Feature | Captured | Planned | In Progress | In Review | Shipped |
+|---|---------|----------|---------|-------------|-----------|---------|
+| 11 | Feature Requests | ✓ 2025-01-10 | ✓ 2025-01-11 | ✓ 2025-01-12 | ✓ 2025-01-14 | ✓ 2025-01-15 |
+| 15 | Analytics Page | ✓ 2026-06-06 | — | — | — | — |
+
+- Each cell shows a tick (✓) + the date that stage was completed, or a dash (—) if not yet reached.
+- Stages are ordered left to right: Captured → Planned → In Progress → In Review → Shipped.
+- Rows ordered by feature number descending (newest first) or grouped: active on top, shipped below.
+- Clicking a row opens the feature detail view.
+
+### 2. Feature detail (click to expand or /roadmap/<id>)
+Structured card with:
+- Title and feature number
+- Status badge
+- Description / scope
+- Release breakdown (release 1, release 2, etc. with their own statuses)
+- Any linked GitHub PR (optional)
+
+---
+
+## DB schema (new table)
+
+```sql
+CREATE TABLE features (
+  id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+  number              TEXT    NOT NULL UNIQUE,   -- e.g. "11", "11-1"
+  title               TEXT    NOT NULL,
+  type                TEXT    NOT NULL,          -- "feature" or "release"
+  parent              TEXT,                      -- parent feature number, null for top-level
+  status              TEXT    NOT NULL,          -- current status (latest stage reached)
+  description         TEXT,                      -- short human-readable scope
+  spec_slug           TEXT,                      -- e.g. "11-1-feature-requests-core"
+  pr_url              TEXT,                      -- optional GitHub PR link
+  captured_at         TEXT,                      -- timestamp when captured stage completed
+  planned_at          TEXT,                      -- timestamp when planned stage completed
+  in_progress_at      TEXT,                      -- timestamp when in_progress stage completed
+  in_review_at        TEXT,                      -- timestamp when in_review stage completed
+  shipped_at          TEXT,                      -- timestamp when shipped
+  created_at          TEXT    DEFAULT (datetime('now'))
+);
+```
+
+Seeded from the existing registry entries on first run.
+
+---
+
+## Routes
+
+- `GET /roadmap` — public, shows all features grouped by status
+- `GET /roadmap/<number>` — public, shows detail card for a feature/release
+
+---
+
+## Implementation notes
+
+- New `roadmap.css` and `roadmap_detail.css` (or shared) in `static/css/`
+- New query helpers in `queries.py`: `get_all_features()`, `get_feature_by_number(number)`
+- Seed function in `db.py` or a separate `seed_features.py` script
+- No Chart.js needed — this is a card/list UI
+- Nav link: add "Roadmap" to the public nav (visible even when logged out)
