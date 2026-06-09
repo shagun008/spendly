@@ -120,7 +120,9 @@ Report: "✓ Local branch deleted"
    - If yes: update the parent feature row Status to `✅ Shipped`
    - If no: update the parent feature row Status to reflect the least-complete remaining release
 5. Rewrite `.claude/features/status.md` by reading the full registry and
-   regenerating all sections grouped by status. Set "Last updated" to today's date.
+   regenerating all sections grouped by status, in this order:
+   🔧 In Progress, 👀 In Review, 📝 Spec'd, 📋 Planned, 💡 Captured, ✅ Recently Shipped (last 5).
+   Set "Last updated" to today's date.
 
 ## Step 9c — Update CLAUDE.md roadmap table
 Read `.claude/features/registry.md` and rewrite the Feature Roadmap table

@@ -169,7 +169,7 @@ Branch names use slug only (no number): `feature/budget-alerts-mvp`
          ↓
 /create-spec <number.release> <slug>   ← writes spec, creates feature branch
          ↓
-Plan Mode → implementation
+/implement <number.release>      ← reads spec, plans + executes implementation
          ↓
 /test-feature <spec-name>        ← writes + runs pytest tests
          ↓
@@ -181,7 +181,8 @@ Plan Mode → implementation
 Status values tracked at each stage:
 - 💡 Captured — processed thought written
 - 📋 Planned — release plan written, ready for /create-spec
-- 🔧 In Progress — spec created, implementation underway
+- 📝 Spec'd — spec created, ready for /implement
+- 🔧 In Progress — implementation underway
 - 👀 In Review — tests passing and/or under code review
 - ✅ Shipped — merged to main
 

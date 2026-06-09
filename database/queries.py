@@ -481,3 +481,72 @@ def get_voted_feature_ids(user_id):
     cur.close()
     conn.close()
     return {row["feature_id"] for row in rows}
+
+
+def _feature_row(row):
+    stage_keys = (
+        "captured_at",
+        "planned_at",
+        "spec_at",
+        "implemented_at",
+        "tested_at",
+        "reviewed_at",
+        "shipped_at",
+    )
+    # These labels drive CSS badge class names in roadmap.css via
+    # `f.status | lower | replace(' ', '-')` — update both together.
+    stage_labels = (
+        "Req Captured",
+        "Planned",
+        "Spec'd",
+        "Implemented",
+        "Tested",
+        "Reviewed",
+        "Shipped",
+    )
+
+    formatted = {}
+    current_status = "Upcoming"
+    for key, label in zip(stage_keys, stage_labels):
+        val = row[key]
+        if val is not None:
+            formatted[key] = {
+                "short": (
+                    val.strftime("%b %-d %Y")
+                    if hasattr(val, "strftime")
+                    else str(val)[:10]
+                ),
+                "full": (
+                    val.strftime("%a, %d %b %Y %H:%M")
+                    if hasattr(val, "strftime")
+                    else str(val)[:16]
+                ),
+            }
+            current_status = label
+        else:
+            formatted[key] = None
+
+    return {
+        "number": row["number"],
+        "parent_number": row["parent_number"],
+        "title": row["title"],
+        "slug": row["slug"],
+        "type": row["type"],
+        "status": current_status,
+        **formatted,
+    }
+
+
+def get_all_features():
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "SELECT number, parent_number, title, slug, type,"
+        " captured_at, planned_at, spec_at, implemented_at,"
+        " tested_at, reviewed_at, shipped_at"
+        " FROM features ORDER BY id ASC"
+    )
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return [_feature_row(r) for r in rows]

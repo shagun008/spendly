@@ -199,9 +199,9 @@ Example: `.claude/specs/11.1-budget-alerts-mvp.md`
 ## Step 11 — Update feature registry and status
 If `.claude/features/registry.md` exists:
 1. Find the release sub-row whose Number matches `feature_number` (e.g. `11.1`).
-   Update its Status to `🔧 In Progress` and Specs column to `<spec_filename>`.
+   Update its Status to `📝 Spec'd` and Specs column to `<spec_filename>`.
 2. Find the parent feature row whose Number matches `parent_feature_number` (e.g. `11`).
-   Update its Status to reflect the least-complete release (🔧 In Progress).
+   Update its Status to reflect the least-complete release (📝 Spec'd).
 
 If no matching row exists, skip this step silently.
 
@@ -219,6 +219,6 @@ Title:     <feature_title>
 
 Then tell the user:
 "Review the spec at `.claude/specs/<spec_filename>`
-then enter Plan Mode to begin implementation."
+then run `/implement <feature_number>` to begin implementation."
 
 Do not print the full spec in chat unless explicitly asked.
