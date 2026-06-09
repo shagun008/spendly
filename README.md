@@ -6,11 +6,11 @@ Spendly is a personal expense tracker — and a proof of concept for structured,
 
 ## Why This Matters
 
-**12 features · 15 spec releases · 0 unreviewed merges · 1 database migration handled as a governed pipeline feature**
+**13 features · 16 spec releases · 0 unreviewed merges · 1 database migration handled as a governed pipeline feature**
 
 This project is a proof of concept for AI-assisted software delivery — a repeatable pipeline that takes a feature from raw idea to production code with structured governance built into every step. Every feature was spec'd before it was built, tested before it was reviewed, and code-reviewed (in parallel, by two independent agents) before it was merged. Nothing shipped without passing through the full pipeline.
 
-- 12 features shipped across 15 spec releases
+- 13 features shipped across 16 spec releases
 - Every feature spec'd, tested, and code-reviewed before merge
 - A full database migration (SQLite → Supabase PostgreSQL) handled end-to-end as a pipeline feature — not a manual one-off
 - A repeatable system: raw idea to shipped pull request with zero untracked steps
@@ -37,6 +37,7 @@ Spendly solves a simple problem: tracking personal expenses without the overhead
 - **Profile** — view your full expense history with date-range filters and running totals
 - **Analytics** — visual breakdown of spending by category and over time
 - **Community** — submit feature requests, upvote ideas, and discover what other users are asking for; requests are ranked by votes and unique views
+- **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date tooltip on hover
 - **Mobile** — fully responsive at all screen sizes with a hamburger navigation menu
 
 ---
@@ -113,5 +114,7 @@ The pipeline proved capable beyond routine feature work. When the project outgre
 | 10 | Mobile Nav | ✅ Shipped |
 | 11 | Feature Requests and Public Discovery | ✅ Shipped |
 | 12 | Migration to Supabase | ✅ Shipped |
+| 14 | Add README File | ✅ Shipped |
+| 15 | Developer Roadmap Page | 👀 In Review |
 
-Next feature: TBD
+Next feature: 15.2 — Expand-in-Place Detail View

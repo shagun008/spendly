@@ -15,7 +15,14 @@ from flask import (
 )
 from dotenv import load_dotenv
 from werkzeug.security import check_password_hash
-from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
+from database.db import (
+    get_db,
+    init_db,
+    seed_db,
+    seed_features,
+    create_user,
+    get_user_by_email,
+)
 from database.queries import (
     get_user_by_id,
     get_recent_transactions,
@@ -35,6 +42,7 @@ from database.queries import (
     increment_feature_view,
     toggle_feature_vote,
     get_voted_feature_ids,
+    get_all_features,
 )
 
 load_dotenv()
@@ -91,6 +99,7 @@ def _validate_feature_request_form(page, title, description):
 with app.app_context():
     init_db()
     seed_db()
+    seed_features()
 
 
 # ------------------------------------------------------------------ #
@@ -501,6 +510,12 @@ def vote_feature_request(id):
         abort(403)
     voted, vote_count = toggle_feature_vote(id, session["user_id"])
     return jsonify({"voted": voted, "upvotes": vote_count})
+
+
+@app.route("/roadmap")
+def roadmap():
+    features = get_all_features()
+    return render_template("roadmap.html", features=features)
 
 
 if __name__ == "__main__":

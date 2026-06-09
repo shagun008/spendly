@@ -1,0 +1,235 @@
+.roadmap-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+}
+
+.roadmap-header {
+    margin-bottom: 2rem;
+}
+
+.roadmap-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--ink);
+    margin: 0 0 0.5rem;
+}
+
+.roadmap-subtitle {
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Table wrapper — enables horizontal scroll on mobile */
+.roadmap-table-wrapper {
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+.roadmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--paper-card);
+    font-family: var(--font-body);
+    min-width: 600px;
+}
+
+/* Header */
+.roadmap-table thead th {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    background: var(--paper-warm);
+}
+
+.roadmap-table thead th.col-stage {
+    text-align: center;
+}
+
+/* Column widths */
+.col-number  { width: 4rem; }
+.col-feature { min-width: 280px; }
+.col-stage   { width: 52px; }
+
+/* Rows */
+.roadmap-row td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    vertical-align: middle;
+}
+
+.roadmap-row:last-child td {
+    border-bottom: none;
+}
+
+.roadmap-row:hover td {
+    background: var(--paper-warm);
+}
+
+/* Feature number */
+.roadmap-number {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* Indent release rows */
+.roadmap-row--release .roadmap-number {
+    padding-left: 1.75rem;
+    color: var(--ink-faint);
+}
+
+.roadmap-row--release .roadmap-feature-title {
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+}
+
+/* Feature cell */
+.roadmap-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.roadmap-feature-title {
+    color: var(--ink);
+    font-weight: 500;
+}
+
+/* Stage cells — centred dot */
+.roadmap-stage {
+    text-align: center;
+    padding: 0.7rem 0.5rem;
+}
+
+/* ── Stage dot ── */
+.roadmap-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    position: relative;
+    cursor: default;
+    flex-shrink: 0;
+}
+
+.roadmap-dot--empty {
+    background: transparent;
+    border: 1.5px solid var(--border);
+}
+
+/* Tooltip on hover — positioned above the dot */
+.roadmap-dot[data-date]::before {
+    content: attr(data-date);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--paper-card);
+    font-size: 0.7rem;
+    font-family: var(--font-body);
+    white-space: nowrap;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 10;
+}
+
+.roadmap-dot[data-date]:hover::before {
+    opacity: 1;
+}
+
+/* Status badges */
+.roadmap-badge {
+    font-size: 0.68rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.roadmap-badge--shipped {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.roadmap-badge--implemented {
+    background: var(--accent-2-light);
+    color: var(--accent-2);
+}
+
+.roadmap-badge--specd,
+.roadmap-badge--tested,
+.roadmap-badge--reviewed {
+    background: var(--accent-3-light);
+    color: var(--accent-3);
+}
+
+.roadmap-badge--planned,
+.roadmap-badge--captured,
+.roadmap-badge--req-captured {
+    background: var(--paper-warm);
+    color: var(--ink-muted);
+}
+
+.roadmap-badge--upcoming {
+    background: var(--border-soft);
+    color: var(--ink-faint);
+}
+
+/* Empty state */
+.roadmap-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .roadmap-page {
+        padding: 2rem 1rem 3rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .roadmap-title {
+        font-size: 1.5rem;
+    }
+
+    /* On mobile keep only # (1), Feature (2), Implemented (6), Shipped (9) */
+    .roadmap-table th:nth-child(3),
+    .roadmap-table th:nth-child(4),
+    .roadmap-table th:nth-child(5),
+    .roadmap-table th:nth-child(7),
+    .roadmap-table th:nth-child(8),
+    .roadmap-table td:nth-child(3),
+    .roadmap-table td:nth-child(4),
+    .roadmap-table td:nth-child(5),
+    .roadmap-table td:nth-child(7),
+    .roadmap-table td:nth-child(8) {
+        display: none;
+    }
+
+    .roadmap-table {
+        min-width: 0;
+    }
+}

@@ -74,6 +74,26 @@ def init_db():
         )
     """)
 
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS features (
+            id              SERIAL PRIMARY KEY,
+            number          TEXT      UNIQUE NOT NULL,
+            parent_number   TEXT,
+            title           TEXT      NOT NULL,
+            slug            TEXT      NOT NULL,
+            type            TEXT      NOT NULL DEFAULT 'feature',
+            description     TEXT,
+            captured_at     TIMESTAMP,
+            planned_at      TIMESTAMP,
+            spec_at         TIMESTAMP,
+            implemented_at  TIMESTAMP,
+            tested_at       TIMESTAMP,
+            reviewed_at     TIMESTAMP,
+            shipped_at      TIMESTAMP,
+            created_at      TIMESTAMP DEFAULT NOW()
+        )
+    """)
+
     conn.commit()
     cur.close()
     conn.close()
@@ -133,6 +153,282 @@ def seed_db():
             "INSERT INTO expenses (user_id, amount, category, date, description)"
             " VALUES (%s, %s, %s, %s, %s)",
             expense,
+        )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+def seed_features():
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute("SELECT COUNT(*) AS count FROM features")
+    if cur.fetchone()["count"] > 0:
+        cur.close()
+        conn.close()
+        return
+
+    shipped = "2026-05-01 00:00:00"
+
+    # columns: number, parent_number, title, slug, type,
+    #          captured_at, planned_at, spec_at, implemented_at,
+    #          tested_at, reviewed_at, shipped_at
+    s = shipped  # all stage timestamps for backfilled shipped features
+    rows = [
+        (
+            "01",
+            None,
+            "Database Setup",
+            "database-setup",
+            "feature",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        ("02", None, "Registration", "registration", "feature", s, s, s, s, s, s, s),
+        (
+            "03",
+            None,
+            "Login and Logout",
+            "login-and-logout",
+            "feature",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        ("04", None, "Profile Page", "profile-page", "feature", s, s, s, s, s, s, s),
+        (
+            "05",
+            None,
+            "Backend Routes for Profile Page",
+            "backend-routes-for-profile-page",
+            "feature",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "06",
+            None,
+            "Date Filter on Profile",
+            "date-filter-profile",
+            "feature",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        ("07", None, "Add Expense", "add-expense", "feature", s, s, s, s, s, s, s),
+        ("08", None, "Edit Expense", "edit-expense", "feature", s, s, s, s, s, s, s),
+        (
+            "09",
+            None,
+            "Delete Expense",
+            "delete-expense",
+            "feature",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        ("10", None, "Mobile Nav", "mobile-nav", "feature", s, s, s, s, s, s, s),
+        (
+            "11",
+            None,
+            "Feature Requests and Public Discovery",
+            "feature-requests-and-public-discovery",
+            "feature",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "11-1",
+            "11",
+            "DB, Submission, and /features Page",
+            "feature-requests-core",
+            "release",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "11-2",
+            "11",
+            "Upvoting and Trending",
+            "feature-requests-voting",
+            "release",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "11-3",
+            "11",
+            "Home Page Latest Features Section",
+            "home-latest-features-section",
+            "release",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "12",
+            None,
+            "Migration to Supabase",
+            "migration-to-supabase",
+            "feature",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "12.1",
+            "12",
+            "Swap Database Layer",
+            "supabase-db-layer",
+            "release",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "12.2",
+            "12",
+            "Local Data Migration",
+            "local-data-migration-to-supabase",
+            "release",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "14",
+            None,
+            "Add README File",
+            "add-readme-file",
+            "feature",
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+            s,
+        ),
+        (
+            "15",
+            None,
+            "Developer Roadmap Page",
+            "developer-roadmap-page",
+            "feature",
+            "2026-06-07",
+            "2026-06-07",
+            None,
+            None,
+            None,
+            None,
+            None,
+        ),
+        (
+            "15.1",
+            "15",
+            "DB Layer + Pipeline Table",
+            "roadmap-pipeline",
+            "release",
+            None,
+            None,
+            "2026-06-08",
+            None,
+            None,
+            None,
+            None,
+        ),
+        (
+            "15.2",
+            "15",
+            "Expand-in-Place Detail View",
+            "roadmap-detail",
+            "release",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ),
+        (
+            "15.3",
+            "15",
+            "Harness Integration",
+            "roadmap-harness-integration",
+            "release",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ),
+    ]
+
+    for row in rows:
+        cur.execute(
+            "INSERT INTO features"
+            " (number, parent_number, title, slug, type,"
+            "  captured_at, planned_at, spec_at, implemented_at,"
+            "  tested_at, reviewed_at, shipped_at)"
+            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            row,
         )
 
     conn.commit()

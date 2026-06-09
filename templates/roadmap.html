@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Roadmap — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/roadmap.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="roadmap-page">
+    <div class="roadmap-header">
+        <h1 class="roadmap-title">Roadmap</h1>
+        <p class="roadmap-subtitle">Full transparency into the Spendly feature pipeline — what's shipped, in progress, and planned.</p>
+    </div>
+
+    <div class="roadmap-table-wrapper">
+        {% if features %}
+        <table class="roadmap-table">
+            <thead>
+                <tr>
+                    <th scope="col" class="col-number">#</th>
+                    <th scope="col" class="col-feature">Feature</th>
+                    <th scope="col" class="col-stage">Req Cap.</th>
+                    <th scope="col" class="col-stage">Planned</th>
+                    <th scope="col" class="col-stage">Spec'd</th>
+                    <th scope="col" class="col-stage">Impl.</th>
+                    <th scope="col" class="col-stage">Tested</th>
+                    <th scope="col" class="col-stage">Reviewed</th>
+                    <th scope="col" class="col-stage">Shipped</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in features %}
+                <tr class="roadmap-row roadmap-row--{{ f.type }}">
+                    <td class="roadmap-number">{{ f.number }}</td>
+                    <td class="roadmap-feature">
+                        <span class="roadmap-feature-title">{{ f.title }}</span>
+                        <span class="roadmap-badge roadmap-badge--{{ f.status | lower | replace(' ', '-') | replace("'", '') }}">{{ f.status }}</span>
+                    </td>
+                    <td class="roadmap-stage">
+                        {% if f.captured_at %}
+                        <span class="roadmap-dot" data-date="{{ f.captured_at.short }}"></span>
+                        {% else %}
+                        <span class="roadmap-dot roadmap-dot--empty"></span>
+                        {% endif %}
+                    </td>
+                    <td class="roadmap-stage">
+                        {% if f.planned_at %}
+                        <span class="roadmap-dot" data-date="{{ f.planned_at.short }}"></span>
+                        {% else %}
+                        <span class="roadmap-dot roadmap-dot--empty"></span>
+                        {% endif %}
+                    </td>
+                    <td class="roadmap-stage">
+                        {% if f.spec_at %}
+                        <span class="roadmap-dot" data-date="{{ f.spec_at.short }}"></span>
+                        {% else %}
+                        <span class="roadmap-dot roadmap-dot--empty"></span>
+                        {% endif %}
+                    </td>
+                    <td class="roadmap-stage">
+                        {% if f.implemented_at %}
+                        <span class="roadmap-dot" data-date="{{ f.implemented_at.short }}"></span>
+                        {% else %}
+                        <span class="roadmap-dot roadmap-dot--empty"></span>
+                        {% endif %}
+                    </td>
+                    <td class="roadmap-stage">
+                        {% if f.tested_at %}
+                        <span class="roadmap-dot" data-date="{{ f.tested_at.short }}"></span>
+                        {% else %}
+                        <span class="roadmap-dot roadmap-dot--empty"></span>
+                        {% endif %}
+                    </td>
+                    <td class="roadmap-stage">
+                        {% if f.reviewed_at %}
+                        <span class="roadmap-dot" data-date="{{ f.reviewed_at.short }}"></span>
+                        {% else %}
+                        <span class="roadmap-dot roadmap-dot--empty"></span>
+                        {% endif %}
+                    </td>
+                    <td class="roadmap-stage">
+                        {% if f.shipped_at %}
+                        <span class="roadmap-dot" data-date="{{ f.shipped_at.short }}"></span>
+                        {% else %}
+                        <span class="roadmap-dot roadmap-dot--empty"></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="roadmap-empty">No features yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
