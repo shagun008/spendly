@@ -5,7 +5,7 @@ Last updated: 2026-06-08
 Nothing in progress
 
 ## 👀 In Review
-- **15.1** DB Layer + Pipeline Table (`feature/roadmap-pipeline`)
+Nothing in review
 
 ## 📝 Spec'd — ready to implement
 Nothing spec'd yet
@@ -18,8 +18,8 @@ Nothing spec'd yet
 Nothing captured yet
 
 ## ✅ Recently Shipped (last 5)
+- **15.1** DB Layer + Pipeline Table
 - **14** Add README File
 - **12.2** Local Data Migration to Supabase
 - **12.1** Swap Database Layer
 - **11-3** Home Page "Latest Features" Section
-- **11-2** Upvoting and Trending
