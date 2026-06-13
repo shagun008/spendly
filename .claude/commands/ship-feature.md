@@ -24,14 +24,22 @@ Generate a Conventional Commit message:
 - chore: config or tooling
 - docs: documentation only
 
+Always include the release number as a scope in parentheses.
+Format: `type(number): description`
+
 Rules:
 - Lowercase
 - No period at the end
 - Under 72 characters
 - Describes what the user can now do, not what the code does
+- Never add a Co-Authored-By trailer
 
-Good: "feat: add delete expense button with confirmation dialog"
-Bad: "feat: added DELETE route to app.py"
+Good: "feat(15.2): expand roadmap rows inline to show feature description (#27)"
+Bad: "feat: added detail view to roadmap.html"
+
+Note: the PR number is not known until Step 5. Generate the message without it first,
+then after the PR is created in Step 5, amend the commit to append (#PR_NUMBER) and
+force-push before merging.
 
 ## Step 2b — README check
 Before committing, check whether README.md needs updating for this feature:

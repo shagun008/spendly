@@ -215,5 +215,6 @@ Status values tracked at each stage:
 | 12      | Migration to Supabase                           | ✅ Shipped  |
 | 14      | Add README File                                 | ✅ Shipped  |
 | 15      | Developer Roadmap Page                          | 📋 Planned  |
+| 15.4    | Roadmap Stage Metrics                           | 💡 Captured |
 
-Next feature to implement: **15.2**
+Next feature to implement: **15.3**
