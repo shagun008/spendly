@@ -10,6 +10,9 @@ created: 2026-06-02
 
 # Release Plan: Migration to Supabase
 
+## Roadmap description
+Migrates the database to Supabase so data persists across deployments and the app is production-ready.
+
 ## Summary
 Spendly currently uses SQLite, which is ephemeral on Railway — all data is lost on every redeploy. This feature migrates the database layer to Supabase (managed PostgreSQL) to provide persistent storage in production. Release 1 swaps the entire database layer (driver, schema, queries) to work with Postgres via a required DATABASE_URL env var. Release 2 handles migrating existing local SQLite data into Supabase so no local users or expenses are lost during the switchover.
 

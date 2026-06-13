@@ -113,6 +113,14 @@ Generate a spec document with this exact structure:
 ---
 # Spec: <feature_title>
 
+## Roadmap description
+One sentence written for a non-technical audience — what this
+release does and why it matters to a user of the app. This is
+what appears on the public /roadmap page when the row is expanded.
+Keep it under 25 words. No jargon, no route names, no file names.
+Example: "Lets logged-in users add a new expense by filling out a
+short form. The entry appears on their profile immediately."
+
 ## Overview
 One paragraph describing what this feature does and why
 it exists at this stage of the Spendly roadmap. If a processed
@@ -207,6 +215,34 @@ If no matching row exists, skip this step silently.
 
 Rewrite `.claude/features/status.md` by reading the full registry and
 regenerating all sections grouped by status. Set "Last updated" to today's date.
+
+## Step 11b — Write spec Overview into the features DB table
+Extract the Overview paragraph from the spec file you just wrote.
+Run the following Python snippet to update the `description` column
+for this release's row in the `features` table:
+
+```bash
+/path/to/venv/bin/python - <<'EOF'
+import os, re, psycopg2
+from dotenv import load_dotenv
+load_dotenv()
+with open(".claude/specs/<spec_filename>") as f:
+    content = f.read()
+m = re.search(r'## Roadmap description\n+(.+?)(?=\n##|\Z)', content, re.DOTALL)
+description = ' '.join(m.group(1).strip().split()) if m else None
+conn = psycopg2.connect(os.environ["DATABASE_URL"])
+cur = conn.cursor()
+cur.execute("UPDATE features SET description = %s WHERE number = %s", (description, "<feature_number>"))
+conn.commit()
+print(f"Updated {cur.rowcount} row(s)")
+cur.close()
+conn.close()
+EOF
+```
+
+Replace `<spec_filename>` and `<feature_number>` with the actual values.
+Find the venv Python by running `find . -name "python" -path "*/venv/*" | head -1`.
+If the DB update fails, log the error and continue — do not block the spec creation.
 
 ## Step 12 — Report to the user
 Print a short summary in this exact format:

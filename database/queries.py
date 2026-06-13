@@ -1,6 +1,9 @@
 """Query helpers for the profile page and expense mutations."""
 
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
+
+_EST = ZoneInfo("America/New_York")
 
 import psycopg2.extras
 
@@ -510,18 +513,19 @@ def _feature_row(row):
     for key, label in zip(stage_keys, stage_labels):
         val = row[key]
         if val is not None:
-            formatted[key] = {
-                "short": (
-                    val.strftime("%b %-d %Y")
-                    if hasattr(val, "strftime")
-                    else str(val)[:10]
-                ),
-                "full": (
-                    val.strftime("%a, %d %b %Y %H:%M")
-                    if hasattr(val, "strftime")
-                    else str(val)[:16]
-                ),
-            }
+            if hasattr(val, "strftime"):
+                if val.tzinfo is None:
+                    val = val.replace(tzinfo=timezone.utc)
+                val = val.astimezone(_EST)
+                formatted[key] = {
+                    "short": val.strftime("%b %-d %Y"),
+                    "full": val.strftime("%a, %d %b %Y %H:%M EST"),
+                }
+            else:
+                formatted[key] = {
+                    "short": str(val)[:10],
+                    "full": str(val)[:16],
+                }
             current_status = label
         else:
             formatted[key] = None
@@ -532,6 +536,7 @@ def _feature_row(row):
         "title": row["title"],
         "slug": row["slug"],
         "type": row["type"],
+        "description": row["description"],
         "status": current_status,
         **formatted,
     }
@@ -541,7 +546,7 @@ def get_all_features():
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute(
-        "SELECT number, parent_number, title, slug, type,"
+        "SELECT number, parent_number, title, slug, type, description,"
         " captured_at, planned_at, spec_at, implemented_at,"
         " tested_at, reviewed_at, shipped_at"
         " FROM features ORDER BY id ASC"

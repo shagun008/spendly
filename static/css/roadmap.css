@@ -232,4 +232,57 @@
     .roadmap-table {
         min-width: 0;
     }
+
+    .roadmap-detail-card {
+        padding: 0.75rem 1rem;
+    }
 }
+
+/* ── Clickable feature rows ── */
+.roadmap-row--clickable {
+    cursor: pointer;
+}
+
+/* Chevron icon in feature cell */
+.roadmap-chevron {
+    width: 14px;
+    height: 14px;
+    color: var(--ink-faint);
+    flex-shrink: 0;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.roadmap-row--expanded .roadmap-chevron {
+    transform: rotate(180deg);
+    color: var(--accent);
+}
+
+/* ── Detail row ── */
+.roadmap-detail-row {
+    display: none;
+}
+
+.roadmap-detail-row--open {
+    display: table-row;
+}
+
+.roadmap-detail-row td {
+    padding: 0;
+    border-bottom: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    background: var(--paper-warm);
+}
+
+/* ── Detail card ── */
+.roadmap-detail-card {
+    padding: 0.9rem 1.5rem;
+}
+
+.roadmap-detail-desc {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+    margin: 0;
+    font-style: italic;
+}
+
