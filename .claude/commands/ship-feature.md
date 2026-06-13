@@ -117,6 +117,34 @@ git branch -D CURRENT_BRANCH
 ```
 Report: "✓ Local branch deleted"
 
+## Step 9a — Stamp reviewed_at and shipped_at in the database
+
+Read the spec to identify the feature number (e.g. `15.2`).
+
+Run the following Python snippet, substituting FEATURE_NUMBER:
+
+```bash
+python3 -c "
+import psycopg2, os
+from datetime import datetime, timezone
+from dotenv import load_dotenv
+load_dotenv()
+conn = psycopg2.connect(os.environ['DATABASE_URL'])
+cur = conn.cursor()
+now = datetime.now(timezone.utc)
+cur.execute(
+    \"UPDATE features SET reviewed_at = %s, shipped_at = %s WHERE number = %s\",
+    (now, now, 'FEATURE_NUMBER')
+)
+print('Rows updated:', cur.rowcount)
+conn.commit()
+cur.close()
+conn.close()
+"
+```
+
+Report: "✓ DB stamped — reviewed_at + shipped_at set for FEATURE_NUMBER"
+
 ## Step 9b — Update registry and status
 
 1. Read `.claude/features/registry.md`
