@@ -36,3 +36,6 @@ the parent — the roadmap reads types from release sub-rows directly.
 - Not a multi-type/array approach on the parent row — kept deliberately simple.
 - Not a change to the capture-thoughts UX beyond removing one question.
 - Not urgent — the app works fine without it. This is a quality/accuracy improvement.
+
+
+Created: 2026-06-13 13:32 EST

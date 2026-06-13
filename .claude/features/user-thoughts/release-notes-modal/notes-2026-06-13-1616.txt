@@ -1,0 +1,39 @@
+# Release Notes Modal
+
+## The idea
+When a user clicks a green (completed) stage dot on the roadmap, show a pop-up modal
+with the full release notes for that release. The modal should contain:
+- The test result report (which tests were written, how many passed)
+- The code review report (security findings, quality findings)
+- The combined action plan and what was done
+
+## Where the data comes from
+The harness already produces these reports:
+- `/test-feature` writes a Testing Pipeline Report after tests pass
+- `/code-review-feature` writes a unified Code Review Report after both reviewers complete
+
+These reports should be stored in the `features` DB table so they survive reseeds
+and are always in sync with the release row.
+
+## Storage approach
+Add two TEXT columns to the `features` table:
+- `test_report` — the full testing pipeline report produced by /test-feature
+- `review_report` — the full unified code review report produced by /code-review-feature
+
+The harness commands write to these columns as part of their existing stamp step.
+
+## UI behaviour
+- Clicking a green dot on a release sub-row opens a modal
+- Modal title: "<release number> — <title>"
+- Modal body: test report section + review report section, rendered as formatted text
+- If only one report exists (e.g. test passed but review not done yet), show what's available
+- If neither exists, the dot is not clickable (or shows "No release notes yet")
+- Clicking outside the modal or pressing Escape closes it
+- Parent feature row dots (which are structural, not stage dots) should not trigger the modal
+
+## Why this is valuable
+Right now the roadmap shows WHEN each stage happened but not WHAT was found or done.
+The modal turns the pipeline dots into a full audit trail — visitors can see the quality
+bar that was applied to each release.
+
+Created: 2026-06-13 16:16 EST

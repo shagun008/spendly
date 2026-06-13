@@ -530,12 +530,15 @@ def _feature_row(row):
         else:
             formatted[key] = None
 
+    _VALID_SUBTYPES = {"new-feature", "enhancement", "bug-fix"}
+    raw_subtype = row["release_subtype"]
     return {
         "number": row["number"],
         "parent_number": row["parent_number"],
         "title": row["title"],
         "slug": row["slug"],
         "type": row["type"],
+        "release_subtype": raw_subtype if raw_subtype in _VALID_SUBTYPES else None,
         "description": row["description"],
         "status": current_status,
         **formatted,
@@ -546,7 +549,7 @@ def get_all_features():
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute(
-        "SELECT number, parent_number, title, slug, type, description,"
+        "SELECT number, parent_number, title, slug, type, release_subtype, description,"
         " captured_at, planned_at, spec_at, implemented_at,"
         " tested_at, reviewed_at, shipped_at"
         " FROM features ORDER BY id ASC"

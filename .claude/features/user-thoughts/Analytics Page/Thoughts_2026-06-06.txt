@@ -63,3 +63,6 @@ This gives a complete, usable page in Release 1 without over-engineering the fir
   meaningful across the full history. A filter can be added in Release 2.
 - Chart.js loaded only in analytics.html ({% block scripts %}), not globally in base.html.
   It is ~200KB and only needed on one page.
+
+
+Created: 2026-06-08 18:48 EST

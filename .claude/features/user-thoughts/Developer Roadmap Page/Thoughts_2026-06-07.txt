@@ -81,3 +81,6 @@ Seeded from the existing registry entries on first run.
 - Seed function in `db.py` or a separate `seed_features.py` script
 - No Chart.js needed — this is a card/list UI
 - Nav link: add "Roadmap" to the public nav (visible even when logged out)
+
+
+Created: 2026-06-07 22:25 EST

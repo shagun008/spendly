@@ -44,3 +44,5 @@ None specified.
 - **Remove `.claude/features/status.md`** — it's a derived cache, redundant once the `features` DB table is the source of truth. The `/status` command should query the DB instead of reading this file.
 - **Keep `.claude/features/registry.md`** — retained as a git-tracked audit trail checked into the repo. Useful as a human-readable backup when DB is unavailable (new machine, empty DB). Commands read from the DB; the registry is updated alongside the DB but is no longer authoritative.
 - **`features` DB table is the source of truth** — all harness commands (`/capture-thoughts`, `/plan-release`, `/create-spec`, `/ship-feature`, `/status`) read from and write to the DB. The registry is updated in parallel as a backup, not as the primary store.
+
+Created: 2026-06-07 22:25 EST

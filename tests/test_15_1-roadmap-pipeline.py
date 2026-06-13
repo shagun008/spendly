@@ -34,12 +34,12 @@ Spec behaviours covered (Definition of Done from 15.1 spec)
 7.  "Roadmap" nav link is present when logged in
 8.  Pipeline table is rendered when the features table has rows
 9.  Each seeded feature title appears in the pipeline table HTML
-10. Completed stage columns show the ✓ glyph
-11. Completed stage columns show a non-empty date string (not "None" / "null")
+10. Completed stage columns show a filled dot indicator with a data-date tooltip attribute
+11. Completed stage columns embed a non-empty date string in data-date (not "None" / "null")
 12. Incomplete stage cells do not contain the literal strings "None" or "null"
 13. Status badge is present on each row and reflects the rightmost non-null stage
 14. A fully-shipped feature row carries a "Shipped" status badge
-15. A feature with only in_progress_at set carries an "Implementation" status badge
+15. A feature with only implemented_at set carries an "Implemented" status badge
 16. A feature with no stage timestamps carries an "Upcoming" status badge
 17. GET /roadmap with an empty features table returns 200 (no 500)
 18. Empty-state message "No features yet." is shown when the features table is empty
@@ -62,6 +62,19 @@ import database.db as db_module
 from database.db import init_db, seed_features
 import database.queries as queries_module
 
+
+@pytest.fixture(scope="module", autouse=True)
+def _reseed_after_module():
+    """Re-seed the live DB after all tests in this module complete.
+
+    Tests TRUNCATE the features table using the real DATABASE_URL, which wipes
+    production data. This fixture restores the seed rows once all tests are done
+    so the roadmap page is not left empty.
+    """
+    yield
+    seed_features()
+
+
 # ------------------------------------------------------------------ #
 # Required stage keys returned by _feature_row / get_all_features()  #
 # ------------------------------------------------------------------ #
@@ -75,18 +88,20 @@ REQUIRED_FEATURE_KEYS = {
     "status",
     "captured_at",
     "planned_at",
-    "in_progress_at",
-    "in_review_at",
-    "code_reviewed_at",
+    "spec_at",
+    "implemented_at",
+    "tested_at",
+    "reviewed_at",
     "shipped_at",
 }
 
 STAGE_KEYS = (
     "captured_at",
     "planned_at",
-    "in_progress_at",
-    "in_review_at",
-    "code_reviewed_at",
+    "spec_at",
+    "implemented_at",
+    "tested_at",
+    "reviewed_at",
     "shipped_at",
 )
 
@@ -248,9 +263,10 @@ def _insert_feature_row(
     slug,
     captured_at=None,
     planned_at=None,
-    in_progress_at=None,
-    in_review_at=None,
-    code_reviewed_at=None,
+    spec_at=None,
+    implemented_at=None,
+    tested_at=None,
+    reviewed_at=None,
     shipped_at=None,
     parent_number=None,
     ftype="feature",
@@ -260,9 +276,9 @@ def _insert_feature_row(
     cur.execute(
         "INSERT INTO features"
         " (number, parent_number, title, slug, type,"
-        "  captured_at, planned_at, in_progress_at, in_review_at,"
-        "  code_reviewed_at, shipped_at)"
-        " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        "  captured_at, planned_at, spec_at, implemented_at,"
+        "  tested_at, reviewed_at, shipped_at)"
+        " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         " RETURNING id",
         (
             number,
@@ -272,9 +288,10 @@ def _insert_feature_row(
             ftype,
             captured_at,
             planned_at,
-            in_progress_at,
-            in_review_at,
-            code_reviewed_at,
+            spec_at,
+            implemented_at,
+            tested_at,
+            reviewed_at,
             shipped_at,
         ),
     )
@@ -458,42 +475,42 @@ class TestRoadmapPipelineTable:
 
 
 # ------------------------------------------------------------------ #
-# 5. Completed stage columns — ✓ glyph and date                       #
+# 5. Completed stage columns — dot indicator and date tooltip          #
 # ------------------------------------------------------------------ #
 
 
 class TestCompletedStageColumns:
-    def test_shipped_feature_row_contains_check_glyph(self, seeded_client):
-        """A fully-shipped seeded feature must show the ✓ tick in its stage cells."""
+    def test_shipped_feature_row_contains_dot_indicator(self, seeded_client):
+        """A fully-shipped seeded feature must show filled dot indicators in its stage cells."""
         body = _body(seeded_client.get("/roadmap"))
         assert (
-            "✓" in body or "&#x2713;" in body or "✓" in body
-        ), "Completed stage cells must contain the ✓ (U+2713) check glyph"
+            "roadmap-dot" in body
+        ), "Completed stage cells must render a span with class 'roadmap-dot'"
 
     def test_shipped_feature_row_contains_date_text(self, seeded_client):
-        """A shipped seeded feature must show a date string (e.g. 'May 2026') in its cells."""
+        """A shipped seeded feature must embed a date string in the data-date attribute."""
         body = _body(seeded_client.get("/roadmap"))
         # The seed uses 2026-05-01 for all shipped stages — formatted as "May 1 2026"
         assert (
             "2026" in body
-        ), "Completed stage cells must contain the year part of the timestamp"
+        ), "Completed stage cells must embed the year part of the timestamp in data-date"
 
-    def test_completed_stage_shows_roadmap_check_class(self, seeded_client):
-        """The template uses class='roadmap-check' for the ✓ glyph span."""
+    def test_completed_stage_shows_roadmap_dot_class(self, seeded_client):
+        """The template uses class='roadmap-dot' for filled stage indicators."""
         body = _body(seeded_client.get("/roadmap"))
         assert (
-            "roadmap-check" in body
-        ), "Completed stage cells must render a span with class 'roadmap-check'"
+            "roadmap-dot" in body
+        ), "Completed stage cells must render a span with class 'roadmap-dot'"
 
-    def test_completed_stage_shows_roadmap_date_class(self, seeded_client):
-        """The template uses class='roadmap-date' for the date span."""
+    def test_completed_stage_shows_data_date_attribute(self, seeded_client):
+        """Filled dot spans must carry a data-date attribute for the tooltip."""
         body = _body(seeded_client.get("/roadmap"))
         assert (
-            "roadmap-date" in body
-        ), "Completed stage cells must render a span with class 'roadmap-date'"
+            "data-date=" in body
+        ), "Completed stage cells must render a span with a data-date tooltip attribute"
 
-    def test_inline_shipped_feature_check_glyph(self, client, _patched_get_db):
-        """Insert a fully-shipped feature inline and verify the ✓ appears."""
+    def test_inline_shipped_feature_dot_indicator(self, client, _patched_get_db):
+        """Insert a fully-shipped feature inline and verify dot indicators appear."""
         _insert_feature_row(
             _patched_get_db,
             number="T01",
@@ -501,9 +518,10 @@ class TestCompletedStageColumns:
             slug="inline-shipped-check",
             captured_at=SHIPPED_TS,
             planned_at=SHIPPED_TS,
-            in_progress_at=SHIPPED_TS,
-            in_review_at=SHIPPED_TS,
-            code_reviewed_at=SHIPPED_TS,
+            spec_at=SHIPPED_TS,
+            implemented_at=SHIPPED_TS,
+            tested_at=SHIPPED_TS,
+            reviewed_at=SHIPPED_TS,
             shipped_at=SHIPPED_TS,
         )
         body = _body(client.get("/roadmap"))
@@ -511,8 +529,8 @@ class TestCompletedStageColumns:
             "Inline Shipped Feature for Check Glyph Test" in body
         ), "Inline-inserted feature title must appear in the pipeline table"
         assert (
-            "✓" in body or "✓" in body
-        ), "Inline shipped feature must show the ✓ glyph in its stage cells"
+            "roadmap-dot" in body
+        ), "Inline shipped feature must show dot indicators in its stage cells"
 
 
 # ------------------------------------------------------------------ #
@@ -537,21 +555,21 @@ class TestIncompleteStageColumns:
         ), "Null stage cells must not render the literal string 'null' as cell content"
 
     def test_inline_in_progress_only_no_none_in_html(self, client, _patched_get_db):
-        """A feature with only in_progress_at set must not show 'None' for other stages."""
+        """A feature with only implemented_at set must not show 'None' for other stages."""
         _insert_feature_row(
             _patched_get_db,
             number="T02",
             title="In Progress Only Feature for None Suppression Test",
             slug="in-progress-only-none-test",
-            in_progress_at=SHIPPED_TS,
+            implemented_at=SHIPPED_TS,
         )
         body = _body(client.get("/roadmap"))
         assert (
             ">None<" not in body
-        ), "Incomplete stage cells must not render '>None<' when only in_progress_at is set"
+        ), "Incomplete stage cells must not render '>None<' when only implemented_at is set"
         assert (
             ">null<" not in body
-        ), "Incomplete stage cells must not render '>null<' when only in_progress_at is set"
+        ), "Incomplete stage cells must not render '>null<' when only implemented_at is set"
 
     def test_inline_captured_only_no_none_in_html(self, client, _patched_get_db):
         """A feature with only captured_at set must not show 'None' for later stages."""
@@ -590,18 +608,18 @@ class TestStatusBadge:
     def test_inline_in_progress_feature_has_implementation_badge(
         self, client, _patched_get_db
     ):
-        """A feature with only in_progress_at set must show 'Implementation' badge."""
+        """A feature with only implemented_at set must show 'Implemented' badge."""
         _insert_feature_row(
             _patched_get_db,
             number="T04",
             title="In Progress Feature for Implementation Badge Status Test",
             slug="in-progress-badge-test",
-            in_progress_at=SHIPPED_TS,
+            implemented_at=SHIPPED_TS,
         )
         body = _body(client.get("/roadmap"))
         assert (
-            "Implementation" in body
-        ), "A feature with only in_progress_at set must carry the 'Implementation' status badge"
+            "Implemented" in body
+        ), "A feature with only implemented_at set must carry the 'Implemented' status badge"
 
     def test_inline_upcoming_feature_has_upcoming_status(self, client, _patched_get_db):
         """A feature with no stage timestamps must show 'Upcoming' status."""
@@ -656,9 +674,10 @@ class TestStatusBadge:
             slug="all-stages-shipped-badge-test",
             captured_at=SHIPPED_TS,
             planned_at=SHIPPED_TS,
-            in_progress_at=SHIPPED_TS,
-            in_review_at=SHIPPED_TS,
-            code_reviewed_at=SHIPPED_TS,
+            spec_at=SHIPPED_TS,
+            implemented_at=SHIPPED_TS,
+            tested_at=SHIPPED_TS,
+            reviewed_at=SHIPPED_TS,
             shipped_at=SHIPPED_TS,
         )
         body = _body(client.get("/roadmap"))
@@ -874,9 +893,10 @@ class TestGetAllFeaturesShape:
             slug="all-stages-shipped-status",
             captured_at=SHIPPED_TS,
             planned_at=SHIPPED_TS,
-            in_progress_at=SHIPPED_TS,
-            in_review_at=SHIPPED_TS,
-            code_reviewed_at=SHIPPED_TS,
+            spec_at=SHIPPED_TS,
+            implemented_at=SHIPPED_TS,
+            tested_at=SHIPPED_TS,
+            reviewed_at=SHIPPED_TS,
             shipped_at=SHIPPED_TS,
         )
         result = queries_module.get_all_features()
