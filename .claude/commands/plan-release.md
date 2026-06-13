@@ -144,12 +144,7 @@ In `.claude/features/registry.md`:
    | <feature_number>.1 | → <release_1_title> | release | <feature_number> | 📋 Planned | — |
    | <feature_number>.2 | → <release_2_title> | release | <feature_number> | 📋 Planned | — |
 
-## Step 8b — Update status.md
-Rewrite `.claude/features/status.md` by reading the full registry and
-regenerating all sections grouped by status. Follow the same format as
-`/status` command output. Set "Last updated" to today's date.
-
-## Step 8c — Commit and push all planning artefacts
+## Step 8b — Commit and push all planning artefacts
 Create a planning branch, stage everything under `.claude/features/`, commit, push, then use the GitHub MCP to create and merge the PR.
 
 Run these git steps in order:
@@ -230,7 +225,12 @@ overwrites the previous description — keeping the DB in sync with the file.
 
 ## Step 8e — Stamp planned_at and insert release sub-rows in the database
 
-Run the following Python snippet. Substitute PARENT_NUMBER and build RELEASE_ROWS
+For each release defined in this plan, determine its `release_subtype`:
+- `new-feature` — adds a net-new capability (new route, new page, new DB table)
+- `enhancement` — improves something that already exists
+- `bug-fix` — corrects broken or incorrect behaviour
+
+Then run the following Python snippet. Substitute PARENT_NUMBER and build RELEASE_ROWS
 as a list of tuples — one per release defined in this plan:
 
 ```bash
@@ -255,15 +255,17 @@ else:
         if cur.rowcount == 0:
             print('WARNING: 0 rows updated for parent PARENT_NUMBER — check the number is correct and the row exists')
         # Insert release sub-rows — idempotent, skip if already exist
+        # Tuple format: (number, parent_number, title, slug, type, release_subtype)
+        # release_subtype is one of: new-feature, enhancement, bug-fix
         release_rows = [
-            ('RELEASE_NUMBER', 'PARENT_NUMBER', 'RELEASE_TITLE', 'RELEASE_SLUG', 'release'),
-            # one tuple per release: (number, parent_number, title, slug, type)
+            ('RELEASE_NUMBER', 'PARENT_NUMBER', 'RELEASE_TITLE', 'RELEASE_SLUG', 'release', 'RELEASE_SUBTYPE'),
+            # one tuple per release
         ]
         inserted = 0
         for row in release_rows:
             cur.execute('''
-                INSERT INTO features (number, parent_number, title, slug, type, planned_at)
-                VALUES (%s, %s, %s, %s, %s, %s)
+                INSERT INTO features (number, parent_number, title, slug, type, release_subtype, planned_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (number) DO NOTHING
             ''', (*row, now))
             inserted += cur.rowcount

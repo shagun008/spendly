@@ -90,6 +90,7 @@ tests/                  # pytest test files, one per feature spec
 | GET/POST | `/expenses/add`         | `add_expense`         | logged-in   |
 | GET/POST | `/expenses/<id>/edit`   | `edit_expense`        | logged-in   |
 | POST   | `/expenses/<id>/delete`   | `delete_expense_route`| logged-in   |
+| GET    | `/roadmap`                | `roadmap`             | public      |
 
 ---
 

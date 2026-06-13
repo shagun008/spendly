@@ -42,3 +42,6 @@ Migrate the Spendly database from SQLite to Supabase (PostgreSQL) to support per
 - Passwords are already hashed — migrate as-is, no re-hashing needed
 - Supabase MCP can automate schema creation and data verification steps
 - Consider using Neon as an alternative to Supabase if needed
+
+
+Created: 2026-06-02 22:30 EST

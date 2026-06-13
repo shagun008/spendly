@@ -104,11 +104,7 @@ Spendly — Feature Status
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 ```
 
-## Step 4 — Update status.md
-Rewrite `.claude/features/status.md` with the same grouped content
-plus a "Last updated: <today's date YYYY-MM-DD>" line at the top.
-
-## Step 5 — Prompt next action
+## Step 4 — Prompt next action
 After the summary, print one line suggesting the most relevant next action:
 - If anything is In Progress: "Continue implementation, then run `/test-feature <spec-name>`"
 - Else if anything is Spec'd: "Run `/implement-feature <number>` to start implementation"

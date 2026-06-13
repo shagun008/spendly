@@ -41,6 +41,28 @@ Read `.claude/features/registry.md` to understand:
 
 ---
 
+## File naming convention for user-thoughts
+
+Any file written into a `user-thoughts/` subfolder — whether by the user or by this
+command — must include a timestamp in its name:
+
+```
+<descriptive-name>-YYYY-MM-DD-HHMM.txt
+```
+
+Example: `notes-2026-06-13-1616.txt`
+
+When writing a new file into a user-thoughts subfolder during interactive mode (Step 2a),
+get the current EST timestamp first:
+
+```bash
+python3 -c "from datetime import datetime; from zoneinfo import ZoneInfo; print(datetime.now(ZoneInfo('America/New_York')).strftime('%Y-%m-%d-%H%M'))"
+```
+
+Use that timestamp in the filename.
+
+---
+
 ## Step 2a — Interactive mode (no input folder)
 
 Walk through these questions one at a time. Free-form answers are fine.
@@ -57,7 +79,8 @@ Then ask discovery questions:
 5. "Any rough implementation ideas or open questions you'd like to capture?"
 6. "Is there a deadline or release pressure attached to this?"
 
-Once all answers are collected, skip to Step 3.
+Once all answers are collected, write the raw answers to a new file in the subfolder
+using the timestamped naming convention above, then skip to Step 3.
 
 ---
 
@@ -137,7 +160,17 @@ Example: "Budget Alerts" → budget-alerts
 
 ## Step 6 — Write the processed thought file
 
-Save to: `.claude/features/processed-thoughts/<assigned_number>-<slug>.md`
+Get the current datetime in EST by running:
+```bash
+python3 -c "from datetime import datetime; from zoneinfo import ZoneInfo; print(datetime.now(ZoneInfo('America/New_York')).strftime('%Y-%m-%d-%H%M'))"
+```
+
+Save to: `.claude/features/processed-thoughts/<assigned_number>-<slug>-<datetime>.md`
+
+Where `<datetime>` is the EST timestamp in the format `YYYY-MM-DD-HHMM`
+(e.g. `2026-06-13-1612`).
+
+Example: `16-release-notes-modal-2026-06-13-1612.md`
 
 Use this exact format:
 
@@ -148,7 +181,7 @@ title: <Title Case title>
 type: new-feature | enhancement
 parent: <parent number if enhancement, else null>
 status: captured
-created: <today's date YYYY-MM-DD>
+created: <datetime in format YYYY-MM-DD HH:MM EST>
 source_folder: .claude/features/user-thoughts/<subfolder>/
 ---
 
@@ -245,7 +278,7 @@ Print:
 Number:             <assigned_number>
 Title:              <title>
 Type:               <new-feature | enhancement>
-Processed thought:  .claude/features/processed-thoughts/<assigned_number>-<slug>.md
+Processed thought:  .claude/features/processed-thoughts/<assigned_number>-<slug>-<datetime>.md
 ```
 
 Then say:

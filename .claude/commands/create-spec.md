@@ -213,9 +213,6 @@ If `.claude/features/registry.md` exists:
 
 If no matching row exists, skip this step silently.
 
-Rewrite `.claude/features/status.md` by reading the full registry and
-regenerating all sections grouped by status. Set "Last updated" to today's date.
-
 ## Step 11b — Write spec Overview into the features DB table
 Extract the Overview paragraph from the spec file you just wrote.
 Run the following Python snippet to update the `description` column
@@ -245,12 +242,12 @@ else:
         # that incorrectly populates captured_at and planned_at alongside spec_at.
         # ON CONFLICT ensures only spec_at (and description) are ever set by this command.
         cur.execute("""
-            INSERT INTO features (number, description, spec_at)
-            VALUES (%s, %s, %s)
+            INSERT INTO features (number, title, description, spec_at)
+            VALUES (%s, %s, %s, %s)
             ON CONFLICT (number) DO UPDATE
               SET description = EXCLUDED.description,
                   spec_at = COALESCE(features.spec_at, EXCLUDED.spec_at)
-        """, ("<feature_number>", description, now))
+        """, ("<feature_number>", "<feature_title>", description, now))
         conn.commit()
         if cur.rowcount == 0:
             print('WARNING: 0 rows upserted — check that <feature_number> placeholder was substituted correctly')

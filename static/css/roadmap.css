@@ -195,6 +195,31 @@
     color: var(--ink-faint);
 }
 
+/* Release subtype badges */
+.roadmap-type-badge {
+    font-size: 0.62rem;
+    font-weight: 500;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.roadmap-type-badge--new-feature {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.roadmap-type-badge--enhancement {
+    background: var(--accent-2-light);
+    color: var(--accent-2);
+}
+
+.roadmap-type-badge--bug-fix {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
 /* Empty state */
 .roadmap-empty {
     padding: 2rem 1rem;

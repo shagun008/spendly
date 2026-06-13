@@ -38,6 +38,12 @@
                     <td class="roadmap-number">{{ f.number }}</td>
                     <td class="roadmap-feature">
                         <span class="roadmap-feature-title">{{ f.title }}</span>
+                        {% if f.release_subtype %}
+                        {% set _subtype_label = {'new-feature': 'New Feature', 'enhancement': 'Enhancement', 'bug-fix': 'Bug Fix'}.get(f.release_subtype) %}
+                        {% if _subtype_label %}
+                        <span class="roadmap-type-badge roadmap-type-badge--{{ f.release_subtype }}">{{ _subtype_label }}</span>
+                        {% endif %}
+                        {% endif %}
                         {% if f.description %}
                         <i data-lucide="chevron-down" class="roadmap-chevron"></i>
                         {% endif %}
