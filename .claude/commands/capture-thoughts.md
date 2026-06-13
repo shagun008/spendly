@@ -194,8 +194,8 @@ Insert both in numerical order (enhancements after their parent).
 ## Step 7a — Stamp captured_at in the database
 
 Run the following Python snippet, substituting FEATURE_NUMBER, TITLE, and SLUG
-with the values assigned in this run. TYPE is always `feature` — the new-feature/
-enhancement distinction lives in the processed-thought file, not the DB type column:
+with the values assigned in this run. TYPE is NULL for parent feature rows —
+the roadmap uses type only on release sub-rows to control indent/styling:
 
 ```bash
 python3 -c "
@@ -212,10 +212,10 @@ else:
         cur = conn.cursor()
         now = datetime.now(timezone.utc)
         cur.execute('''
-            INSERT INTO features (number, title, slug, type, captured_at)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO features (number, title, slug, captured_at)
+            VALUES (%s, %s, %s, %s)
             ON CONFLICT (number) DO UPDATE SET captured_at = EXCLUDED.captured_at
-        ''', ('FEATURE_NUMBER', 'TITLE', 'SLUG', 'feature', now))
+        ''', ('FEATURE_NUMBER', 'TITLE', 'SLUG', now))
         if cur.rowcount == 0:
             print('WARNING: 0 rows upserted — check that FEATURE_NUMBER is correct and the INSERT ran')
         else:

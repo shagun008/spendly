@@ -4,7 +4,7 @@ title: Developer Roadmap Page
 type: new-feature
 parent: null
 status: planned
-releases: 3
+releases: 5
 created: 2026-06-07
 ---
 
@@ -38,6 +38,20 @@ A public `/roadmap` page that gives any visitor full transparency into the Spend
 - **Spec arg:** `15.3 roadmap-harness-integration`
 - **Depends on:** Release 1
 - **Risk:** medium (touches every harness command)
+
+### Release 4 — Release-Level Type Classification
+- **Scope:** Move `type` from parent feature rows to release sub-rows. `capture-thoughts.md` — remove type from parent DB insert (NULL). `plan-release.md` — assign `new-feature`, `enhancement`, or `bug-fix` per release and include in sub-row DB insert. Roadmap page — render the release type as a small badge on each release sub-row.
+- **Spec slug:** release-type-classification
+- **Spec arg:** `15.4 release-type-classification`
+- **Depends on:** Release 3
+- **Risk:** low
+
+### Release 5 — Roadmap Stage Metrics
+- **Scope:** Track time and token cost per pipeline stage. 28 new columns on the `features` table (`*_start_at`, `*_end_at`, `*_start_tokens`, `*_end_tokens` per stage). Harness commands write start/end values. Roadmap dot tooltips show duration (hours) and token delta alongside the existing timestamp.
+- **Spec slug:** roadmap-stage-metrics
+- **Spec arg:** `15.5 roadmap-stage-metrics`
+- **Depends on:** Release 3
+- **Risk:** high (large schema addition, harness wiring across all commands)
 
 ## Deferred / Out of scope
 - **`/code-review-feature` and `/test-feature` writing to DB** — these commands don't advance the pipeline status so no DB write is needed; `in_review_at` is set by `/create-spec` or `/ship-feature` as appropriate.

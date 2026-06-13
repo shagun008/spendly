@@ -17,7 +17,8 @@ Spendly — Feature Status
   Nothing planned
 
 💡 Captured — needs release planning
-  15.4 Roadmap Stage Metrics → run /plan-release 15.4
+  15.4 → Release-Level Type Classification (feature 15) → run /create-spec 15.4 release-type-classification
+  15.5 → Roadmap Stage Metrics (feature 15) → run /create-spec 15.5 roadmap-stage-metrics
 
 ✅ Recently Shipped
   15.3 → Harness Integration (Live Updates)
