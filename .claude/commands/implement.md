@@ -10,6 +10,46 @@ an implementation plan, execute it, then update status tracking.
 
 User input: $ARGUMENTS
 
+## Step 0 — If no arguments given, show a picker
+
+If $ARGUMENTS is empty or blank:
+  Read `.claude/features/registry.md` in full.
+  Find all release sub-rows with status 📝 Spec'd.
+
+  If none exist:
+    Print: "No spec'd features — run /create-spec first."
+    Stop.
+
+  If exactly one spec'd release exists:
+    Call AskUserQuestion with ONE question. Header: "Which feature?".
+    One option for the single spec'd release:
+      - Label: "<number> — <title>"
+      - Description: "Implement this release"
+      - Preview:
+        ```
+        /implement <number>
+
+        Reads .claude/specs/<spec-filename>
+        Produces an implementation plan and executes it.
+        Updates registry to 🔧 In Progress when done.
+        ```
+    After confirmation, continue to Step 1 using that release number.
+
+  If multiple spec'd releases exist:
+    Call AskUserQuestion with ONE question. Header: "Which feature?".
+    One option per spec'd release (max 4):
+      - Label: "<number> — <title>"
+      - Description: "Implement this release"
+      - Preview:
+        ```
+        /implement <number>
+
+        Reads .claude/specs/<spec-filename>
+        Produces an implementation plan and executes it.
+        Updates registry to 🔧 In Progress when done.
+        ```
+    After selection, continue to Step 1 using the selected number.
+
 ## Step 1 — Parse the release number
 
 Extract the release number from $ARGUMENTS (e.g. `15.1` or `11-2`).
