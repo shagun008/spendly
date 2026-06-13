@@ -10,6 +10,9 @@ created: 2026-06-07
 
 # Release Plan: Developer Roadmap Page
 
+## Roadmap description
+A public page showing full transparency into what's being built on Spendly — what's shipped, in progress, and planned.
+
 ## Summary
 A public `/roadmap` page that gives any visitor full transparency into the Spendly feature pipeline. The page shows a table where each row is a feature and each column is a dev stage (Captured → Planned → In Progress → In Review → Shipped), with a tick and timestamp per completed stage. Clicking a row expands it in-place to show a structured detail card. The work is split into three releases: Release 1 builds the DB layer, seeds all existing features, and ships the pipeline table; Release 2 adds the expand-in-place detail view; Release 3 wires up the harness commands so the features table stays live as new features move through the pipeline.
 

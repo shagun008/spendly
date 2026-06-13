@@ -106,6 +106,9 @@ created: <today's date YYYY-MM-DD>
 
 # Release Plan: <title>
 
+## Roadmap description
+<one sentence for a non-technical audience — what this feature does and why it matters to a user of the app. This is what appears on the public /roadmap page. Under 25 words, no jargon, no route names, no file names. Example: "A public board where users can submit and upvote ideas for new features.">
+
 ## Summary
 <one paragraph describing what this feature does and how it was decomposed>
 
@@ -181,6 +184,39 @@ git pull origin main
 ```
 
 Report the PR URL and confirm the merge before continuing to Step 9.
+
+## Step 8d — Write the Summary into the features DB table
+Extract the Summary paragraph from the release plan file you just wrote (the
+paragraph under `## Summary`). Run the following to upsert it into the
+`description` column for the parent feature row:
+
+```bash
+$(find . -name "python" -path "*/venv/*" | head -1) - <<'EOF'
+import os, re, psycopg2
+from dotenv import load_dotenv
+load_dotenv()
+with open(".claude/features/releases/<release_plan_filename>") as f:
+    content = f.read()
+m = re.search(r'## Roadmap description\n+(.+?)(?=\n##|\Z)', content, re.DOTALL)
+description = ' '.join(m.group(1).strip().split()) if m else None
+conn = psycopg2.connect(os.environ["DATABASE_URL"])
+cur = conn.cursor()
+cur.execute(
+    "UPDATE features SET description = %s WHERE number = %s",
+    (description, "<feature_number>"),
+)
+conn.commit()
+print(f"Updated {cur.rowcount} row(s)")
+cur.close()
+conn.close()
+EOF
+```
+
+Replace `<release_plan_filename>` and `<feature_number>` with the actual values.
+If the DB update fails, log the error and continue — do not block the plan creation.
+
+If the release plan is later edited and re-run, this step re-executes and
+overwrites the previous description — keeping the DB in sync with the file.
 
 ## Step 9 — Report to the user
 Print:

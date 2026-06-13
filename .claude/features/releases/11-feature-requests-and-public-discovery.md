@@ -10,6 +10,9 @@ created: 2026-05-25
 
 # Release Plan: Feature Requests Page and Public Feature Discovery
 
+## Roadmap description
+A public board where users can submit, browse, and upvote ideas for new Spendly features.
+
 ## Summary
 This feature introduces a community-style feature request system. A single /features route serves both logged-out visitors (public listing with search, filter, sort, and detail modal) and logged-in users (two-column layout with their own requests, edit/delete controls, and a submission form). Upvoting with self-vote prevention and a trending score are added in Release 2. The home page gets a "Latest Features" section in Release 3.
 

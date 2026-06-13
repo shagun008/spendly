@@ -1,21 +1,20 @@
 # Spendly — Feature Status
-Last updated: 2026-06-08
+Last updated: 2026-06-13
 
 ## 🔧 In Progress
 Nothing in progress
 
 ## 👀 In Review
-Nothing in review
+- **15.2** Expand-in-Place Detail View (`feature/roadmap-detail`)
 
 ## 📝 Spec'd — ready to implement
 Nothing spec'd yet
 
 ## 📋 Planned — ready to spec
-- **15.2** Expand-in-Place Detail View
 - **15.3** Harness Integration (Live Updates)
 
 ## 💡 Captured — needs release planning
-Nothing captured yet
+- **15.4** Roadmap Stage Metrics
 
 ## ✅ Recently Shipped (last 5)
 - **15.1** DB Layer + Pipeline Table

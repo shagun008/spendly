@@ -30,62 +30,81 @@
             </thead>
             <tbody>
                 {% for f in features %}
-                <tr class="roadmap-row roadmap-row--{{ f.type }}">
+                <tr class="roadmap-row roadmap-row--{{ f.type }}{% if f.description %} roadmap-row--clickable{% endif %}"
+                    {% if f.description %}
+                    aria-expanded="false"
+                    aria-controls="detail-{{ f.number | replace('.', '-') }}"
+                    {% endif %}>
                     <td class="roadmap-number">{{ f.number }}</td>
                     <td class="roadmap-feature">
                         <span class="roadmap-feature-title">{{ f.title }}</span>
+                        {% if f.description %}
+                        <i data-lucide="chevron-down" class="roadmap-chevron"></i>
+                        {% endif %}
                         <span class="roadmap-badge roadmap-badge--{{ f.status | lower | replace(' ', '-') | replace("'", '') }}">{{ f.status }}</span>
                     </td>
                     <td class="roadmap-stage">
                         {% if f.captured_at %}
-                        <span class="roadmap-dot" data-date="{{ f.captured_at.short }}"></span>
+                        <span class="roadmap-dot" data-date="{{ f.captured_at.full }}"></span>
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                     <td class="roadmap-stage">
                         {% if f.planned_at %}
-                        <span class="roadmap-dot" data-date="{{ f.planned_at.short }}"></span>
+                        <span class="roadmap-dot" data-date="{{ f.planned_at.full }}"></span>
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                     <td class="roadmap-stage">
                         {% if f.spec_at %}
-                        <span class="roadmap-dot" data-date="{{ f.spec_at.short }}"></span>
+                        <span class="roadmap-dot" data-date="{{ f.spec_at.full }}"></span>
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                     <td class="roadmap-stage">
                         {% if f.implemented_at %}
-                        <span class="roadmap-dot" data-date="{{ f.implemented_at.short }}"></span>
+                        <span class="roadmap-dot" data-date="{{ f.implemented_at.full }}"></span>
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                     <td class="roadmap-stage">
                         {% if f.tested_at %}
-                        <span class="roadmap-dot" data-date="{{ f.tested_at.short }}"></span>
+                        <span class="roadmap-dot" data-date="{{ f.tested_at.full }}"></span>
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                     <td class="roadmap-stage">
                         {% if f.reviewed_at %}
-                        <span class="roadmap-dot" data-date="{{ f.reviewed_at.short }}"></span>
+                        <span class="roadmap-dot" data-date="{{ f.reviewed_at.full }}"></span>
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                     <td class="roadmap-stage">
                         {% if f.shipped_at %}
-                        <span class="roadmap-dot" data-date="{{ f.shipped_at.short }}"></span>
+                        <span class="roadmap-dot" data-date="{{ f.shipped_at.full }}"></span>
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                 </tr>
+                {% if f.description %}
+                <tr class="roadmap-detail-row"
+                    id="detail-{{ f.number | replace('.', '-') }}"
+                    role="region"
+                    aria-label="{{ f.title }} details">
+                    <td colspan="9">
+                        <div class="roadmap-detail-card">
+                            <p class="roadmap-detail-desc">{{ f.description or "No description." }}</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
                 {% endfor %}
             </tbody>
         </table>
@@ -94,4 +113,46 @@
         {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    var clickableRows = document.querySelectorAll('.roadmap-row--clickable');
+    var openDetailId = null;
+
+    clickableRows.forEach(function (row) {
+        row.addEventListener('click', function () {
+            var detailId = row.getAttribute('aria-controls');
+            var detailRow = document.getElementById(detailId);
+            if (!detailRow) return;
+
+            var isOpen = row.getAttribute('aria-expanded') === 'true';
+
+            if (openDetailId && openDetailId !== detailId) {
+                var prevDetail = document.getElementById(openDetailId);
+                var prevRow = document.querySelector('[aria-controls="' + openDetailId + '"]');
+                if (prevDetail) prevDetail.classList.remove('roadmap-detail-row--open');
+                if (prevRow) {
+                    prevRow.setAttribute('aria-expanded', 'false');
+                    prevRow.classList.remove('roadmap-row--expanded');
+                }
+            }
+
+            if (isOpen) {
+                detailRow.classList.remove('roadmap-detail-row--open');
+                row.setAttribute('aria-expanded', 'false');
+                row.classList.remove('roadmap-row--expanded');
+                openDetailId = null;
+            } else {
+                detailRow.classList.add('roadmap-detail-row--open');
+                row.setAttribute('aria-expanded', 'true');
+                row.classList.add('roadmap-row--expanded');
+                openDetailId = detailId;
+            }
+        });
+    });
+    lucide.createIcons();
+})();
+</script>
 {% endblock %}

@@ -37,7 +37,7 @@ Spendly solves a simple problem: tracking personal expenses without the overhead
 - **Profile** — view your full expense history with date-range filters and running totals
 - **Analytics** — visual breakdown of spending by category and over time
 - **Community** — submit feature requests, upvote ideas, and discover what other users are asking for; requests are ranked by votes and unique views
-- **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date tooltip on hover
+- **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date/time tooltip on hover; click any feature row to expand an inline detail card with its description
 - **Mobile** — fully responsive at all screen sizes with a hamburger navigation menu
 
 ---
