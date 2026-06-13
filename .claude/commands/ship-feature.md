@@ -92,8 +92,7 @@ just created. Use squash merge.
 Report: "✓ PR merged to main"
 
 ## Step 7 — Delete remote branch via GitHub MCP
-Use the GitHub MCP server to delete CURRENT_BRANCH
-from GitHub after the merge.
+Use `git push origin --delete CURRENT_BRANCH` to delete the remote branch.
 
 Report: "✓ Remote branch deleted"
 
@@ -134,21 +133,6 @@ in `CLAUDE.md` to match. Rules:
 - Update the "Next feature to implement" line to the next integer after the
   highest feature number in the registry
 
-## Step 10 — Deploy to Railway
-Run:
-```bash
-railway up --service expense-tracker
-```
-This streams the full build log live. Wait for Railway to confirm the deployment
-is successful before reporting done.
-
-If the deploy fails:
-- Report the failure with the relevant error lines from the build log
-- Do NOT mark the feature as complete in the summary
-- Tell the user to fix the issue and re-run `railway up` manually
-
-Report: "✓ Deployed to Railway — <deployment URL>"
-
 ## Final summary
 Print:
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
@@ -159,8 +143,6 @@ Print:
 ✓ Remote branch deleted
 ✓ Switched to main
 ✓ Local branch deleted
-✓ Deployed to Railway — <deployment URL>
-Next: run /create-spec for the next feature
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
 ## Rules
@@ -171,3 +153,4 @@ Next: run /create-spec for the next feature
   "GitHub MCP is not connected. Run /mcp to check connection."
 - If push fails due to no upstream, use git push -u origin CURRENT_BRANCH
 - Never proceed to merge if PR creation fails
+- Do NOT deploy to Railway — deployment is handled separately by the user
