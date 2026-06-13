@@ -69,7 +69,7 @@ Preview:
 ```
 Commands in this group
 ──────────────────────
-/implement <number>
+/implement-feature <number>
   Execute a spec'd feature
 
 /test-feature <spec-name>
@@ -209,14 +209,14 @@ Description: "Execute a spec'd feature"
 Preview (build dynamically):
 If `specced` is empty:
 ```
-/implement <number>
+/implement-feature <number>
 
 No spec'd features yet.
 Run /create-spec first.
 ```
 Else:
 ```
-/implement <number>
+/implement-feature <number>
 
 Spec'd features ready to implement:
 <list each as "  • <number> — <title>">
@@ -231,7 +231,7 @@ If `in_progress` is empty:
 /test-feature <spec-name>
 
 Nothing in progress.
-Run /implement first.
+Run /implement-feature first.
 ```
 Else:
 ```
@@ -271,9 +271,9 @@ Preview:
 Wait for selection.
 
 - If "Implement" and `specced` is empty: print "No spec'd features — run /create-spec first." and re-run from Step 2.
-- If "Implement" and one item: go to Step 4 with `/implement <number>`.
+- If "Implement" and one item: go to Step 4 with `/implement-feature <number>`.
 - If "Implement" and multiple: show sub-question (header: "Which feature?") with one option per specced item. After selection go to Step 4.
-- If "Test" and `in_progress` is empty: print "Nothing in progress — run /implement first." and re-run from Step 2.
+- If "Test" and `in_progress` is empty: print "Nothing in progress — run /implement-feature first." and re-run from Step 2.
 - If "Test" and one item: go to Step 4 with `/test-feature <spec-filename>`.
 - If "Test" and multiple: show sub-question. After selection go to Step 4.
 - If "Code review" and `in_review` is empty: print "Nothing in review — run /test-feature first." and re-run from Step 2.

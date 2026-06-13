@@ -2,7 +2,7 @@
 
 This file is the single source of truth for feature numbering, status, and traceability.
 It is updated automatically by `/capture-thoughts`, `/plan-release`, `/create-spec`,
-`/implement`, `/test-feature`, `/code-review-feature`, and `/ship-feature`.
+`/implement-feature`, `/test-feature`, `/code-review-feature`, and `/ship-feature`.
 
 ## Status Legend
 
@@ -10,7 +10,7 @@ It is updated automatically by `/capture-thoughts`, `/plan-release`, `/create-sp
 |--------|---------|
 | 💡 Captured | Processed thought written, ready for /plan-release |
 | 📋 Planned | Release plan written, ready for /create-spec |
-| 📝 Spec'd | Spec created, ready for /implement |
+| 📝 Spec'd | Spec created, ready for /implement-feature |
 | 🔧 In Progress | Implementation underway |
 | 👀 In Review | Tests written and/or under code review |
 | ✅ Shipped | Merged to main |
@@ -51,10 +51,10 @@ Release sub-rows (indented with →) show individual release status.
 | 12.2 | → Local Data Migration | release | 12 | ✅ Shipped | 12.2-local-data-migration-to-supabase.md |
 | 14 | Add README File | new-feature | — | ✅ Shipped | 1 release |
 | 14.1 | → Add README File | release | 14 | ✅ Shipped | 14-add-readme-file |
-| 15 | Developer Roadmap Page | new-feature | — | 📋 Planned | 3 releases planned |
+| 15 | Developer Roadmap Page | new-feature | — | 👀 In Review | 3 releases planned |
 | 15.1 | → DB Layer + Pipeline Table | release | 15 | ✅ Shipped | 15.1-roadmap-pipeline.md |
 | 15.2 | → Expand-in-Place Detail View | release | 15 | ✅ Shipped | 15.2-roadmap-detail.md |
-| 15.3 | → Harness Integration (Live Updates) | release | 15 | 📋 Planned | — |
+| 15.3 | → Harness Integration (Live Updates) | release | 15 | 👀 In Review | 15.3-harness-integration-live-updates.md |
 | 15.4 | Roadmap Stage Metrics | enhancement | 15 | 💡 Captured | — |
 | 15.4.? | → Roadmap Stage Metrics | release | 15.4 | 💡 Captured | — |
 

@@ -8,10 +8,13 @@ Spendly — Feature Status
   Nothing in progress
 
 👀 In Review
-  Nothing in review
+  15.3 → Harness Integration (Live Updates)
+
+📝 Spec'd — ready to implement
+  Nothing spec'd
 
 📋 Planned — ready to spec
-  15.3 → Harness Integration (Live Updates) → run /create-spec 15.3 harness-integration
+  Nothing planned
 
 💡 Captured — needs release planning
   15.4 Roadmap Stage Metrics → run /plan-release 15.4
@@ -22,5 +25,8 @@ Spendly — Feature Status
   14.1 → Add README File
   12.2 → Local Data Migration
   12.1 → Swap Database Layer
+
+🚀 Deployed
+  Nothing deployed yet
 
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌

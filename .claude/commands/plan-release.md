@@ -191,24 +191,34 @@ paragraph under `## Summary`). Run the following to upsert it into the
 `description` column for the parent feature row:
 
 ```bash
-$(find . -name "python" -path "*/venv/*" | head -1) - <<'EOF'
+python3 - <<'EOF'
 import os, re, psycopg2
 from dotenv import load_dotenv
 load_dotenv()
-with open(".claude/features/releases/<release_plan_filename>") as f:
-    content = f.read()
-m = re.search(r'## Roadmap description\n+(.+?)(?=\n##|\Z)', content, re.DOTALL)
-description = ' '.join(m.group(1).strip().split()) if m else None
-conn = psycopg2.connect(os.environ["DATABASE_URL"])
-cur = conn.cursor()
-cur.execute(
-    "UPDATE features SET description = %s WHERE number = %s",
-    (description, "<feature_number>"),
-)
-conn.commit()
-print(f"Updated {cur.rowcount} row(s)")
-cur.close()
-conn.close()
+url = os.environ.get('DATABASE_URL')
+if not url:
+    print('Warning: DATABASE_URL not set — skipping DB update')
+else:
+    try:
+        with open(".claude/features/releases/<release_plan_filename>") as f:
+            content = f.read()
+        m = re.search(r'## Roadmap description\n+(.+?)(?=\n##|\Z)', content, re.DOTALL)
+        description = ' '.join(m.group(1).strip().split()) if m else None
+        conn = psycopg2.connect(url)
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE features SET description = %s WHERE number = %s",
+            (description, "<feature_number>"),
+        )
+        conn.commit()
+        if cur.rowcount == 0:
+            print('WARNING: 0 rows updated — check that <feature_number> is correct and the parent row exists')
+        else:
+            print(f"Updated {cur.rowcount} row(s)")
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f'DB update failed: {e}')
 EOF
 ```
 
@@ -217,6 +227,60 @@ If the DB update fails, log the error and continue — do not block the plan cre
 
 If the release plan is later edited and re-run, this step re-executes and
 overwrites the previous description — keeping the DB in sync with the file.
+
+## Step 8e — Stamp planned_at and insert release sub-rows in the database
+
+Run the following Python snippet. Substitute PARENT_NUMBER and build RELEASE_ROWS
+as a list of tuples — one per release defined in this plan:
+
+```bash
+python3 -c "
+import psycopg2, os
+from datetime import datetime, timezone
+from dotenv import load_dotenv
+load_dotenv()
+url = os.environ.get('DATABASE_URL')
+if not url:
+    print('Warning: DATABASE_URL not set — skipping DB stamp')
+else:
+    try:
+        conn = psycopg2.connect(url)
+        cur = conn.cursor()
+        now = datetime.now(timezone.utc)
+        # Stamp planned_at on the parent feature row
+        cur.execute(
+            'UPDATE features SET planned_at = %s WHERE number = %s',
+            (now, 'PARENT_NUMBER')
+        )
+        if cur.rowcount == 0:
+            print('WARNING: 0 rows updated for parent PARENT_NUMBER — check the number is correct and the row exists')
+        # Insert release sub-rows — idempotent, skip if already exist
+        release_rows = [
+            ('RELEASE_NUMBER', 'PARENT_NUMBER', 'RELEASE_TITLE', 'RELEASE_SLUG', 'release'),
+            # one tuple per release: (number, parent_number, title, slug, type)
+        ]
+        inserted = 0
+        for row in release_rows:
+            cur.execute('''
+                INSERT INTO features (number, parent_number, title, slug, type, planned_at)
+                VALUES (%s, %s, %s, %s, %s, %s)
+                ON CONFLICT (number) DO NOTHING
+            ''', (*row, now))
+            inserted += cur.rowcount
+        if inserted == 0:
+            print('WARNING: 0 sub-rows inserted — rows may already exist (OK on re-run) or RELEASE_NUMBER placeholders were not substituted')
+        else:
+            print(f'Sub-rows inserted: {inserted}')
+        print('Done')
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f'DB stamp failed: {e}')
+"
+```
+
+If the DB write fails, log the error and continue — do not block the command.
 
 ## Step 9 — Report to the user
 Print:

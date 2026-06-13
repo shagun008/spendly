@@ -103,8 +103,43 @@ After presenting the report (regardless of verdict):
 2. Find the release sub-row whose Specs column matches `$ARGUMENTS`
 3. If the release sub-row status is not already `👀 In Review`, update it to `👀 In Review`
 4. Update the parent feature row status if needed
-5. Rewrite `.claude/features/status.md` by reading the full registry and
-   regenerating all sections grouped by status. Set "Last updated" to today's date.
+5. Stamp `reviewed_at` in the database — extract the release number from `$ARGUMENTS`
+   (leading digits and dots before the first `-`, e.g. `15.3` from `15.3-harness-integration-live-updates`),
+   then run:
+
+```bash
+python3 -c "
+import psycopg2, os
+from datetime import datetime, timezone
+from dotenv import load_dotenv
+load_dotenv()
+url = os.environ.get('DATABASE_URL')
+if not url:
+    print('Warning: DATABASE_URL not set — skipping DB stamp')
+else:
+    try:
+        conn = psycopg2.connect(url)
+        cur = conn.cursor()
+        now = datetime.now(timezone.utc)
+        cur.execute(
+            'UPDATE features SET reviewed_at = %s WHERE number = %s AND reviewed_at IS NULL',
+            (now, 'RELEASE_NUMBER')
+        )
+        if cur.rowcount == 0:
+            print('WARNING: 0 rows updated — check that RELEASE_NUMBER was substituted correctly and the row exists')
+        else:
+            print('Rows updated:', cur.rowcount)
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f'DB stamp failed: {e}')
+"
+```
+
+   If the DB write fails, log the error and continue.
+
+6. Run `/status` to refresh the live feature status view from the database.
 
 ---
 
