@@ -126,17 +126,43 @@ import psycopg2, os
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 load_dotenv()
-conn = psycopg2.connect(os.environ['DATABASE_URL'])
-cur = conn.cursor()
-now = datetime.now(timezone.utc)
-cur.execute(
-    \"UPDATE features SET reviewed_at = %s, shipped_at = %s WHERE number = %s\",
-    (now, now, 'FEATURE_NUMBER')
-)
-print('Rows updated:', cur.rowcount)
-conn.commit()
-cur.close()
-conn.close()
+url = os.environ.get('DATABASE_URL')
+if not url:
+    print('Warning: DATABASE_URL not set — skipping DB stamp')
+else:
+    try:
+        conn = psycopg2.connect(url)
+        cur = conn.cursor()
+        now = datetime.now(timezone.utc)
+        cur.execute(
+            \"UPDATE features SET reviewed_at = COALESCE(reviewed_at, %s), shipped_at = %s WHERE number = %s\",
+            (now, now, 'FEATURE_NUMBER')
+        )
+        if cur.rowcount == 0:
+            print('WARNING: 0 rows updated — check that FEATURE_NUMBER was substituted correctly and the row exists')
+        else:
+            print('Rows updated:', cur.rowcount)
+        # Stamp parent shipped_at if all sibling releases are now shipped
+        cur.execute('''
+            SELECT COUNT(*) FROM features
+            WHERE parent_number = (SELECT parent_number FROM features WHERE number = %s)
+            AND shipped_at IS NULL
+            AND number != %s
+        ''', ('FEATURE_NUMBER', 'FEATURE_NUMBER'))
+        remaining = cur.fetchone()[0]
+        if remaining == 0:
+            cur.execute('''
+                UPDATE features SET shipped_at = %s
+                WHERE number = (SELECT parent_number FROM features WHERE number = %s)
+                AND parent_number IS NULL
+            ''', (now, 'FEATURE_NUMBER'))
+            if cur.rowcount:
+                print('Parent feature shipped_at stamped.')
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f'DB stamp failed: {e}')
 "
 ```
 

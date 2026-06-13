@@ -94,6 +94,10 @@ def init_db():
         )
     """)
 
+    cur.execute("""
+        ALTER TABLE features ADD COLUMN IF NOT EXISTS deployed_at TIMESTAMP
+    """)
+
     conn.commit()
     cur.close()
     conn.close()

@@ -191,11 +191,50 @@ Insert both in numerical order (enhancements after their parent).
 
 ---
 
-## Step 7b — Update status.md
+## Step 7a — Stamp captured_at in the database
 
-Rewrite `.claude/features/status.md` by reading the full registry and
-regenerating all sections grouped by status. Follow the same format as
-`/status` command output. Set "Last updated" to today's date.
+Run the following Python snippet, substituting FEATURE_NUMBER, TITLE, and SLUG
+with the values assigned in this run. TYPE is always `feature` — the new-feature/
+enhancement distinction lives in the processed-thought file, not the DB type column:
+
+```bash
+python3 -c "
+import psycopg2, os
+from datetime import datetime, timezone
+from dotenv import load_dotenv
+load_dotenv()
+url = os.environ.get('DATABASE_URL')
+if not url:
+    print('Warning: DATABASE_URL not set — skipping DB stamp')
+else:
+    try:
+        conn = psycopg2.connect(url)
+        cur = conn.cursor()
+        now = datetime.now(timezone.utc)
+        cur.execute('''
+            INSERT INTO features (number, title, slug, type, captured_at)
+            VALUES (%s, %s, %s, %s, %s)
+            ON CONFLICT (number) DO UPDATE SET captured_at = EXCLUDED.captured_at
+        ''', ('FEATURE_NUMBER', 'TITLE', 'SLUG', 'feature', now))
+        if cur.rowcount == 0:
+            print('WARNING: 0 rows upserted — check that FEATURE_NUMBER is correct and the INSERT ran')
+        else:
+            print('Rows upserted:', cur.rowcount)
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f'DB stamp failed: {e}')
+"
+```
+
+If the DB write fails, log the error and continue — do not block the command.
+
+---
+
+## Step 7b — Refresh status
+
+Run `/status` to refresh the live feature status view from the database.
 
 ---
 

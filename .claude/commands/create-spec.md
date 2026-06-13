@@ -222,26 +222,48 @@ Run the following Python snippet to update the `description` column
 for this release's row in the `features` table:
 
 ```bash
-/path/to/venv/bin/python - <<'EOF'
+python3 - <<'EOF'
 import os, re, psycopg2
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 load_dotenv()
-with open(".claude/specs/<spec_filename>") as f:
-    content = f.read()
-m = re.search(r'## Roadmap description\n+(.+?)(?=\n##|\Z)', content, re.DOTALL)
-description = ' '.join(m.group(1).strip().split()) if m else None
-conn = psycopg2.connect(os.environ["DATABASE_URL"])
-cur = conn.cursor()
-cur.execute("UPDATE features SET description = %s WHERE number = %s", (description, "<feature_number>"))
-conn.commit()
-print(f"Updated {cur.rowcount} row(s)")
-cur.close()
-conn.close()
+url = os.environ.get('DATABASE_URL')
+if not url:
+    print('Warning: DATABASE_URL not set — skipping DB update')
+else:
+    try:
+        with open(".claude/specs/<spec_filename>") as f:
+            content = f.read()
+        m = re.search(r'## Roadmap description\n+(.+?)(?=\n##|\Z)', content, re.DOTALL)
+        description = ' '.join(m.group(1).strip().split()) if m else None
+        conn = psycopg2.connect(url)
+        cur = conn.cursor()
+        now = datetime.now(timezone.utc)
+        # INSERT rather than UPDATE: sub-release rows may not exist yet if /plan-release
+        # was never run for this feature (e.g. manually created specs). A plain UPDATE
+        # would silently update 0 rows, causing the model to later improvise a full INSERT
+        # that incorrectly populates captured_at and planned_at alongside spec_at.
+        # ON CONFLICT ensures only spec_at (and description) are ever set by this command.
+        cur.execute("""
+            INSERT INTO features (number, description, spec_at)
+            VALUES (%s, %s, %s)
+            ON CONFLICT (number) DO UPDATE
+              SET description = EXCLUDED.description,
+                  spec_at = COALESCE(features.spec_at, EXCLUDED.spec_at)
+        """, ("<feature_number>", description, now))
+        conn.commit()
+        if cur.rowcount == 0:
+            print('WARNING: 0 rows upserted — check that <feature_number> placeholder was substituted correctly')
+        else:
+            print(f"Upserted {cur.rowcount} row(s)")
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f'DB update failed: {e}')
 EOF
 ```
 
 Replace `<spec_filename>` and `<feature_number>` with the actual values.
-Find the venv Python by running `find . -name "python" -path "*/venv/*" | head -1`.
 If the DB update fails, log the error and continue — do not block the spec creation.
 
 ## Step 12 — Report to the user
@@ -255,6 +277,6 @@ Title:     <feature_title>
 
 Then tell the user:
 "Review the spec at `.claude/specs/<spec_filename>`
-then run `/implement <feature_number>` to begin implementation."
+then run `/implement-feature <feature_number>` to begin implementation."
 
 Do not print the full spec in chat unless explicitly asked.
