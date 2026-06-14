@@ -552,7 +552,7 @@ def get_all_features():
         "SELECT number, parent_number, title, slug, type, release_subtype, description,"
         " captured_at, planned_at, spec_at, implemented_at,"
         " tested_at, reviewed_at, shipped_at"
-        " FROM features ORDER BY id ASC"
+        " FROM features ORDER BY number ASC"
     )
     rows = cur.fetchall()
     cur.close()
