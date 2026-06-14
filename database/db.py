@@ -568,10 +568,10 @@ def seed_features():
         ),
         (
             '15.5',
-            None,
+            '15',
             'Release Notes Modal',
             'release-notes-modal',
-            'feature',
+            'release',
             None,
             None,
             '2026-06-14 04:57:35.592068',
