@@ -248,20 +248,23 @@ else:
               SET description = EXCLUDED.description,
                   spec_at = COALESCE(features.spec_at, EXCLUDED.spec_at)
         """, ("<feature_number>", "<feature_title>", description, now))
-        conn.commit()
         if cur.rowcount == 0:
-            print('WARNING: 0 rows upserted — check that <feature_number> placeholder was substituted correctly')
+            conn.rollback()
+            print('ERROR: 0 rows upserted — placeholder substitution likely failed. DB NOT updated.')
+            print('ACTION REQUIRED: manually verify and re-run the DB stamp before continuing.')
         else:
+            conn.commit()
             print(f"Upserted {cur.rowcount} row(s)")
         cur.close()
         conn.close()
     except Exception as e:
-        print(f'DB update failed: {e}')
+        print(f'ERROR: DB update failed: {e}')
+        print('ACTION REQUIRED: resolve the error and re-run the DB stamp before continuing.')
 EOF
 ```
 
 Replace `<spec_filename>` and `<feature_number>` with the actual values.
-If the DB update fails, log the error and continue — do not block the spec creation.
+If the DB update fails or 0 rows are upserted, print a clear ERROR and stop — do not proceed to Step 12 until the stamp is confirmed successful.
 
 ## Step 12 — Report to the user
 Print a short summary in this exact format:
