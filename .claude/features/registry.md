@@ -51,12 +51,13 @@ Release sub-rows (indented with →) show individual release status.
 | 12.2 | → Local Data Migration | release | 12 | ✅ Shipped | 12.2-local-data-migration-to-supabase.md |
 | 14 | Add README File | new-feature | — | ✅ Shipped | 1 release |
 | 14.1 | → Add README File | release | 14 | ✅ Shipped | 14-add-readme-file |
-| 15 | Developer Roadmap Page | new-feature | — | 🔧 In Progress | 5 releases planned |
+| 15 | Developer Roadmap Page | new-feature | — | 🔧 In Progress | 6 releases planned |
 | 15.1 | → DB Layer + Pipeline Table | release | 15 | ✅ Shipped | 15.1-roadmap-pipeline.md |
 | 15.2 | → Expand-in-Place Detail View | release | 15 | ✅ Shipped | 15.2-roadmap-detail.md |
 | 15.3 | → Harness Integration (Live Updates) | release | 15 | ✅ Shipped | 15.3-harness-integration-live-updates.md |
 | 15.4 | → Release-Level Type Classification | release | 15 | ✅ Shipped | 15.4-release-type-classification.md |
-| 15.5 | → Roadmap Stage Metrics | release | 15 | 💡 Captured | — |
+| 15.5 | → Release Notes Modal | release | 15 | 💡 Captured | — |
+| 15.6 | → Roadmap Stage Metrics | release | 15 | 💡 Captured | — |
 
 ## Numbering Rules
 

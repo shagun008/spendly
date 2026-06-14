@@ -4,7 +4,7 @@ title: Developer Roadmap Page
 type: new-feature
 parent: null
 status: planned
-releases: 5
+releases: 6
 created: 2026-06-07
 ---
 
@@ -46,10 +46,17 @@ A public `/roadmap` page that gives any visitor full transparency into the Spend
 - **Depends on:** Release 3
 - **Risk:** low
 
-### Release 5 — Roadmap Stage Metrics
+### Release 5 — Release Notes Modal
+- **Scope:** Clicking a completed (green) stage dot on a release sub-row opens a modal showing the full test report and code review report for that release. Two new TEXT columns on the `features` table (`test_report`, `review_report`). `/test-feature` and `/code-review-feature` write to these columns as part of their stamp step. Modal is dismissible via click-outside or Escape. Dots are non-clickable if no reports exist. Parent feature row dots do not trigger the modal.
+- **Spec slug:** release-notes-modal
+- **Spec arg:** `15.5 release-notes-modal`
+- **Depends on:** Release 2
+- **Risk:** medium (new DB columns + harness stamp updates + modal UI)
+
+### Release 6 — Roadmap Stage Metrics
 - **Scope:** Track time and token cost per pipeline stage. 28 new columns on the `features` table (`*_start_at`, `*_end_at`, `*_start_tokens`, `*_end_tokens` per stage). Harness commands write start/end values. Roadmap dot tooltips show duration (hours) and token delta alongside the existing timestamp.
 - **Spec slug:** roadmap-stage-metrics
-- **Spec arg:** `15.5 roadmap-stage-metrics`
+- **Spec arg:** `15.6 roadmap-stage-metrics`
 - **Depends on:** Release 3
 - **Risk:** high (large schema addition, harness wiring across all commands)
 
