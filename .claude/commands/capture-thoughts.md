@@ -226,9 +226,11 @@ Insert both in numerical order (enhancements after their parent).
 
 ## Step 7a — Stamp captured_at in the database
 
-Run the following Python snippet, substituting FEATURE_NUMBER, TITLE, and SLUG
-with the values assigned in this run. TYPE is NULL for parent feature rows —
-the roadmap uses type only on release sub-rows to control indent/styling:
+Run the following Python snippet, substituting FEATURE_NUMBER, TITLE, SLUG,
+PARENT_NUMBER, and IS_ENHANCEMENT with the values assigned in this run.
+
+- For a **new feature**: PARENT_NUMBER = None, IS_ENHANCEMENT = False
+- For an **enhancement**: PARENT_NUMBER = the parent feature number as a string (e.g. '15'), IS_ENHANCEMENT = True
 
 ```bash
 python3 -c "
@@ -244,11 +246,16 @@ else:
         conn = psycopg2.connect(url)
         cur = conn.cursor()
         now = datetime.now(timezone.utc)
+        parent_number = PARENT_NUMBER  # e.g. '15' for enhancement, None for new feature
+        row_type = 'release' if IS_ENHANCEMENT else None
         cur.execute('''
-            INSERT INTO features (number, title, slug, captured_at)
-            VALUES (%s, %s, %s, %s)
-            ON CONFLICT (number) DO UPDATE SET captured_at = EXCLUDED.captured_at
-        ''', ('FEATURE_NUMBER', 'TITLE', 'SLUG', now))
+            INSERT INTO features (number, parent_number, title, slug, type, captured_at)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON CONFLICT (number) DO UPDATE
+              SET parent_number = EXCLUDED.parent_number,
+                  type = EXCLUDED.type,
+                  captured_at = EXCLUDED.captured_at
+        ''', ('FEATURE_NUMBER', parent_number, 'TITLE', 'SLUG', row_type, now))
         if cur.rowcount == 0:
             print('WARNING: 0 rows upserted — check that FEATURE_NUMBER is correct and the INSERT ran')
         else:
