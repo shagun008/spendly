@@ -6,15 +6,15 @@ Spendly is a personal expense tracker — and a proof of concept for structured,
 
 ## Why This Matters
 
-**13 features · 16 spec releases · 0 unreviewed merges · 1 database migration handled as a governed pipeline feature**
+**14 features · 20 spec releases · 0 unreviewed merges · the harness writes its own progress to the live roadmap**
 
 This project is a proof of concept for AI-assisted software delivery — a repeatable pipeline that takes a feature from raw idea to production code with structured governance built into every step. Every feature was spec'd before it was built, tested before it was reviewed, and code-reviewed (in parallel, by two independent agents) before it was merged. Nothing shipped without passing through the full pipeline.
 
-- 13 features shipped across 16 spec releases
+- 14 features shipped across 20 spec releases
 - Every feature spec'd, tested, and code-reviewed before merge
-- A full database migration (SQLite → Supabase PostgreSQL) handled end-to-end as a pipeline feature — not a manual one-off
+- The harness is self-documenting: every pipeline command (`/capture-thoughts`, `/plan-release`, `/create-spec`, `/implement-feature`, `/test-feature`, `/code-review-feature`, `/ship-feature`, `/deploy`) writes a timestamp to the live database — so the public `/roadmap` page reflects the real pipeline state automatically, with no manual updates
+- A full database migration (SQLite → Supabase PostgreSQL) handled end-to-end as two spec'd pipeline releases — not a manual one-off
 - A repeatable system: raw idea to shipped pull request with zero untracked steps
-- Infrastructure changes subject to the same governance as product features
 
 ---
 
@@ -37,7 +37,7 @@ Spendly solves a simple problem: tracking personal expenses without the overhead
 - **Profile** — view your full expense history with date-range filters and running totals
 - **Analytics** — visual breakdown of spending by category and over time
 - **Community** — submit feature requests, upvote ideas, and discover what other users are asking for; requests are ranked by votes and unique views
-- **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date/time tooltip on hover; click any feature row to expand an inline detail card with its description
+- **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date/time tooltip on hover; click any feature row to expand an inline detail card with its description and release type badge (New Feature / Enhancement / Bug Fix); the page is kept live automatically as the harness runs
 - **Mobile** — fully responsive at all screen sizes with a hamburger navigation menu
 
 ---
@@ -52,34 +52,46 @@ The pipeline follows this path for every feature:
 User notes / screenshot
         │
         ▼
-/capture-thoughts          (💡 Captured)
+/capture-thoughts          (💡 Captured)   ← stamps captured_at in DB
         │
         ▼
-/plan-release              (📋 Planned)
+/plan-release              (📋 Planned)    ← stamps planned_at in DB
         │
         ▼
-/create-spec + Plan Mode   (🔧 In Progress)
+/create-spec + Plan Mode   (📝 Spec'd)     ← stamps spec_at in DB
         │
         ▼
-/test-feature              (👀 In Review)
+/implement-feature         (🔧 In Progress) ← stamps implemented_at in DB
+        │
+        ▼
+/test-feature              (👀 In Review)  ← stamps tested_at in DB
         │
         ▼
 /code-review-feature       (security + quality agents, parallel)
+        │                                  ← stamps reviewed_at in DB
+        ▼
+/ship-feature              (✅ Shipped)    ← stamps shipped_at in DB
         │
         ▼
-/ship-feature              (✅ Shipped)
+/deploy                                    ← stamps deployed_at in DB
 ```
+
+Every stage timestamp lands in the `features` table. The public `/roadmap` page reads directly from that table — so it reflects the true pipeline state at all times, with no manual updates.
 
 | Command | What it does |
 |---|---|
 | `/capture-thoughts` | Reads free-form notes and synthesises them into a structured feature brief |
 | `/plan-release` | Decomposes a feature into release-sized units with a written plan |
 | `/create-spec` | Writes a formal spec file and creates a dedicated feature branch |
+| `/implement-feature` | Reads the spec, plans implementation, and executes it |
 | `/test-feature` | Generates pytest tests from the spec and runs them |
 | `/code-review-feature` | Launches a security reviewer and a quality reviewer in parallel |
 | `/ship-feature` | Commits, opens a pull request, squash-merges, and cleans up the branch |
+| `/deploy` | Deploys the current main branch to Railway |
+| `/dev` | Interactive workflow picker — shows the next recommended step with live registry context |
+| `/status` | Reads the live DB and prints the current status of every feature and release |
 
-The pipeline proved capable beyond routine feature work. When the project outgrew SQLite and required a migration to Supabase PostgreSQL — including data migration scripts, not just schema changes — that work was handled as two spec'd pipeline releases (12.1 and 12.2), subject to the same governance as every other feature. Infrastructure changes treated as first-class deliverables, not one-off tasks.
+The pipeline proved capable well beyond routine feature work. When the project outgrew SQLite and required a migration to Supabase PostgreSQL — including data migration scripts, not just schema changes — that work was handled as two spec'd pipeline releases (12.1 and 12.2), subject to the same governance as every other feature. Infrastructure changes treated as first-class deliverables, not one-off tasks.
 
 ---
 
@@ -100,21 +112,21 @@ The pipeline proved capable beyond routine feature work. When the project outgre
 
 ## Feature Roadmap
 
-| # | Feature | Status |
-|---|---|---|
-| 01 | Database Setup | ✅ Shipped |
-| 02 | Registration | ✅ Shipped |
-| 03 | Login and Logout | ✅ Shipped |
-| 04 | Profile Page | ✅ Shipped |
-| 05 | Backend Routes for Profile | ✅ Shipped |
-| 06 | Date Filter on Profile | ✅ Shipped |
-| 07 | Add Expense | ✅ Shipped |
-| 08 | Edit Expense | ✅ Shipped |
-| 09 | Delete Expense | ✅ Shipped |
-| 10 | Mobile Nav | ✅ Shipped |
-| 11 | Feature Requests and Public Discovery | ✅ Shipped |
-| 12 | Migration to Supabase | ✅ Shipped |
-| 14 | Add README File | ✅ Shipped |
-| 15 | Developer Roadmap Page | 👀 In Review |
+| # | Feature | Releases | Status |
+|---|---|---|---|
+| 01 | Database Setup | 1 | ✅ Shipped |
+| 02 | Registration | 1 | ✅ Shipped |
+| 03 | Login and Logout | 1 | ✅ Shipped |
+| 04 | Profile Page | 1 | ✅ Shipped |
+| 05 | Backend Routes for Profile | 1 | ✅ Shipped |
+| 06 | Date Filter on Profile | 1 | ✅ Shipped |
+| 07 | Add Expense | 1 | ✅ Shipped |
+| 08 | Edit Expense | 1 | ✅ Shipped |
+| 09 | Delete Expense | 1 | ✅ Shipped |
+| 10 | Mobile Nav | 1 | ✅ Shipped |
+| 11 | Feature Requests and Public Discovery | 3 | ✅ Shipped |
+| 12 | Migration to Supabase | 2 | ✅ Shipped |
+| 14 | Add README File | 1 | ✅ Shipped |
+| 15 | Developer Roadmap Page | 4 shipped, 2 planned | 🔧 In Progress |
 
-Next feature: 15.2 — Expand-in-Place Detail View
+Next up: **15.5 — Release Notes Modal**, **15.6 — Roadmap Stage Metrics**
