@@ -58,8 +58,8 @@ Release sub-rows (indented with →) show individual release status.
 | 15.4 | → Release-Level Type Classification | release | 15 | ✅ Shipped | 15.4-release-type-classification.md |
 | 15.5 | → Release Notes Modal | release | 15 | 💡 Captured | — |
 | 15.6 | → Roadmap Stage Metrics | release | 15 | 💡 Captured | — |
-| 16 | Post-Review Improvement Loop | new-feature | — | 📋 Planned | 1 release planned |
-| 16.1 | → Improvement Loop Skill | release | 16 | 📋 Planned | — |
+| 16 | Post-Review Improvement Loop | new-feature | — | 📝 Spec'd | 1 release planned |
+| 16.1 | → Improvement Loop Skill | release | 16 | 📝 Spec'd | 16.1-improvement-loop.md |
 
 ## Numbering Rules
 
