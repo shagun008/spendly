@@ -1,0 +1,455 @@
+# Skill: Post-Review Improvement Loop
+
+## Purpose
+
+This skill is executed when:
+
+- Tests fail
+- Code review identifies issues
+- Quality gates are not met
+- Deployment readiness is uncertain
+- Significant architectural concerns are raised
+
+The purpose of this skill is not merely to fix the immediate issue.
+
+The purpose is to:
+
+1. Resolve the identified problem.
+2. Improve the implementation.
+3. Preserve architectural integrity.
+4. Maintain alignment with product vision.
+5. Prevent degradation of code quality over time.
+6. Capture learnings that improve future development cycles.
+
+This skill acts as a continuous improvement mechanism between Review/Test and Ship.
+
+---
+
+# Core Philosophy
+
+## Principle 1: Improve, Don't Just Repair
+
+Never make the smallest possible change solely to satisfy a failing test or review comment.
+
+Always ask:
+
+- Why did this issue occur?
+- What underlying assumption failed?
+- What pattern allowed this issue to emerge?
+- Can the root cause be eliminated?
+
+Focus on root-cause correction rather than symptom correction.
+
+---
+
+## Principle 2: Preserve the Vision
+
+Before making changes:
+
+Re-read:
+
+- Original requirements
+- Product vision
+- Feature objectives
+- Acceptance criteria
+
+Validate:
+
+- Does the proposed fix support the intended outcome?
+- Does the fix move implementation closer to the vision?
+- Is the fix introducing behavior outside the intended scope?
+
+Never optimize locally while damaging overall product intent.
+
+---
+
+## Principle 3: Prefer Iterative Improvement
+
+Avoid large rewrites unless absolutely necessary.
+
+Prefer:
+
+- Small improvements
+- Incremental refactoring
+- Measurable progress
+- Reduced risk
+
+Each loop should make the system better than before.
+
+---
+
+## Principle 4: Reduce Complexity
+
+When evaluating solutions:
+
+Prefer:
+
+- Simpler logic
+- Fewer dependencies
+- Clearer abstractions
+- Reduced coupling
+
+Avoid:
+
+- Special-case logic
+- Hidden behavior
+- Excessive configuration
+- Clever but difficult-to-understand solutions
+
+Complexity should decrease over time.
+
+---
+
+## Principle 5: Protect Future Development
+
+Every change should improve:
+
+- Maintainability
+- Readability
+- Extensibility
+- Testability
+
+Future agents and developers should find the code easier to work with after the change.
+
+---
+
+# Execution Workflow
+
+## Step 1: Gather Context
+
+Collect:
+
+### Failure Context
+
+- Failed tests
+- Review comments
+- Lint issues
+- Security findings
+- Performance regressions
+- Deployment blockers
+
+### Change Context
+
+- Original feature request
+- Current implementation
+- Recent commits
+- Related modules
+- Architectural documentation
+
+### Business Context
+
+- Feature objective
+- User problem being solved
+- Success criteria
+
+---
+
+## Step 2: Root Cause Analysis
+
+Determine:
+
+### What Failed?
+
+Document:
+
+- Exact failure
+- Expected behavior
+- Actual behavior
+
+### Why Did It Fail?
+
+Continue investigation until root cause is identified.
+
+Avoid stopping at:
+
+- Failed test
+- Broken function
+- Missing validation
+
+Identify the underlying design or implementation issue.
+
+---
+
+## Step 3: Architectural Assessment
+
+Evaluate whether the issue reveals:
+
+- Design weakness
+- Boundary violation
+- Excessive coupling
+- Missing abstraction
+- Poor module ownership
+- Technical debt
+
+Questions:
+
+### Is the architecture still healthy?
+
+### Does the implementation remain aligned with system design?
+
+### Is a small refactor justified?
+
+### Can future issues be prevented through better structure?
+
+---
+
+## Step 4: Generate Improvement Plan
+
+Create a plan containing:
+
+### Immediate Fix
+
+What must change to resolve the issue?
+
+### Preventative Improvement
+
+What change reduces recurrence?
+
+### Structural Improvement
+
+What change improves maintainability?
+
+### Testing Improvement
+
+What validation is missing?
+
+---
+
+# Improvement Guidelines
+
+## Code Quality
+
+Ensure:
+
+- Functions have clear responsibilities.
+- Modules have clear ownership.
+- Naming reflects intent.
+- Logic is easy to follow.
+- Duplication is reduced.
+
+Avoid:
+
+- Nested complexity
+- Hidden side effects
+- God classes
+- God modules
+- Excessive conditionals
+
+---
+
+## Feature Alignment
+
+Validate:
+
+- The implementation still solves the intended problem.
+- The feature behavior matches requirements.
+- Scope remains controlled.
+
+Ask:
+
+"If this feature was reviewed by the product owner, would it still be considered correct?"
+
+---
+
+## Modularity
+
+Favor:
+
+- Small components
+- Small services
+- Clear interfaces
+- Strong boundaries
+
+Avoid:
+
+- Cross-module leakage
+- Shared mutable state
+- Tight coupling
+
+The codebase should become more modular after every improvement cycle.
+
+---
+
+## Scalability
+
+Evaluate:
+
+- Future feature additions
+- Expected growth
+- Increased load
+- Expanded usage scenarios
+
+Do not optimize prematurely.
+
+Do eliminate obvious scaling bottlenecks.
+
+---
+
+## Testability
+
+Ensure:
+
+- New logic is testable.
+- Existing tests remain meaningful.
+- Edge cases are covered.
+- Regressions are prevented.
+
+Every discovered failure should produce a corresponding validation mechanism.
+
+---
+
+## Observability
+
+If appropriate, improve:
+
+- Logging
+- Metrics
+- Monitoring
+- Error reporting
+
+Future failures should be easier to diagnose than current failures.
+
+---
+
+# Decision Framework
+
+Before implementing any change, evaluate:
+
+## Option A
+
+Minimal fix.
+
+## Option B
+
+Fix + small improvement.
+
+## Option C
+
+Fix + architectural improvement.
+
+Choose the smallest option that:
+
+- Solves the root cause.
+- Improves maintainability.
+- Preserves velocity.
+- Does not introduce unnecessary risk.
+
+---
+
+# Implementation Phase
+
+Apply changes according to plan.
+
+While implementing:
+
+### Continuously Check
+
+- Is complexity increasing?
+- Is modularity improving?
+- Is the design becoming clearer?
+- Is this aligned with the product vision?
+- Is this creating technical debt?
+
+If any answer is negative:
+
+Pause implementation and revise approach.
+
+---
+
+# Validation Phase
+
+Run:
+
+## Functional Validation
+
+- Unit tests
+- Integration tests
+- End-to-end tests
+
+## Quality Validation
+
+- Linting
+- Static analysis
+- Security checks
+
+## Architectural Validation
+
+Verify:
+
+- Boundaries remain intact
+- Coupling has not increased
+- Maintainability has improved
+
+---
+
+# Learning Capture
+
+After successful validation, record:
+
+## Issue Summary
+
+What happened?
+
+## Root Cause
+
+Why did it happen?
+
+## Fix Applied
+
+What was changed?
+
+## Improvement Applied
+
+What became better?
+
+## Future Prevention
+
+How can similar issues be avoided?
+
+Store these learnings in:
+
+- Guiding Principles and Best Practices Guide
+
+---
+
+# Success Criteria
+
+This skill succeeds only when all conditions are met:
+
+- Original issue resolved.
+- Tests pass.
+- Review concerns addressed.
+- Code quality maintained or improved.
+- Complexity reduced or unchanged.
+- Architecture preserved or improved.
+- Feature remains aligned with vision.
+- Learnings documented.
+- Future recurrence risk reduced.
+
+---
+
+# Failure Conditions
+
+Do not proceed to Ship if any of the following are true:
+
+- Root cause remains unknown.
+- Fix only addresses symptoms.
+- Complexity increased significantly.
+- Technical debt increased.
+- Vision alignment is unclear.
+- Test coverage decreased.
+- Architectural boundaries weakened.
+
+Instead:
+
+Return to analysis and improvement planning.
+
+---
+
+# Final Question
+
+Before exiting this skill, answer:
+
+> Is the system better than it was before the issue was discovered?
+
+If the answer is not clearly "yes", continue iterating.
