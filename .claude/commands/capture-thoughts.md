@@ -252,7 +252,7 @@ else:
         cur = conn.cursor()
         now = datetime.now(timezone.utc)
         parent_number = PARENT_NUMBER  # e.g. '15' for enhancement, None for new feature
-        row_type = 'release' if IS_ENHANCEMENT else None
+        row_type = 'release' if IS_ENHANCEMENT else 'feature'
         cur.execute('''
             INSERT INTO features (number, parent_number, title, slug, type, captured_at)
             VALUES (%s, %s, %s, %s, %s, %s)

@@ -3,11 +3,17 @@ description: Commit, push, create PR, merge, and clean up after a feature is com
 allowed-tools: Read, Bash, mcp__github__create_pull_request, mcp__github__merge_pull_request, mcp__github__delete_branch, Bash(railway*)
 ---
 
-## Step 1 — Identify current branch
-```bash
-git branch --show-current
-```
-Store this as CURRENT_BRANCH.
+## Step 0 — Pre-flight Checks
+
+Before doing any work, verify prerequisites:
+
+1. **GitHub auth** — run `gh auth status` or check that `mcp__github__create_pull_request` is available. If neither `gh` CLI nor GitHub MCP is connected, stop immediately and say: "GitHub auth not available. Run `gh auth login` or connect GitHub MCP via `/mcp`, then re-run `/ship-feature`."
+
+2. **Working directory** — run `git status`. If there are uncommitted changes that are NOT part of this feature, warn the user and ask whether to stash them before proceeding.
+
+3. **Branch** — run `git branch --show-current`. If already on `main`, stop and say: "Already on main. Switch to the feature branch first."
+
+Store the branch name as CURRENT_BRANCH.
 
 ## Step 2 — Generate commit message
 Run:
@@ -158,6 +164,21 @@ else:
             ''', (now, 'FEATURE_NUMBER'))
             if cur.rowcount:
                 print('Parent feature shipped_at stamped.')
+        # Propagate pipeline timestamps from release sub-rows to parent
+        # so the roadmap page shows all green dots on the parent row
+        cur.execute('''
+            UPDATE features parent SET
+                captured_at = COALESCE(parent.captured_at, (SELECT captured_at FROM features child WHERE child.parent_number = parent.number AND child.captured_at IS NOT NULL LIMIT 1)),
+                planned_at = COALESCE(parent.planned_at, (SELECT planned_at FROM features child WHERE child.parent_number = parent.number AND child.planned_at IS NOT NULL LIMIT 1)),
+                spec_at = COALESCE(parent.spec_at, (SELECT spec_at FROM features child WHERE child.parent_number = parent.number AND child.spec_at IS NOT NULL LIMIT 1)),
+                implemented_at = COALESCE(parent.implemented_at, (SELECT implemented_at FROM features child WHERE child.parent_number = parent.number AND child.implemented_at IS NOT NULL LIMIT 1)),
+                tested_at = COALESCE(parent.tested_at, (SELECT tested_at FROM features child WHERE child.parent_number = parent.number AND child.tested_at IS NOT NULL LIMIT 1)),
+                reviewed_at = COALESCE(parent.reviewed_at, (SELECT reviewed_at FROM features child WHERE child.parent_number = parent.number AND child.reviewed_at IS NOT NULL LIMIT 1))
+            WHERE parent.number = (SELECT parent_number FROM features WHERE number = %s)
+              AND parent.parent_number IS NULL
+        ''', ('FEATURE_NUMBER',))
+        if cur.rowcount:
+            print('Parent pipeline timestamps propagated from releases.')
         conn.commit()
         cur.close()
         conn.close()
@@ -166,7 +187,7 @@ else:
 "
 ```
 
-Report: "✓ DB stamped — reviewed_at + shipped_at set for FEATURE_NUMBER"
+Report: "✓ DB stamped — reviewed_at + shipped_at set for FEATURE_NUMBER, parent timestamps propagated"
 
 ## Step 9b — Update registry and status
 
