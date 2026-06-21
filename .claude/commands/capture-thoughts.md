@@ -26,9 +26,14 @@ User input: $ARGUMENTS
 **If $ARGUMENTS is empty:**
 - List all subfolders in `.claude/features/user-thoughts/`
 - List all files in `.claude/features/processed-thoughts/` to identify already-processed slugs
-- A subfolder is **unprocessed** if no file in `processed-thoughts/` contains its name as a substring
-- If **one unprocessed subfolder** found: enter file-input mode for that subfolder automatically
-- If **multiple unprocessed subfolders** found: ask the user which one to process, then enter file-input mode
+- A subfolder is **unprocessed** if no file in `processed-thoughts/` matches it in any of these four combinations:
+  - raw subfolder name vs raw filename
+  - raw subfolder name vs slugified filename (lowercase, spaces→hyphens)
+  - slugified subfolder name vs raw filename
+  - slugified subfolder name vs slugified filename
+  This ensures a match regardless of whether the folder or file uses spaces, hyphens, or mixed casing.
+- If **one unprocessed subfolder** found: show the folder name to the user and ask "I found one unprocessed thought folder: `<name>`. Shall I process this one?" — wait for confirmation before proceeding
+- If **multiple unprocessed subfolders** found: list all of them and ask the user which one to process — if two or more have similar names, show them all explicitly and ask the user to confirm which one they mean
 - If **no subfolders at all**: enter **interactive mode** (Step 2a)
 
 ---
