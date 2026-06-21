@@ -14,9 +14,12 @@ Test scope
     + Learning Capture)
 4.  Decision framework — Option A, Option B, Option C are all present
 5.  User approval gate — Phase 4 waits for explicit user approval before Phase 5
-6.  Error handling — missing argument, no spec file, no failures detected,
-    unable to resolve, learning capture write failure
-7.  Learning capture — references .claude/features/improvements/ directory
+6.  Error handling — missing argument, invalid stage, no spec file, no failures
+    detected, unable to resolve, learning capture write failure
+6b. Stage argument — --stage flag accepted with valid values (implement, test,
+    review, ship); invalid stage rejected
+7.  Learning capture — references .claude/features/improvements/ directory and
+    includes trigger_stage field
 8.  Manual invocation only — no auto-trigger hooks in other commands
 9.  Output format — phase headers and final "Is the system better?" question
 10. Rules section — Never implement without approval, always run tests, always
@@ -291,6 +294,56 @@ class TestLearningCapture:
             assert section in content, (
                 f"Learning capture template must include '{section}' section"
             )
+
+    def test_learning_capture_includes_trigger_stage(self):
+        """The learning capture template must include a trigger_stage field."""
+        content = _read_command("improvement-loop.md")
+        assert "trigger_stage" in content, (
+            "Learning capture template must include 'trigger_stage' frontmatter field "
+            "to record which pipeline stage triggered the improvement"
+        )
+
+    def test_learning_capture_trigger_stage_section(self):
+        """The learning capture must have a Trigger Stage section with explanation."""
+        content = _read_command("improvement-loop.md")
+        assert "Trigger Stage" in content, (
+            "Learning capture template must include a 'Trigger Stage' section header"
+        )
+
+
+# ---------------------------------------------------------------------------
+# 6b. Stage argument handling
+# ---------------------------------------------------------------------------
+
+
+class TestStageArgument:
+    """The command must accept and validate a --stage flag."""
+
+    def test_accepts_stage_flag(self):
+        content = _read_command("improvement-loop.md")
+        assert "--stage" in content, (
+            "Command must accept a --stage flag to record which pipeline stage triggered the improvement"
+        )
+
+    def test_valid_stage_values_documented(self):
+        content = _read_command("improvement-loop.md")
+        valid_stages = ["implement", "test", "review", "ship"]
+        for stage in valid_stages:
+            assert stage in content, (
+                f"Command must document '{stage}' as a valid --stage value"
+            )
+
+    def test_invalid_stage_handling(self):
+        content = _read_command("improvement-loop.md")
+        assert "invalid stage" in content.lower() or "Invalid stage" in content, (
+            "Command must handle invalid --stage values gracefully"
+        )
+
+    def test_stage_in_argument_hint(self):
+        content = _read_command("improvement-loop.md")
+        assert "stage" in content.split("---")[1].lower(), (
+            "argument-hint frontmatter must mention the --stage flag"
+        )
 
 
 # ---------------------------------------------------------------------------

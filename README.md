@@ -90,7 +90,7 @@ Every stage timestamp lands in the `features` table. The public `/roadmap` page 
 | `/deploy` | Deploys the current main branch to Railway |
 | `/dev` | Interactive workflow picker — shows the next recommended step with live registry context |
 | `/status` | Reads the live DB and prints the current status of every feature and release |
-| `/improvement-loop` | Runs a structured 5-phase improvement cycle after test failures or code review issues; captures learnings to log |
+| `/improvement-loop` | Runs a structured 5-phase improvement cycle after any pipeline stage (implement, test, review, ship); accepts `--stage` flag to record which stage triggered it; captures learnings to log |
 
 The pipeline proved capable well beyond routine feature work. When the project outgrew SQLite and required a migration to Supabase PostgreSQL — including data migration scripts, not just schema changes — that work was handled as two spec'd pipeline releases (12.1 and 12.2), subject to the same governance as every other feature. Infrastructure changes treated as first-class deliverables, not one-off tasks.
 

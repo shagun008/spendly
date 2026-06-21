@@ -1,13 +1,24 @@
 ---
 description: Run a structured improvement cycle for a feature after test failures or code review issues
-argument-hint: "Feature number e.g. 15.1"
+argument-hint: "Feature number and optional stage e.g. 15.1 --stage test"
 allowed-tools: Read, Write, Edit, Glob, Bash
 ---
 
 Run the Post-Review Improvement Loop for the feature specified in $ARGUMENTS.
 
-If no argument is provided, stop immediately and say:
-"Please provide a feature number. Usage: /improvement-loop <feature_number> e.g. /improvement-loop 15.1"
+Parse arguments:
+- First positional argument: `<feature_number>` (required) — the feature to improve, e.g. `15.1`
+- Optional flag: `--stage <stage>` — the pipeline stage that triggered this improvement. One of:
+  - `implement` — code quality or design issue found during implementation
+  - `test` — test failures after `/test-feature`
+  - `review` — security or quality issues found during `/code-review-feature`
+  - `ship` — issue found during `/ship-feature`
+  - If not provided, prompt the user: "Which stage triggered this improvement? (implement / test / review / shop)"
+
+If no feature number is provided, stop immediately and say:
+"Please provide a feature number. Usage: /improvement-loop <feature_number> [--stage <implement|test|review|ship>]  e.g. /improvement-loop 15.1 --stage test"
+
+Store the parsed values as `FEATURE_NUMBER` and `TRIGGER_STAGE`.
 
 ---
 
@@ -26,7 +37,7 @@ Collect everything needed to understand the problem:
 4. Check for existing test output: `python -m pytest tests/ -v 2>&1 | tail -50`
 5. Read the feature registry: `.claude/features/registry.md` — find the row for this feature
 
-Print a summary of what was collected.
+Note the `TRIGGER_STAGE` when printing the context summary — explain which pipeline stage detected the issue.
 
 ---
 
@@ -109,14 +120,18 @@ Write a learning capture file to `.claude/features/improvements/<timestamp>-<fea
 ```markdown
 ---
 feature_number: <feature_number>
+trigger_stage: <TRIGGER_STAGE>
 date: <timestamp>
 option_chosen: <A/B/C>
 ---
 
 # Improvement Log — <feature_number>
 
+## Trigger Stage
+<TRIGGER_STAGE> — the pipeline stage that detected the issue and triggered this improvement cycle.
+
 ## Issue Summary
-What happened? What was the failing test or review finding?
+What happened? What was the failing test, review finding, or implementation concern?
 
 ## Root Cause
 Why did it happen? What was the underlying cause?
@@ -164,7 +179,8 @@ Is the system better than it was before the issue was discovered?
 
 ## Error Handling
 
-- **Missing argument**: Print usage and stop
+- **Missing feature number**: Print usage with --stage flag and stop
+- **Invalid stage**: If --stage is provided but not one of (implement, test, review, ship), print valid options and stop
 - **No spec file found**: Warn and continue — use source files for context
 - **No failures detected** (tests pass, no review issues): Print "No issues detected for <feature_number> — nothing to improve" and exit
 - **Unable to resolve**: Report findings from all phases, recommend manual intervention
