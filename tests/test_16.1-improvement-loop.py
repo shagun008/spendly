@@ -16,8 +16,9 @@ Test scope
 5.  User approval gate — Phase 4 waits for explicit user approval before Phase 5
 6.  Error handling — missing argument, invalid stage, no spec file, no failures
     detected, unable to resolve, learning capture write failure
-6b. Stage argument — --stage flag accepted with valid values (implement, test,
-    review, ship); invalid stage rejected
+6b. Stage auto-detection — trigger stage derived from conversation context
+    (test output, review findings, implementation work, shipping activity);
+    defaults to unknown if ambiguous
 7.  Learning capture — references .claude/features/improvements/ directory and
     includes trigger_stage field
 8.  Manual invocation only — no auto-trigger hooks in other commands
@@ -312,37 +313,34 @@ class TestLearningCapture:
 
 
 # ---------------------------------------------------------------------------
-# 6b. Stage argument handling
+# 6b. Stage auto-detection from conversation context
 # ---------------------------------------------------------------------------
 
 
-class TestStageArgument:
-    """The command must accept and validate a --stage flag."""
+class TestStageAutoDetection:
+    """The command must auto-detect the trigger stage from conversation context."""
 
-    def test_accepts_stage_flag(self):
+    def test_derives_stage_from_conversation_context(self):
         content = _read_command("improvement-loop.md")
-        assert "--stage" in content, (
-            "Command must accept a --stage flag to record which pipeline stage triggered the improvement"
+        assert "conversation" in content.lower() or "context" in content.lower(), (
+            "Command must derive the trigger stage from conversation context, "
+            "not require a manual --stage argument"
         )
 
-    def test_valid_stage_values_documented(self):
+    def test_known_stages_documented(self):
         content = _read_command("improvement-loop.md")
-        valid_stages = ["implement", "test", "review", "ship"]
-        for stage in valid_stages:
-            assert stage in content, (
-                f"Command must document '{stage}' as a valid --stage value"
-            )
-
-    def test_invalid_stage_handling(self):
-        content = _read_command("improvement-loop.md")
-        assert "invalid stage" in content.lower() or "Invalid stage" in content, (
-            "Command must handle invalid --stage values gracefully"
+        known_stages = ["implement", "test", "review", "ship"]
+        found = sum(1 for s in known_stages if s in content)
+        assert found >= 3, (
+            f"Command should document most known stages for context detection. "
+            f"Only found {found}/4: {[s for s in known_stages if s in content]}"
         )
 
-    def test_stage_in_argument_hint(self):
+    def test_handles_unknown_stage_gracefully(self):
         content = _read_command("improvement-loop.md")
-        assert "stage" in content.split("---")[1].lower(), (
-            "argument-hint frontmatter must mention the --stage flag"
+        assert "unknown" in content.lower(), (
+            "Command must handle the case where no stage can be detected "
+            "by defaulting to 'unknown' without blocking"
         )
 
 

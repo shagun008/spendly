@@ -1,22 +1,24 @@
 ---
 description: Run a structured improvement cycle for a feature after test failures or code review issues
-argument-hint: "Feature number and optional stage e.g. 15.1 --stage test"
+argument-hint: "Feature number e.g. 15.1"
 allowed-tools: Read, Write, Edit, Glob, Bash
 ---
 
 Run the Post-Review Improvement Loop for the feature specified in $ARGUMENTS.
 
-Parse arguments:
-- First positional argument: `<feature_number>` (required) — the feature to improve, e.g. `15.1`
-- Optional flag: `--stage <stage>` — the pipeline stage that triggered this improvement. One of:
-  - `implement` — code quality or design issue found during implementation
-  - `test` — test failures after `/test-feature`
-  - `review` — security or quality issues found during `/code-review-feature`
-  - `ship` — issue found during `/ship-feature`
-  - If not provided, prompt the user: "Which stage triggered this improvement? (implement / test / review / shop)"
+Parse the feature number from $ARGUMENTS (first positional argument, e.g. `15.1`).
 
 If no feature number is provided, stop immediately and say:
-"Please provide a feature number. Usage: /improvement-loop <feature_number> [--stage <implement|test|review|ship>]  e.g. /improvement-loop 15.1 --stage test"
+"Please provide a feature number. Usage: /improvement-loop <feature_number>  e.g. /improvement-loop 15.1"
+
+**Derive the trigger stage from conversation context.** Look at the recent conversation history and the current working directory state to determine which pipeline stage was active when the issue was found:
+
+- If test output is visible in recent conversation or `pytest` was recently run → `test`
+- If code review findings (security/quality) are visible in recent conversation → `review`
+- If implementation work was in progress (code edits, plan mode, spec discussion) → `implement`
+- If a PR or shipping activity was in progress → `ship`
+- If the conversation context is ambiguous but the registry shows the feature at a specific stage, use that stage
+- If no context can be determined → default to `unknown` and note it in the learning capture
 
 Store the parsed values as `FEATURE_NUMBER` and `TRIGGER_STAGE`.
 
@@ -179,8 +181,8 @@ Is the system better than it was before the issue was discovered?
 
 ## Error Handling
 
-- **Missing feature number**: Print usage with --stage flag and stop
-- **Invalid stage**: If --stage is provided but not one of (implement, test, review, ship), print valid options and stop
+- **Missing feature number**: Print usage and stop
+- **Stage auto-detection fails**: If no stage can be derived from conversation context, default to `unknown` and note it in the learning capture — do not block
 - **No spec file found**: Warn and continue — use source files for context
 - **No failures detected** (tests pass, no review issues): Print "No issues detected for <feature_number> — nothing to improve" and exit
 - **Unable to resolve**: Report findings from all phases, recommend manual intervention
