@@ -216,5 +216,6 @@ Status values tracked at each stage:
 | 12      | Migration to Supabase                           | ✅ Shipped  |
 | 14      | Add README File                                 | ✅ Shipped  |
 | 15      | Developer Roadmap Page                          | 🔧 In Progress |
+| 16      | Post-Review Improvement Loop                    | ✅ Shipped  |
 
-Next feature to implement: **16**
+Next feature to implement: **17**
