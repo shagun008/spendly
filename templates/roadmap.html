@@ -8,8 +8,24 @@
 {% block content %}
 <div class="roadmap-page">
     <div class="roadmap-header">
-        <h1 class="roadmap-title">Roadmap</h1>
-        <p class="roadmap-subtitle">Full transparency into the Spendly feature pipeline — what's shipped, in progress, and planned.</p>
+        <div class="roadmap-header-left">
+            <h1 class="roadmap-title">Roadmap</h1>
+            <p class="roadmap-subtitle">Full transparency into the Spendly feature pipeline — what's shipped, in progress, and planned.</p>
+        </div>
+        <div class="roadmap-legend">
+            <span class="roadmap-legend-item">
+                <span class="roadmap-legend-dot roadmap-legend-dot--solid"></span>
+                Stage complete
+            </span>
+            <span class="roadmap-legend-item">
+                <span class="roadmap-legend-dot roadmap-legend-dot--reports"></span>
+                Reports available
+            </span>
+            <span class="roadmap-legend-item">
+                <span class="roadmap-legend-dot roadmap-legend-dot--deployed"></span>
+                Deployed to production
+            </span>
+        </div>
     </div>
 
     <div class="roadmap-table-wrapper">
@@ -79,21 +95,43 @@
                     </td>
                     <td class="roadmap-stage">
                         {% if f.tested_at %}
-                        <span class="roadmap-dot" data-date="{{ f.tested_at.full }}"></span>
+                            {% if f.test_report and f.parent_number %}
+                            <span class="roadmap-dot roadmap-dot--clickable"
+                                  data-report="test"
+                                  data-feature-number="{{ f.number }}"
+                                  data-feature-title="{{ f.title }}"
+                                  data-report-content="{{ f.test_report | e }}"
+                                  data-date="{{ f.tested_at.full }}"></span>
+                            {% else %}
+                            <span class="roadmap-dot" data-date="{{ f.tested_at.full }}"></span>
+                            {% endif %}
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                     <td class="roadmap-stage">
                         {% if f.reviewed_at %}
-                        <span class="roadmap-dot" data-date="{{ f.reviewed_at.full }}"></span>
+                            {% if f.review_report and f.parent_number %}
+                            <span class="roadmap-dot roadmap-dot--clickable"
+                                  data-report="review"
+                                  data-feature-number="{{ f.number }}"
+                                  data-feature-title="{{ f.title }}"
+                                  data-report-content="{{ f.review_report | e }}"
+                                  data-date="{{ f.reviewed_at.full }}"></span>
+                            {% else %}
+                            <span class="roadmap-dot" data-date="{{ f.reviewed_at.full }}"></span>
+                            {% endif %}
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
                     </td>
                     <td class="roadmap-stage">
                         {% if f.shipped_at %}
-                        <span class="roadmap-dot" data-date="{{ f.shipped_at.full }}"></span>
+                            {% if f.deployed_at %}
+                            <span class="roadmap-dot roadmap-dot--deployed" data-date="{{ f.shipped_at.full }}"></span>
+                            {% else %}
+                            <span class="roadmap-dot" data-date="{{ f.shipped_at.full }}"></span>
+                            {% endif %}
                         {% else %}
                         <span class="roadmap-dot roadmap-dot--empty"></span>
                         {% endif %}
@@ -117,6 +155,15 @@
         {% else %}
         <p class="roadmap-empty">No features yet.</p>
         {% endif %}
+    </div>
+</div>
+
+<!-- Release Notes Modal -->
+<div class="roadmap-modal-overlay" id="roadmap-modal-overlay" hidden>
+    <div class="roadmap-modal" role="dialog" aria-modal="true" aria-labelledby="roadmap-modal-title">
+        <button class="roadmap-modal-close" id="roadmap-modal-close" aria-label="Close">&times;</button>
+        <h2 class="roadmap-modal-title" id="roadmap-modal-title"></h2>
+        <div class="roadmap-modal-body" id="roadmap-modal-body"></div>
     </div>
 </div>
 {% endblock %}
@@ -158,6 +205,45 @@
             }
         });
     });
+    // ── Release Notes Modal ──
+    var modalOverlay = document.getElementById('roadmap-modal-overlay');
+    var modalTitle   = document.getElementById('roadmap-modal-title');
+    var modalBody    = document.getElementById('roadmap-modal-body');
+    var modalClose   = document.getElementById('roadmap-modal-close');
+    var clickableDots = document.querySelectorAll('.roadmap-dot--clickable');
+
+    function openModal(number, title, reportType, content) {
+        modalTitle.textContent = number + ' — ' + title;
+        var heading = reportType === 'test' ? 'Test Report' : 'Code Review Report';
+        modalBody.innerHTML = '';
+        var headingEl = document.createElement('h3');
+        headingEl.className = 'roadmap-modal-report-heading';
+        headingEl.textContent = heading;
+        var preEl = document.createElement('pre');
+        preEl.className = 'roadmap-modal-report-text';
+        preEl.textContent = content;
+        modalBody.appendChild(headingEl);
+        modalBody.appendChild(preEl);
+        modalOverlay.hidden = false;
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalOverlay.hidden = true;
+        document.body.style.overflow = '';
+    }
+
+    clickableDots.forEach(function (dot) {
+        dot.addEventListener('click', function (e) {
+            e.stopPropagation();
+            openModal(this.getAttribute('data-feature-number'), this.getAttribute('data-feature-title'), this.getAttribute('data-report'), this.getAttribute('data-report-content'));
+        });
+    });
+
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', function (e) { if (e.target === modalOverlay) closeModal(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modalOverlay.hidden) closeModal(); });
+
     lucide.createIcons();
 })();
 </script>
