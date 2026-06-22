@@ -661,12 +661,8 @@ def seed_features():
             '2026-06-21 23:32:40',
             '2026-06-21 23:45:00',
             '2026-06-22 04:24:10.226909',
-            'Testing Pipeline Report — 15.5-release-notes-modal
-
-29 tests passed.',
-            'Code Review Report — 15.5-release-notes-modal
-
-APPROVED.',
+            'Testing Pipeline Report — 15.5-release-notes-modal\n\n29 tests passed.',
+            'Code Review Report — 15.5-release-notes-modal\n\nAPPROVED.',
             None,
         ),
         (
