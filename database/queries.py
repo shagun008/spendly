@@ -541,6 +541,9 @@ def _feature_row(row):
         "release_subtype": raw_subtype if raw_subtype in _VALID_SUBTYPES else None,
         "description": row["description"],
         "status": current_status,
+        "test_report": row["test_report"],
+        "review_report": row["review_report"],
+        "deployed_at": row["deployed_at"],
         **formatted,
     }
 
@@ -551,7 +554,7 @@ def get_all_features():
     cur.execute(
         "SELECT number, parent_number, title, slug, type, release_subtype, description,"
         " captured_at, planned_at, spec_at, implemented_at,"
-        " tested_at, reviewed_at, shipped_at"
+        " tested_at, reviewed_at, shipped_at, test_report, review_report, deployed_at"
         " FROM features ORDER BY number ASC"
     )
     rows = cur.fetchall()

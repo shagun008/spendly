@@ -147,6 +147,16 @@ These rules apply to every feature. No exceptions.
 
 ---
 
+## Child → Parent Timestamp Propagation
+
+When a release sub-row is shipped, pipeline timestamps must be propagated up to the parent feature row so the parent shows all green dots on the roadmap.
+
+- **Propagate:** `spec_at`, `implemented_at`, `tested_at`, `reviewed_at` from child to parent using `COALESCE` to avoid overwriting existing parent timestamps
+- **Clear child-only timestamps:** `planned_at` and `captured_at` belong to the parent feature, not individual releases. Set these to NULL on child rows after propagating to parent
+- **Seed data:** When updating seed data, ensure parent feature rows have all pipeline timestamps that their children have completed
+
+---
+
 ## Feature Numbering
 
 Features use hyphen notation to support multiple releases per feature:

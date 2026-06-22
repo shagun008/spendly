@@ -1,26 +1,34 @@
 ---
 description: Deploy Spendly to Railway
-allowed-tools: Bash(railway up), Bash(python3 -c)
+allowed-tools: Bash(python3 -c), mcp__plugin_railway_railway__deploy
 ---
 
 You are deploying the Spendly expense tracker to Railway.
 
-## Step 1 — Deploy
+## Step 0 — Pre-flight Checks
 
-Run:
+Before deploying, verify prerequisites:
+
+1. **Railway MCP** — verify Railway MCP server is connected by checking that `mcp__plugin_railway_railway__deploy` is available. If not, stop and say: "Railway MCP not connected. Check MCP settings."
+
+2. **Database URL** — verify `DATABASE_URL` is set: `python3 -c "import os; from dotenv import load_dotenv; load_dotenv(); assert os.environ.get('DATABASE_URL'), 'DATABASE_URL not set'"`. If not set, stop and say: "DATABASE_URL not set in .env file."
+
+## Step 1 — Deploy via Railway MCP
+
+Use the Railway MCP server to deploy:
+
 ```
-railway up
+mcp__plugin_railway_railway__deploy
 ```
 
 ## Step 2 — Report
 
-Print the full output from the command.
-If it succeeds, say: "Deployed successfully." then continue to Step 3.
+If deployment succeeds, say: "Deployed successfully." then continue to Step 3.
 If it fails, show the error output and say: "Deploy failed — see error above." Stop here — do not run Step 3.
 
 ## Step 3 — Stamp deployed_at in the database
 
-Run:
+Stamp ALL shipped releases that haven't been deployed yet:
 
 ```bash
 python3 -c "
@@ -39,17 +47,12 @@ else:
         cur.execute('''
             UPDATE features
             SET deployed_at = %s
-            WHERE id = (
-                SELECT id FROM features
-                WHERE shipped_at IS NOT NULL AND deployed_at IS NULL
-                ORDER BY shipped_at DESC
-                LIMIT 1
-            )
+            WHERE shipped_at IS NOT NULL AND deployed_at IS NULL
             RETURNING number, title
         ''', (now,))
         updated = cur.fetchall()
         if not updated:
-            print('WARNING: 0 rows updated — no undeployed releases found (check shipped_at is set and deployed_at is NULL)')
+            print('WARNING: 0 rows updated — no undeployed releases found')
         else:
             for row in updated:
                 print(f'  Stamped {row[0]} — {row[1]}')
@@ -64,3 +67,9 @@ else:
 
 If `Rows updated: 0`, say: "No undeployed releases found — skipping DB stamp."
 If the DB write fails, log the error and continue.
+
+## Step 4 — Update registry
+
+1. Read `.claude/features/registry.md`
+2. Find all release sub-rows where `shipped_at IS NOT NULL` in the DB but the registry status is not yet `✅ Shipped`
+3. Update those rows to `✅ Shipped` in the registry
