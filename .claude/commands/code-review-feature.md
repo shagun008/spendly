@@ -143,6 +143,14 @@ else:
 
 ---
 
+## Pipeline Reminder
+
+After review is complete, end with:
+```
+👀 Reviewed! Next: /ship-feature
+```
+---
+
 ## Rules
 - Do NOT edit any files before user approval
 - Do NOT start one reviewer before the other — 

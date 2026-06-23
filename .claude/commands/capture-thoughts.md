@@ -34,6 +34,7 @@ User input: $ARGUMENTS
   This ensures a match regardless of whether the folder or file uses spaces, hyphens, or mixed casing.
 - If **one unprocessed subfolder** found: show the folder name to the user and ask "I found one unprocessed thought folder: `<name>`. Shall I process this one?" — wait for confirmation before proceeding
 - If **multiple unprocessed subfolders** found: list all of them and ask the user which one to process — if two or more have similar names, show them all explicitly and ask the user to confirm which one they mean
+- After the user confirms which subfolder to process, remind them: "Processing `<name>`. After capture, continue with: `/plan-release <number>` → `/create-spec <number.release> <slug>` → `/implement-feature <number.release>`"
 - If **no subfolders at all**: enter **interactive mode** (Step 2a)
 
 ---
@@ -294,5 +295,29 @@ Processed thought:  .claude/features/processed-thoughts/<assigned_number>-<slug>
 ```
 
 Then say:
-"Thought captured. Run `/plan-release <assigned_number>` to decompose this into
-releases before moving to spec creation."
+"✅ **Thought captured!**
+
+| Field | Value |
+|-------|-------|
+| **Number** | `<assigned_number>` |
+| **Title** | `<title>` |
+| **Type** | `<new-feature \| enhancement>` |
+| **Processed thought** | `.claude/features/processed-thoughts/<assigned_number>-<slug>-<datetime>.md` |
+
+---
+
+## 🚀 Development Pipeline
+
+> This is an enhancement to an existing feature. It must go through the full pipeline.
+
+| Step | Command | Status | What it does |
+|------|---------|--------|--------------|
+| 1 | `/capture-thoughts` | ✅ Done | Captures thought, assigns number |
+| 2 | `/plan-release <assigned_number>` | ⬜ Pending | Decomposes into releases, writes `releases/` |
+| 3 | `/create-spec <assigned_number.release> <slug>` | ⬜ Pending | Writes spec, creates feature branch |
+| 4 | `/implement-feature <assigned_number.release>` | ⬜ Pending | Reads spec, plans + executes implementation |
+| 5 | `/test-feature <assigned_number.release>-<slug>` | ⬜ Pending | Writes + runs pytest tests |
+| 6 | `/code-review-feature <assigned_number.release>-<slug>` | ⬜ Pending | Parallel security + quality review |
+| 7 | `/ship-feature` | ⬜ Pending | Commit, PR, squash merge, cleanup |
+
+**Next step:** Run `/plan-release <assigned_number>` to begin release planning."

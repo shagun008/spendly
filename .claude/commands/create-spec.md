@@ -280,3 +280,13 @@ Then tell the user:
 then run `/implement-feature <feature_number>` to begin implementation."
 
 Do not print the full spec in chat unless explicitly asked.
+
+---
+
+## Pipeline Reminder
+
+After the spec is created, end with:
+```
+📝 Spec'd! Next: /implement-feature <number.release> → /test-feature → /code-review-feature → /ship-feature
+```
+

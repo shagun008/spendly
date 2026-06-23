@@ -1,0 +1,71 @@
+# Grouping Foundational Features — Roadmap Page Cosmetic Update
+
+Created: 2026-06-22 14:30 EST
+
+## User Request
+
+Cosmetic improvements to the Roadmap page to create a cleaner hierarchical view.
+
+### Requirement 1: "Foundational Features" Parent Row (Group 1–10)
+
+- Group all features/releases numbered 1–10 under a new parent row titled **"Foundational Features"**
+- This parent row includes an expand/collapse (down-arrow / chevron) icon
+- By default, only the "Foundational Features" row is visible (collapsed)
+- Clicking the arrow expands the row to display all 10 underlying releases/features (20 rows: 10 features + 10 releases)
+- Clicking the arrow again collapses the list and hides the items
+
+### Requirement 2: Update Parent Feature Expand/Collapse Behavior
+
+- Currently: clicking a parent feature reveals its `description` in a detail card below
+- New behavior: clicking a parent feature reveals its **child release rows** (the indented `→` rows below it)
+- The description detail row is removed entirely — the chevron now means "expand to see releases"
+- When collapsed, only the parent feature row is visible; when expanded, parent + children are visible
+
+## Current Implementation Context
+
+### Files Involved
+- `templates/roadmap.html` — template markup + inline `<script>` for expand/collapse logic
+- `static/css/roadmap.css` — all roadmap styles
+- `database/queries.py` — `get_all_features()` returns features/releases; `_feature_row()` formats them
+- `app.py` — `roadmap()` route passes features to template
+
+### Current Data Model
+- `type` column: `"feature"` for parent rows, `"release"` for child rows
+- `parent_number`: NULL for features, set to parent number for releases
+- `description`: currently used to determine which rows get the chevron + click behavior
+- Features 01–10 each have exactly 1 release (01.1, 02.1, …, 10.1)
+- Features 11+ are multi-release features
+
+### Current Expand/Collapse Logic (JS in roadmap.html)
+- Rows with a `description` field get `.roadmap-row--clickable` class + chevron icon
+- Clicking toggles a `.roadmap-detail-row` (description card) below the feature row
+- Detail rows have `id="detail-{number}"` and are shown/hidden via `.roadmap-detail-row--open` class
+- Only one detail row open at a time (accordion behavior)
+
+### CSS Classes to Modify/Add
+- `.roadmap-detail-row` / `.roadmap-detail-card` / `.roadmap-detail-desc` — to be removed
+- New: `.roadmap-group-row` for the "Foundational Features" grouping header
+- New: `.roadmap-group-row--collapsed` state class
+- New: `data-parent-group` attribute on rows belonging to the group
+- New: `data-parent` attribute on release rows for parent feature expand/collapse
+
+## Open Design Questions (Awaiting User Confirmation)
+
+1. **Accordion for parent features**: Should only one parent feature be expanded at a time, or multiple simultaneously?
+2. **Default state for "Foundational Features" group**: Collapsed or expanded on page load?
+
+## Implementation Plan (Pending Confirmation)
+
+1. **Template changes** (`templates/roadmap.html`):
+   - Add `<tr class="roadmap-group-row">` for "Foundational Features" with chevron
+   - Mark all 01–10 rows with `data-parent-group="foundational"`
+   - Remove the `roadmap-detail-row` (description card) entirely
+   - Add `data-parent` attributes on release rows pointing to parent feature number
+   - Update JS: group row toggles all child rows; parent feature toggles release children
+
+2. **CSS changes** (`static/css/roadmap.css`):
+   - Style `.roadmap-group-row` (bold, distinct background, full-width)
+   - Add collapsed state that hides child rows
+   - Remove deprecated `.roadmap-detail-row` / `.roadmap-detail-card` styles
+
+3. **No backend changes needed** — data model already supports the hierarchy
