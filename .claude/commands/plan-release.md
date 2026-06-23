@@ -145,21 +145,20 @@ In `.claude/features/registry.md`:
    | <feature_number>.2 | → <release_2_title> | release | <feature_number> | 📋 Planned | — |
 
 ## Step 8b — Commit, push, and merge via /ship-feature
-Create a planning branch, stage all planning artefacts, commit, push, then run `/ship-feature` to handle the PR lifecycle.
+Stage all planning artefacts, commit, then call `/ship-feature` to handle the branch creation, push, PR lifecycle, and merge.
 
 Run these git steps in order:
 ```
-git checkout main
-git pull origin main
-git checkout -b plan/<feature_number>-<slug>
 git add .claude/
 git commit -m "plan: release plan for <feature_number> <title>"
-git push --set-upstream origin plan/<feature_number>-<slug>
 ```
 
-Report: "✓ Pushed — plan/<feature_number>-<slug>"
+Then run `/ship-feature`. It will:
+1. Create a new branch `plan/<feature_number>-<slug>` from main
+2. Cherry-pick the commit onto it
+3. Push the branch
+4. Create a PR, merge it, and clean up
 
-Then run `/ship-feature` to create a regular merge PR, merge it, and clean up.
 Report the PR URL and confirm the merge before continuing to Step 9.
 
 ## Step 8d — Write the Summary into the features DB table
