@@ -144,22 +144,47 @@ In `.claude/features/registry.md`:
    | <feature_number>.1 | → <release_1_title> | release | <feature_number> | 📋 Planned | — |
    | <feature_number>.2 | → <release_2_title> | release | <feature_number> | 📋 Planned | — |
 
-## Step 8b — Commit, push, and merge via /ship-feature
-Stage all planning artefacts, commit, then call `/ship-feature` to handle the branch creation, push, PR lifecycle, and merge.
+## Step 8b — Commit, push, and create PR
+Create a planning branch from main, stage all planning artefacts, commit, push, then create a PR via GitHub MCP and merge it.
 
 Run these git steps in order:
 ```
-git add .claude/
+git checkout main
+git pull origin main
+git checkout -b plan/<feature_number>-<slug>
+git add .claude/features/registry.md .claude/features/releases/ .claude/features/processed-thoughts/
 git commit -m "plan: release plan for <feature_number> <title>"
+git push --set-upstream origin plan/<feature_number>-<slug>
 ```
 
-Then run `/ship-feature`. It will:
-1. Create a new branch `plan/<feature_number>-<slug>` from main
-2. Cherry-pick the commit onto it
-3. Push the branch
-4. Create a PR, merge it, and clean up
+Then use `mcp__github__create_pull_request` to create a PR:
+- **Title:** Plan release for feature <feature_number> <title>
+- **Head:** plan/<feature_number>-<slug>
+- **Base:** main
+- **Body:**
+  ```
+  ## What this PR does
+  Release plan for feature <feature_number> — decomposes into <N> releases.
 
-Report the PR URL and confirm the merge before continuing to Step 9.
+  ## Changes
+  - .claude/features/registry.md — updated feature status and release sub-rows
+  - .claude/features/releases/<feature_number>-<slug>.md — full release plan
+  - .claude/features/processed-thoughts/ — processed thought file
+
+  ## How to test
+  Review the release plan file — no code changes in this PR.
+  ```
+
+After creating the PR, use `mcp__github__merge_pull_request` with `merge_method: "merge"`.
+Then clean up:
+```
+git push origin --delete plan/<feature_number>-<slug>
+git checkout main
+git pull origin main
+git branch -D plan/<feature_number>-<slug>
+```
+
+Report: "✓ PR merged — plan/<feature_number>-<slug>"
 
 ## Step 8d — Write the Summary into the features DB table
 Extract the Summary paragraph from the release plan file you just wrote (the
