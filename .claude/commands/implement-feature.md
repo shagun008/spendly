@@ -160,3 +160,13 @@ Status:      🔧 In Progress
 
 Then say:
 "Implementation complete. Run `/test-feature <spec-name>` when ready to test."
+
+---
+
+## Pipeline Reminder
+
+After implementation is complete, end with:
+```
+🔧 Implemented! Next: /test-feature <spec-name> → /code-review-feature → /ship-feature
+```
+

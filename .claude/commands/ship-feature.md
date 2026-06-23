@@ -330,3 +330,12 @@ Print:
 - If push fails due to no upstream, use git push -u origin CURRENT_BRANCH
 - Never proceed to merge if PR creation fails
 - Do NOT deploy to Railway — deployment is handled separately by the user
+
+---
+
+## Pipeline Reminder
+
+After shipping, end with:
+```
+✅ Shipped! Pipeline complete.
+```

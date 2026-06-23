@@ -303,3 +303,12 @@ If only one release, still use dot notation:
 ```
   /create-spec <feature_number>.1 <slug>    ← Release 1 (single release)
 ```
+
+---
+
+## Pipeline Reminder
+
+After the release plan is written, end with:
+```
+📋 Planned! Next: /create-spec <number.release> <slug> → /implement-feature → /test-feature → /code-review-feature → /ship-feature
+```

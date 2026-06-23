@@ -146,3 +146,12 @@ else:
 6. Run `/status` to refresh the live feature status view from the database.
 
 If tests fail: skip the status update — status remains `🔧 In Progress`.
+
+---
+
+## Pipeline Reminder
+
+After tests pass, end with:
+```
+👀 Tests passing! Next: /code-review-feature <spec-name> → /ship-feature
+```
