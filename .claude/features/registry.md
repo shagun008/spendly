@@ -58,7 +58,7 @@ Release sub-rows (indented with →) show individual release status.
 | 15.4 | → Release-Level Type Classification | release | 15 | ✅ Shipped | 15.4-release-type-classification.md |
 | 15.5 | → Release Notes Modal | release | 15 | ✅ Shipped | 15.5-release-notes-modal.md |
 | 15.6 | → Roadmap Stage Metrics | release | 15 | 💡 Captured | — |
-| 15.7 | → Grouping Foundational Features | release | 15 | 📋 Planned | — |
+| 15.7 | → Grouping Foundational Features | release | 15 | 👀 In Review | 15.7-grouping-foundational-features.md |
 | 16 | Post-Review Improvement Loop | new-feature | — | ✅ Shipped | 1 release |
 | 16.1 | → Improvement Loop Skill | release | 16 | ✅ Shipped | 16.1-improvement-loop.md |
 

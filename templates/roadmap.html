@@ -46,10 +46,25 @@
             </thead>
             <tbody>
                 {% for f in features %}
-                <tr class="roadmap-row roadmap-row--{{ f.type }}{% if f.description %} roadmap-row--clickable{% endif %}"
-                    {% if f.description %}
+                {% if f.number == '01' %}
+                <tr class="roadmap-group-row" data-group="foundational" aria-expanded="false">
+                    <td class="roadmap-number">00</td>
+                    <td colspan="8">
+                        <span class="roadmap-group-cell">
+                            <span class="roadmap-group-label">Foundational Features</span>
+                            <span class="roadmap-group-count">{{ foundational_count }}</span>
+                            <i data-lucide="chevron-down" class="roadmap-chevron roadmap-group-chevron"></i>
+                        </span>
+                    </td>
+                </tr>
+                {% endif %}
+                {% set is_parent = f.type == 'feature' and f.number in parent_numbers %}
+                <tr class="roadmap-row roadmap-row--{{ f.type }}{% if is_parent %} roadmap-parent-row{% endif %}"
+                    {% if f.number in foundational_nums %}data-parent-group="foundational"{% endif %}
+                    {% if f.type == 'release' and f.parent_number %}data-parent="{{ f.parent_number }}"{% endif %}
+                    {% if is_parent %}
                     aria-expanded="false"
-                    aria-controls="detail-{{ f.number | replace('.', '-') }}"
+                    aria-controls="parent-{{ f.number | replace('.', '-') }}"
                     {% endif %}>
                     <td class="roadmap-number">{{ f.number }}</td>
                     <td class="roadmap-feature">
@@ -60,7 +75,7 @@
                         <span class="roadmap-type-badge roadmap-type-badge--{{ f.release_subtype }}">{{ _subtype_label }}</span>
                         {% endif %}
                         {% endif %}
-                        {% if f.description %}
+                        {% if is_parent %}
                         <i data-lucide="chevron-down" class="roadmap-chevron"></i>
                         {% endif %}
                         <span class="roadmap-badge roadmap-badge--{{ f.status | lower | replace(' ', '-') | replace("'", '') }}">{{ f.status }}</span>
@@ -137,18 +152,6 @@
                         {% endif %}
                     </td>
                 </tr>
-                {% if f.description %}
-                <tr class="roadmap-detail-row"
-                    id="detail-{{ f.number | replace('.', '-') }}"
-                    role="region"
-                    aria-label="{{ f.title }} details">
-                    <td colspan="9">
-                        <div class="roadmap-detail-card">
-                            <p class="roadmap-detail-desc">{{ f.description or "No description." }}</p>
-                        </div>
-                    </td>
-                </tr>
-                {% endif %}
                 {% endfor %}
             </tbody>
         </table>
@@ -171,40 +174,75 @@
 {% block scripts %}
 <script>
 (function () {
-    var clickableRows = document.querySelectorAll('.roadmap-row--clickable');
-    var openDetailId = null;
+    // ── Group toggle ──
+    var groupRow = document.querySelector('.roadmap-group-row[data-group="foundational"]');
+    var foundationalRows = document.querySelectorAll('[data-parent-group="foundational"]');
 
-    clickableRows.forEach(function (row) {
+    if (groupRow) {
+        // Collapse group by default: hide all foundational rows immediately
+        foundationalRows.forEach(function (row) {
+            row.style.display = 'none';
+        });
+
+        groupRow.addEventListener('click', function () {
+            var isExpanded = groupRow.getAttribute('aria-expanded') === 'true';
+            groupRow.setAttribute('aria-expanded', String(!isExpanded));
+            groupRow.classList.toggle('roadmap-row--expanded', !isExpanded);
+
+            foundationalRows.forEach(function (row) {
+                row.style.display = isExpanded ? 'none' : '';
+            });
+        });
+    }
+
+    // ── Parent accordion (one parent open at a time) ──
+    var parentRows = document.querySelectorAll('.roadmap-parent-row');
+    var openParentId = null;
+
+    // Collapse all parents by default: hide all release children
+    parentRows.forEach(function (row) {
+        var parentId = row.getAttribute('aria-controls');
+        var parentNum = parentId.replace('parent-', '');
+        var children = document.querySelectorAll('[data-parent="' + parentNum + '"]');
+        children.forEach(function (child) {
+            child.style.display = 'none';
+        });
+    });
+
+    parentRows.forEach(function (row) {
         row.addEventListener('click', function () {
-            var detailId = row.getAttribute('aria-controls');
-            var detailRow = document.getElementById(detailId);
-            if (!detailRow) return;
+            var parentId = row.getAttribute('aria-controls');
+            var parentNum = parentId.replace('parent-', '');
+            var isExpanded = row.getAttribute('aria-expanded') === 'true';
 
-            var isOpen = row.getAttribute('aria-expanded') === 'true';
-
-            if (openDetailId && openDetailId !== detailId) {
-                var prevDetail = document.getElementById(openDetailId);
-                var prevRow = document.querySelector('[aria-controls="' + openDetailId + '"]');
-                if (prevDetail) prevDetail.classList.remove('roadmap-detail-row--open');
+            // Close currently open parent (accordion behavior)
+            if (openParentId && openParentId !== parentId) {
+                var prevRow = document.querySelector('.roadmap-parent-row[aria-controls="' + openParentId + '"]');
                 if (prevRow) {
                     prevRow.setAttribute('aria-expanded', 'false');
                     prevRow.classList.remove('roadmap-row--expanded');
                 }
+                var prevNum = openParentId.replace('parent-', '');
+                var prevChildren = document.querySelectorAll('[data-parent="' + prevNum + '"]');
+                prevChildren.forEach(function (child) { child.style.display = 'none'; });
             }
 
-            if (isOpen) {
-                detailRow.classList.remove('roadmap-detail-row--open');
+            if (isExpanded) {
                 row.setAttribute('aria-expanded', 'false');
                 row.classList.remove('roadmap-row--expanded');
-                openDetailId = null;
+                var children = document.querySelectorAll('[data-parent="' + parentNum + '"]');
+                children.forEach(function (child) { child.style.display = 'none'; });
+                openParentId = null;
             } else {
-                detailRow.classList.add('roadmap-detail-row--open');
                 row.setAttribute('aria-expanded', 'true');
                 row.classList.add('roadmap-row--expanded');
-                openDetailId = detailId;
+                var children = document.querySelectorAll('[data-parent="' + parentNum + '"]');
+                children.forEach(function (child) { child.style.display = ''; });
+                openParentId = parentId;
             }
         });
     });
+
     // ── Release Notes Modal ──
     var modalOverlay = document.getElementById('roadmap-modal-overlay');
     var modalTitle   = document.getElementById('roadmap-modal-title');

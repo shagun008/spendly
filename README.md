@@ -128,6 +128,6 @@ The pipeline proved capable well beyond routine feature work. When the project o
 | 11 | Feature Requests and Public Discovery | 3 | ✅ Shipped |
 | 12 | Migration to Supabase | 2 | ✅ Shipped |
 | 14 | Add README File | 1 | ✅ Shipped |
-| 15 | Developer Roadmap Page | 4 shipped, 2 planned | 🔧 In Progress |
+| 15 | Developer Roadmap Page | 7 shipped, 1 captured | 🔧 In Progress |
 
-Next up: **15.5 — Release Notes Modal**, **15.6 — Roadmap Stage Metrics**
+Next up: **15.6 — Roadmap Stage Metrics**, **17 — TBD**

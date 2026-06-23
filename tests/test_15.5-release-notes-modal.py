@@ -391,22 +391,13 @@ class TestExistingBehaviourPreserved:
         table_html = _extract_table(body)
         assert "data-date=" in table_html
 
-    def test_expand_in_place_still_works(self, client, _patched_get_db):
-        cur = _patched_get_db.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(
-            "INSERT INTO features"
-            " (number, parent_number, title, slug, type, release_subtype, description)"
-            " VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id",
-            ("EB02", None, "Expand Test", "eb-expand", "feature", None,
-             "Test description for expand-in-place"),
-        )
-        row = cur.fetchone()
-        _patched_get_db.commit()
-        cur.close()
-        assert row is not None
-        body = _body(client.get("/roadmap"))
-        assert "roadmap-row--clickable" in body
-        assert "roadmap-detail-row" in body
+    def test_parent_row_and_group_row_present(self, seeded_client):
+        """After 15.7 changes, parent rows and group row replace the old
+        clickable-row + detail-row pattern."""
+        body = _body(seeded_client.get("/roadmap"))
+        assert "roadmap-parent-row" in body
+        assert "roadmap-group-row" in body
+        assert "roadmap-detail-row" not in body
         assert "aria-expanded" in body
 
     def test_page_200_with_mixed_null_and_set_reports(self, client, _patched_get_db):

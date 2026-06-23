@@ -515,7 +515,16 @@ def vote_feature_request(id):
 @app.route("/roadmap")
 def roadmap():
     features = get_all_features()
-    return render_template("roadmap.html", features=features)
+    foundational_nums = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"}
+    foundational_count = sum(1 for f in features if f["number"] in foundational_nums)
+    parent_numbers = {f["parent_number"] for f in features if f["parent_number"]}
+    return render_template(
+        "roadmap.html",
+        features=features,
+        foundational_count=foundational_count,
+        foundational_nums=foundational_nums,
+        parent_numbers=parent_numbers,
+    )
 
 
 if __name__ == "__main__":
