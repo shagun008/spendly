@@ -98,7 +98,8 @@ Report: "✓ PR created — <PR URL>"
 
 ## Step 6 — Merge PR via GitHub MCP
 Use the GitHub MCP server to merge the pull request
-just created. Use squash merge.
+just created. Use regular merge (not squash) so the PR
+shows a proper diff on GitHub.
 
 Report: "✓ PR merged to main"
 
@@ -323,13 +324,14 @@ Print:
 
 ## Rules
 - Never commit directly to main
-- Always use squash merge
+- Always use regular merge (not squash) so PRs show a proper diff on GitHub
 - Always delete both remote and local branch after merge
 - If GitHub MCP is not connected stop and say:
   "GitHub MCP is not connected. Run /mcp to check connection."
 - If push fails due to no upstream, use git push -u origin CURRENT_BRANCH
 - Never proceed to merge if PR creation fails
 - Do NOT deploy to Railway — deployment is handled separately by the user
+- Use merge_method: "merge" (regular merge) when calling mcp__github__merge_pull_request — never squash
 
 ---
 
