@@ -107,9 +107,9 @@ If tests pass (verdict is ✅):
 3. Update that release sub-row Status to `👀 In Review`
 4. Update the parent feature row Status to `👀 In Review` if all active releases
    are at In Review or better
-5. Stamp `tested_at` in the database — extract the release number from `$ARGUMENTS`
-   (leading digits and dots before the first `-`, e.g. `15.3` from `15.3-harness-integration-live-updates`),
-   then run:
+5. Write the test report to the database — extract the release number from `$ARGUMENTS`
+   (leading digits and dots before the first `-`, e.g. `15.3` from `15.3-harness-integration-live-updates`).
+   Compose a test report string summarizing the results (test file, pass/fail count, spec name), then run:
 
 ```bash
 python3 -c "
@@ -118,6 +118,7 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv
 load_dotenv()
 url = os.environ.get('DATABASE_URL')
+report = '''TEST_REPORT_CONTENT'''
 if not url:
     print('Warning: DATABASE_URL not set — skipping DB stamp')
 else:
@@ -126,8 +127,8 @@ else:
         cur = conn.cursor()
         now = datetime.now(timezone.utc)
         cur.execute(
-            'UPDATE features SET tested_at = %s WHERE number = %s AND tested_at IS NULL',
-            (now, 'RELEASE_NUMBER')
+            'UPDATE features SET tested_at = %s, test_report = %s WHERE number = %s',
+            (now, report, 'RELEASE_NUMBER')
         )
         if cur.rowcount == 0:
             print('WARNING: 0 rows updated — check that RELEASE_NUMBER was substituted correctly and the row exists')
@@ -141,6 +142,7 @@ else:
 "
 ```
 
+   Replace `TEST_REPORT_CONTENT` with the actual test report text (e.g. `Test Report — 15.7-grouping-foundational-features\n\n36 tests passed.`).
    If the DB write fails, log the error and continue.
 
 6. Run `/status` to refresh the live feature status view from the database.

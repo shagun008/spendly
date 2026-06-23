@@ -702,6 +702,25 @@ def seed_features():
             None,
             None,
             None,
+        ),
+        (
+            '15.7',
+            '15',
+            'Grouping Foundational Features',
+            'grouping-foundational-features',
+            'release',
+            'new-feature',
+            'Groups the first 10 features under a collapsible "Foundational Features" header and makes parent features expand to show their releases.',
+            None,
+            None,
+            None,
+            '2026-06-23 12:00:00',
+            '2026-06-23 12:00:00',
+            '2026-06-23 12:00:00',
+            None,
+            None,
+            None,
+            None,
         )
     ]
 

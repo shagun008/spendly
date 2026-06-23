@@ -257,18 +257,9 @@
     .roadmap-table {
         min-width: 0;
     }
-
-    .roadmap-detail-card {
-        padding: 0.75rem 1rem;
-    }
 }
 
-/* ── Clickable feature rows ── */
-.roadmap-row--clickable {
-    cursor: pointer;
-}
-
-/* Chevron icon in feature cell */
+/* ── Chevron icon ── */
 .roadmap-chevron {
     width: 14px;
     height: 14px;
@@ -282,33 +273,66 @@
     color: var(--accent);
 }
 
-/* ── Detail row ── */
-.roadmap-detail-row {
-    display: none;
+/* ── Group row ── */
+.roadmap-group-row {
+    cursor: pointer;
+    background: var(--paper-card);
 }
 
-.roadmap-detail-row--open {
-    display: table-row;
-}
-
-.roadmap-detail-row td {
-    padding: 0;
-    border-bottom: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
+.roadmap-group-row:hover td {
     background: var(--paper-warm);
 }
 
-/* ── Detail card ── */
-.roadmap-detail-card {
-    padding: 0.9rem 1.5rem;
+.roadmap-group-row td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
 }
 
-.roadmap-detail-desc {
-    font-size: 0.85rem;
-    color: var(--ink-muted);
-    line-height: 1.6;
-    margin: 0;
-    font-style: italic;
+.roadmap-group-row td.roadmap-number {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.roadmap-group-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.roadmap-group-label {
+    flex-shrink: 0;
+}
+
+.roadmap-group-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding: 0 0.35rem;
+    border-radius: 999px;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.roadmap-group-row.roadmap-row--expanded .roadmap-group-chevron {
+    transform: rotate(180deg);
+    color: var(--accent);
+}
+
+/* ── Parent row (feature with children) ── */
+.roadmap-parent-row {
+    cursor: pointer;
 }
 
 /* ── Legend ── */
@@ -369,6 +393,11 @@
     .roadmap-legend {
         flex-wrap: wrap;
         gap: 0.75rem;
+    }
+
+    .roadmap-group-cell {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
     }
 }
 
@@ -498,4 +527,3 @@
         font-size: 1.1rem;
     }
 }
-

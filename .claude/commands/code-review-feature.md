@@ -84,28 +84,14 @@ CHANGES REQUESTED — must fix before committing,
 see action plan above
 ---
 
-## Step 3: Ask for Approval
+## Step 3: Write Report to Database
 
-After presenting the unified report, ask:
+**This step runs immediately after presenting the report — BEFORE asking about the action plan.**
+The review report must be persisted to the database so the roadmap page shows the clickable double-ring dot.
 
-"Do you want me to implement the action plan now?"
-
-Wait for explicit user confirmation before making 
-any changes. Do not touch any files until the user 
-approves.
-
----
-
-## Step 4: Update Status
-
-After presenting the report (regardless of verdict):
-1. Read `.claude/features/registry.md`
-2. Find the release sub-row whose Specs column matches `$ARGUMENTS`
-3. If the release sub-row status is not already `👀 In Review`, update it to `👀 In Review`
-4. Update the parent feature row status if needed
-5. Stamp `reviewed_at` in the database — extract the release number from `$ARGUMENTS`
-   (leading digits and dots before the first `-`, e.g. `15.3` from `15.3-harness-integration-live-updates`),
-   then run:
+Write the code review report to the database — extract the release number from `$ARGUMENTS`
+(leading digits and dots before the first `-`, e.g. `15.3` from `15.3-harness-integration-live-updates`).
+Compose the review report string from the unified report produced in Step 2, then run:
 
 ```bash
 python3 -c "
@@ -114,6 +100,7 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv
 load_dotenv()
 url = os.environ.get('DATABASE_URL')
+report = '''REVIEW_REPORT_CONTENT'''
 if not url:
     print('Warning: DATABASE_URL not set — skipping DB stamp')
 else:
@@ -122,8 +109,8 @@ else:
         cur = conn.cursor()
         now = datetime.now(timezone.utc)
         cur.execute(
-            'UPDATE features SET reviewed_at = %s WHERE number = %s AND reviewed_at IS NULL',
-            (now, 'RELEASE_NUMBER')
+            'UPDATE features SET reviewed_at = %s, review_report = %s WHERE number = %s',
+            (now, report, 'RELEASE_NUMBER')
         )
         if cur.rowcount == 0:
             print('WARNING: 0 rows updated — check that RELEASE_NUMBER was substituted correctly and the row exists')
@@ -137,8 +124,32 @@ else:
 "
 ```
 
-   If the DB write fails, log the error and continue.
+Replace `REVIEW_REPORT_CONTENT` with the full unified review report text from Step 2.
+If the DB write fails, log the error and continue.
 
+---
+
+## Step 4: Ask for Approval
+
+After writing the report to the database, ask:
+
+"Do you want me to implement the action plan now?"
+
+Wait for explicit user confirmation before making
+any changes. Do not touch any files until the user
+approves.
+
+**IMPORTANT:** If the user says yes to implementing the action plan, you MUST still complete Step 5 (Update Status) after the implementation. Do not skip the registry update and `/status` refresh.
+
+---
+
+## Step 5: Update Status
+
+After presenting the report (regardless of verdict):
+1. Read `.claude/features/registry.md`
+2. Find the release sub-row whose Specs column matches `$ARGUMENTS`
+3. If the release sub-row status is not already `👀 In Review`, update it to `👀 In Review`
+4. Update the parent feature row status if needed
 6. Run `/status` to refresh the live feature status view from the database.
 
 ---
