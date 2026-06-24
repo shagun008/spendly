@@ -157,7 +157,7 @@
                     <label class="modal-label" for="qa-category">Category</label>
                     <select class="modal-input" id="qa-category" name="category" required>
                         <option value="" disabled selected>Select a category</option>
-                        {% for c in categories %}
+                        {% for c in valid_categories %}
                         <option value="{{ c }}">{{ c }}</option>
                         {% endfor %}
                     </select>

@@ -245,6 +245,7 @@ def profile():
         stats=stats,
         transactions=transactions,
         categories=categories,
+        valid_categories=VALID_CATEGORIES,
         date_from=date_from or "",
         date_to=date_to or "",
         presets=presets,
