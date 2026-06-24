@@ -63,6 +63,11 @@ finding with both perspectives noted.
 
 Structure the combined report as:
 Code Review Report — $ARGUMENTS
+
+Start: YYYY-MM-DD HH:MM:SS EST
+End:   YYYY-MM-DD HH:MM:SS EST
+Duration: X.X minutes
+
 Security Findings
 [spendly-security-reviewer output]
 Quality Findings

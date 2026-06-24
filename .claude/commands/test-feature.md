@@ -109,7 +109,30 @@ If tests pass (verdict is ✅):
    are at In Review or better
 5. Write the test report to the database — extract the release number from `$ARGUMENTS`
    (leading digits and dots before the first `-`, e.g. `15.3` from `15.3-harness-integration-live-updates`).
-   Compose a test report string summarizing the results (test file, pass/fail count, spec name), then run:
+   Compose a test report string that includes:
+   - **Start time**: the wall-clock time when `/test-feature` was invoked (use the current time at the start of Step 1 as the best approximation)
+   - **End time**: the wall-clock time when the test run completed
+   - **Duration**: minutes elapsed between start and end
+   - Test file, pass/fail count, spec name, and coverage summary
+
+   Format the report as:
+   ```
+   Test Report — <spec-name>
+
+   Start: YYYY-MM-DD HH:MM:SS EST
+   End:   YYYY-MM-DD HH:MM:SS EST
+   Duration: X.X minutes
+
+   N tests passed, 0 failed.
+
+   Tests written: tests/test_<spec_filename>.py
+   Spec: .claude/specs/<spec_filename>.md
+
+   Coverage:
+   - <one line per test group>
+   ```
+
+   Then run:
 
 ```bash
 python3 -c "
@@ -142,7 +165,7 @@ else:
 "
 ```
 
-   Replace `TEST_REPORT_CONTENT` with the actual test report text (e.g. `Test Report — 15.7-grouping-foundational-features\n\n36 tests passed.`).
+   Replace `TEST_REPORT_CONTENT` with the actual test report text including start time, end time, and duration.
    If the DB write fails, log the error and continue.
 
 6. Run `/status` to refresh the live feature status view from the database.
