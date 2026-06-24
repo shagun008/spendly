@@ -63,7 +63,7 @@ Release sub-rows (indented with →) show individual release status.
 | 16.1 | → Improvement Loop Skill | release | 16 | ✅ Shipped | 16.1-improvement-loop.md |
 | 17 | User Profile Page Updates | new-feature | — | 🔧 In Progress | 3 releases planned |
 | 17.1 | → Change Password | release | 17 | ✅ Shipped | 17.1-change-password.md |
-| 17.2 | → Quick Add Expense Modal | release | 17 | 👀 In Review | 17.2-quick-add-expense-modal.md |
+| 17.2 | → Quick Add Expense Modal | release | 17 | ✅ Shipped | 17.2-quick-add-expense-modal.md |
 | 17.3 | → Embedded Analytics Dashboard | release | 17 | 📋 Planned | — |
 
 ## Numbering Rules

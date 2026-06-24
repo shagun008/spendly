@@ -247,4 +247,4 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 16      | Post-Review Improvement Loop                    | ✅ Shipped  |
 | 17      | User Profile Page Updates                      | 🔧 In Progress |
 
-Next feature to implement: **17.2**
+Next feature to implement: **17.3**
