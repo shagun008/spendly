@@ -35,7 +35,7 @@ Spendly solves a simple problem: tracking personal expenses without the overhead
 - **Auth** — register, log in, and log out with securely hashed passwords
 - **Expenses** — add, edit, and delete expenses across 7 categories: Food, Transport, Bills, Health, Entertainment, Shopping, and Other
 - **Profile** — view your full expense history with date-range filters and running totals; change your password securely from the profile card
-- **Analytics** — visual breakdown of spending by category and over time
+- **Analytics** — visual breakdown of spending by category and over time, embedded in the Profile page with switchable chart views (trends, categories, monthly comparison)
 - **Community** — submit feature requests, upvote ideas, and discover what other users are asking for; requests are ranked by votes and unique views
 - **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date/time tooltip on hover; click any feature row to expand an inline detail card with its description and release type badge (New Feature / Enhancement / Bug Fix); the page is kept live automatically as the harness runs
 - **Mobile** — fully responsive at all screen sizes with a hamburger navigation menu
@@ -129,6 +129,6 @@ The pipeline proved capable well beyond routine feature work. When the project o
 | 12 | Migration to Supabase | 2 | ✅ Shipped |
 | 14 | Add README File | 1 | ✅ Shipped |
 | 15 | Developer Roadmap Page | 7 shipped, 1 captured | 🔧 In Progress |
-| 17 | User Profile Page Updates | 1 shipped, 2 planned | 🔧 In Progress |
+| 17 | User Profile Page Updates | 2 shipped, 1 in progress | 🔧 In Progress |
 
-Next up: **15.6 — Roadmap Stage Metrics**, **17.2 — Quick Add Expense Modal**
+Next up: **15.6 — Roadmap Stage Metrics**, **17.3 — Embedded Analytics Dashboard**

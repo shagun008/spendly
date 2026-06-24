@@ -1,6 +1,6 @@
 """Query helpers for the profile page and expense mutations."""
 
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from zoneinfo import ZoneInfo
 
 _EST = ZoneInfo("America/New_York")
@@ -206,6 +206,74 @@ def delete_expense(expense_id, user_id):
     cur.close()
     conn.close()
     return rowcount
+
+
+def get_spending_trends(user_id, date_from=None, date_to=None):
+    """Return daily spending totals for the line chart."""
+    clause, params = _date_clause(date_from, date_to)
+    sql = (
+        "SELECT date, SUM(amount) AS total FROM expenses "
+        "WHERE user_id = %s"
+    )
+    if clause:
+        sql = sql + " " + clause
+    sql = sql + " GROUP BY date ORDER BY date ASC"
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(sql, (user_id, *params))
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return [{"date": row["date"], "total": row["total"]} for row in rows]
+
+
+def get_monthly_comparison(user_id):
+    """Return current month vs previous month totals for the bar chart."""
+    today = date.today()
+    current_start = today.replace(day=1).isoformat()
+    if today.month == 1:
+        prev_start = f"{today.year - 1}-12-01"
+        prev_end = f"{today.year - 1}-12-31"
+        prev_label = f"Dec {today.year - 1}"
+    else:
+        prev_start = f"{today.year}-{today.month - 1:02d}-01"
+        # Last day of previous month
+        if today.month - 1 in (1, 3, 5, 7, 8, 10, 12):
+            prev_end = f"{today.year}-{today.month - 1:02d}-31"
+        elif today.month - 1 in (4, 6, 9, 11):
+            prev_end = f"{today.year}-{today.month - 1:02d}-30"
+        else:  # February
+            year = today.year
+            if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+                prev_end = f"{year}-02-29"
+            else:
+                prev_end = f"{year}-02-28"
+        prev_label = date(today.year, today.month - 1, 1).strftime("%b %Y")
+
+    current_label = today.strftime("%b %Y")
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        "SELECT COALESCE(SUM(amount), 0) AS total FROM expenses "
+        "WHERE user_id = %s AND date >= %s",
+        (user_id, current_start),
+    )
+    current_total = cur.fetchone()["total"]
+
+    cur.execute(
+        "SELECT COALESCE(SUM(amount), 0) AS total FROM expenses "
+        "WHERE user_id = %s AND date BETWEEN %s AND %s",
+        (user_id, prev_start, prev_end),
+    )
+    prev_total = cur.fetchone()["total"]
+    cur.close()
+    conn.close()
+
+    return {
+        "current_month": {"total": current_total, "label": current_label},
+        "previous_month": {"total": prev_total, "label": prev_label},
+    }
 
 
 # ------------------------------------------------------------------ #

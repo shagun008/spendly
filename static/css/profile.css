@@ -590,3 +590,90 @@
 .tx-delete-btn:hover {
     text-decoration: underline;
 }
+
+/* ------------------------------------------------------------------ */
+/* Analytics Dashboard                                                  */
+/* ------------------------------------------------------------------ */
+
+.analytics-dashboard {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+}
+
+.analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.analytics-tabs {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.analytics-tab {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    font-family: var(--font-body);
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.analytics-tab:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.analytics-tab--active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.analytics-chart-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.analytics-chart-wrap canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.analytics-empty {
+    text-align: center;
+    padding: 2rem;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+}
+
+.analytics-empty svg {
+    display: block;
+    margin: 0 auto 0.5rem;
+    width: 32px;
+    height: 32px;
+    color: var(--ink-faint);
+}
+
+@media (max-width: 600px) {
+    .analytics-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .analytics-chart-wrap {
+        max-width: 100%;
+    }
+}
