@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+            integrity="sha384-ed5cc99f2e6nUZLBkQ86NJ6TVVKAeSaK8jWa3NhkYWZFomE39AvDbQWeie9PlQqM3pmYW5d1g"
+            crossorigin="anonymous"></script>
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -18,8 +21,6 @@
         <a href="{{ url_for('roadmap') }}"
            class="{{ base_class }}{% if request.endpoint == 'roadmap' %} nav-link--active{% endif %}">Roadmap</a>
         {% if session.get("user_id") %}
-        <a href="{{ url_for('analytics') }}"
-           class="{{ base_class }}{% if request.endpoint == 'analytics' %} nav-link--active{% endif %}">Analytics</a>
         <a href="{{ url_for('profile') }}" class="{{ base_class }} {{ username_class }}">{{ session["user_name"] }}</a>
         <a href="{{ url_for('logout') }}" class="{{ base_class }} {{ cta_class }}">Logout</a>
         {% else %}

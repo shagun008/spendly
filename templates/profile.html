@@ -35,6 +35,29 @@
         </div>
     </div>
 
+    <!-- Analytics Dashboard -->
+    <div class="analytics-dashboard"
+         data-trends='{{ trends | tojson }}'
+         data-monthly='{{ monthly | tojson }}'
+         data-categories='{{ categories | tojson }}'
+         data-has-expenses='{{ "true" if stats.transaction_count > 0 else "false" }}'>
+        <div class="analytics-header">
+            <h3 class="section-heading">Analytics</h3>
+            <div class="analytics-tabs" role="tablist">
+                <button class="analytics-tab analytics-tab--active" role="tab" aria-selected="true" data-view="trends">Trends</button>
+                <button class="analytics-tab" role="tab" aria-selected="false" data-view="categories">Categories</button>
+                <button class="analytics-tab" role="tab" aria-selected="false" data-view="monthly">Monthly Comparison</button>
+            </div>
+        </div>
+        <div class="analytics-chart-wrap">
+            <canvas id="analytics-chart"></canvas>
+        </div>
+        <p class="analytics-empty" id="analytics-empty" hidden>
+            <i data-lucide="bar-chart-2"></i>
+            Add expenses to see your analytics
+        </p>
+    </div>
+
     <!-- Date filter bar -->
     <div class="filter-bar">
         <div class="filter-presets">
@@ -211,6 +234,7 @@
 
 {% block scripts %}
 <script>lucide.createIcons();</script>
+<script src="{{ url_for('static', filename='js/analytics-dashboard.js') }}"></script>
 <script>
 (function () {
     var overlay = document.getElementById('change-password-modal');

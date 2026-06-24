@@ -29,6 +29,8 @@ from database.queries import (
     get_recent_transactions,
     get_summary_stats,
     get_category_breakdown,
+    get_spending_trends,
+    get_monthly_comparison,
     insert_expense,
     get_expense_by_id,
     update_expense,
@@ -238,6 +240,8 @@ def profile():
         user_id, date_from=date_from, date_to=date_to
     )
     categories = get_category_breakdown(user_id, date_from=date_from, date_to=date_to)
+    trends = get_spending_trends(user_id, date_from=date_from, date_to=date_to)
+    monthly = get_monthly_comparison(user_id)
 
     return render_template(
         "profile.html",
@@ -245,6 +249,8 @@ def profile():
         stats=stats,
         transactions=transactions,
         categories=categories,
+        trends=trends,
+        monthly=monthly,
         valid_categories=VALID_CATEGORIES,
         date_from=date_from or "",
         date_to=date_to or "",
@@ -304,13 +310,6 @@ def change_password():
     finally:
         cur.close()
         conn.close()
-
-
-@app.route("/analytics")
-def analytics():
-    if not session.get("user_id"):
-        return redirect(url_for("login"))
-    return render_template("analytics.html")
 
 
 @app.route("/profile/add-expense", methods=["POST"])
