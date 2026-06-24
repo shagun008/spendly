@@ -18,8 +18,6 @@
         <a href="{{ url_for('roadmap') }}"
            class="{{ base_class }}{% if request.endpoint == 'roadmap' %} nav-link--active{% endif %}">Roadmap</a>
         {% if session.get("user_id") %}
-        <a href="{{ url_for('add_expense') }}"
-           class="{{ base_class }}{% if request.endpoint == 'add_expense' %} nav-link--active{% endif %}">Add Expense</a>
         <a href="{{ url_for('analytics') }}"
            class="{{ base_class }}{% if request.endpoint == 'analytics' %} nav-link--active{% endif %}">Analytics</a>
         <a href="{{ url_for('profile') }}" class="{{ base_class }} {{ username_class }}">{{ session["user_name"] }}</a>
