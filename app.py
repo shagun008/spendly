@@ -71,7 +71,6 @@ VALID_PAGES = [
     "Home",
     "Profile",
     "Analytics",
-    "Add Expense",
     "Edit Expense",
     "Other",
 ]
@@ -313,16 +312,10 @@ def analytics():
     return render_template("analytics.html")
 
 
-@app.route("/expenses/add", methods=["GET", "POST"])
+@app.route("/profile/add-expense", methods=["POST"])
 def add_expense():
     if not session.get("user_id"):
         return redirect(url_for("login"))
-
-    if request.method == "GET":
-        today = date.today().isoformat()
-        return render_template(
-            "add_expense.html", today=today, categories=VALID_CATEGORIES
-        )
 
     raw_amount = request.form.get("amount", "").strip()
     category = request.form.get("category", "").strip()
@@ -351,14 +344,14 @@ def add_expense():
 
     if error:
         flash(error)
-        return render_template(
-            "add_expense.html",
-            categories=VALID_CATEGORIES,
-            form=request.form,
-            today=date.today().isoformat(),
-        )
+        return redirect(url_for("profile"))
 
-    insert_expense(session["user_id"], amount, category, raw_date, description)
+    try:
+        insert_expense(session["user_id"], amount, category, raw_date, description)
+    except psycopg2.Error:
+        flash("Could not save expense. Please try again.")
+        return redirect(url_for("profile"))
+
     flash("Expense added.", "success")
     return redirect(url_for("profile"))
 

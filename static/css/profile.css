@@ -18,11 +18,42 @@
     gap: 6px;
 }
 
+.profile-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .profile-header-left {
     display: flex;
     align-items: center;
     gap: 10px;
     color: var(--ink);
+}
+
+.btn-add-expense {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper-card);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    flex-shrink: 0;
+}
+
+.btn-add-expense:hover {
+    background: var(--ink);
+    transform: scale(1.05);
+}
+
+.btn-add-expense svg {
+    width: 18px;
+    height: 18px;
 }
 
 .profile-header-left svg {
@@ -412,6 +443,12 @@
 .modal-input:focus {
     outline: none;
     border-color: var(--accent);
+}
+
+.optional-label {
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    font-weight: 400;
 }
 
 .modal-footer {

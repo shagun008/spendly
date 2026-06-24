@@ -10,9 +10,14 @@
 
     <!-- Page header -->
     <div class="profile-header">
-        <div class="profile-header-left">
-            <i data-lucide="user"></i>
-            <h1 class="profile-title">My Profile</h1>
+        <div class="profile-header-row">
+            <div class="profile-header-left">
+                <i data-lucide="user"></i>
+                <h1 class="profile-title">My Profile</h1>
+            </div>
+            <button class="btn-add-expense" id="quick-add-btn" aria-label="Add expense">
+                <i data-lucide="plus"></i>
+            </button>
         </div>
         <p class="profile-subtitle">Manage your account and view your spending</p>
     </div>
@@ -133,6 +138,46 @@
 
     </div>
 </div>
+    <!-- Quick Add Expense modal -->
+    <div class="modal-overlay" id="quick-add-modal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="quick-add-modal-title">
+            <div class="modal-header">
+                <h2 class="modal-title" id="quick-add-modal-title">Add Expense</h2>
+                <button class="modal-close" id="quick-add-modal-close" aria-label="Close">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('add_expense') }}" class="modal-form">
+                <div class="modal-field">
+                    <label class="modal-label" for="qa-amount">Amount (₹)</label>
+                    <input class="modal-input" type="number" id="qa-amount" name="amount"
+                           step="0.01" min="0.01" placeholder="0.00" required>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label" for="qa-category">Category</label>
+                    <select class="modal-input" id="qa-category" name="category" required>
+                        <option value="" disabled selected>Select a category</option>
+                        {% for c in categories %}
+                        <option value="{{ c }}">{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label" for="qa-date">Date</label>
+                    <input class="modal-input" type="date" id="qa-date" name="date" required>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label" for="qa-description">Description <span class="optional-label">(optional)</span></label>
+                    <input class="modal-input" type="text" id="qa-description" name="description"
+                           maxlength="200" placeholder="e.g. Lunch at cafe">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" id="quick-add-modal-cancel">Cancel</button>
+                    <button type="submit" class="filter-btn filter-btn--apply">Save Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Change Password modal -->
     <div class="modal-overlay" id="change-password-modal" aria-hidden="true">
         <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -172,6 +217,41 @@
     var btn = document.getElementById('change-password-btn');
     var closeBtn = document.getElementById('modal-close');
     var cancelBtn = document.getElementById('modal-cancel');
+    if (!overlay || !btn) return;
+
+    var lastFocused = null;
+
+    function open() {
+        lastFocused = document.activeElement;
+        overlay.style.display = 'flex';
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        var firstInput = overlay.querySelector('input');
+        if (firstInput) firstInput.focus();
+    }
+    function close() {
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lastFocused) lastFocused.focus();
+    }
+
+    btn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    cancelBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) close();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.style.display === 'flex') close();
+    });
+})();
+
+(function () {
+    var overlay = document.getElementById('quick-add-modal');
+    var btn = document.getElementById('quick-add-btn');
+    var closeBtn = document.getElementById('quick-add-modal-close');
+    var cancelBtn = document.getElementById('quick-add-modal-cancel');
     if (!overlay || !btn) return;
 
     var lastFocused = null;
