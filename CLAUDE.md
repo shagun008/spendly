@@ -132,6 +132,16 @@ Always use these variables — never hardcode hex values.
 
 ---
 
+## Git Push Policy
+
+`git push` is **only** allowed in two places:
+1. `/ship-feature` — push the feature branch (Step 4) and push main after merge (final step)
+2. `/plan-release` — push the plan branch (Step 3) and delete it after (Step 6)
+
+**Never run `git push` at any other time** — not after committing, not after implementing, not after testing, not after code review. Do not push "to keep the remote in sync." Do not push unless the slash command explicitly instructs it or the user explicitly asks for it.
+
+Intermediate commits on a feature branch stay local until `/ship-feature` runs. If a user wants to back up their work, they will ask for a push explicitly.
+
 ## Implementation Rules
 
 These rules apply to every feature. No exceptions.
