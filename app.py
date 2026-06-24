@@ -1,6 +1,7 @@
 import math
 import os
 import psycopg2
+import psycopg2.extras
 from datetime import date, datetime, timedelta
 from flask import (
     Flask,
@@ -14,7 +15,7 @@ from flask import (
     jsonify,
 )
 from dotenv import load_dotenv
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from database.db import (
     get_db,
     init_db,
@@ -250,6 +251,59 @@ def profile():
         presets=presets,
         active_preset=active_preset,
     )
+
+
+@app.route("/profile/change-password", methods=["POST"])
+def change_password():
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    current = request.form.get("current_password", "")
+    if not current:
+        flash("Current password is required.")
+        return redirect(url_for("profile"))
+
+    conn = get_db()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    try:
+        cur.execute("SELECT id, password_hash FROM users WHERE id = %s", (session["user_id"],))
+        user = cur.fetchone()
+
+        if user is None or not check_password_hash(user["password_hash"], current):
+            flash("Current password is incorrect.")
+            return redirect(url_for("profile"))
+
+        new = request.form.get("new_password", "")
+        if len(new) < 8:
+            flash("New password must be at least 8 characters.")
+            return redirect(url_for("profile"))
+
+        confirm = request.form.get("confirm_password", "")
+        if new != confirm:
+            flash("New passwords do not match.")
+            return redirect(url_for("profile"))
+
+        try:
+            cur.execute(
+                "UPDATE users SET password_hash = %s WHERE id = %s",
+                (generate_password_hash(new), session["user_id"]),
+            )
+            conn.commit()
+        except psycopg2.Error:
+            conn.rollback()
+            flash("Could not update password. Please try again.")
+            return redirect(url_for("profile"))
+
+        # Regenerate session to invalidate any other sessions
+        user_name = session.get("user_name")
+        session.clear()
+        session["user_id"] = user["id"]
+        session["user_name"] = user_name
+        flash("Password changed.", "success")
+        return redirect(url_for("profile"))
+    finally:
+        cur.close()
+        conn.close()
 
 
 @app.route("/analytics")
