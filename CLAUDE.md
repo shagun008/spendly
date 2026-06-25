@@ -256,5 +256,6 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 15      | Developer Roadmap Page                          | 🔧 In Progress |
 | 16      | Post-Review Improvement Loop                    | ✅ Shipped  |
 | 17      | User Profile Page Updates                      | ✅ Shipped  |
+| 18      | Quick Edit Expense from Profile                | ✅ Shipped  |
 
-Next feature to implement: **18**
+Next feature to implement: **19**
