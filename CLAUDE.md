@@ -257,5 +257,6 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 16      | Post-Review Improvement Loop                    | ✅ Shipped  |
 | 17      | User Profile Page Updates                      | ✅ Shipped  |
 | 18      | Quick Edit Expense from Profile                | ✅ Shipped  |
+| 19      | Profile Layout and Navbar Updates              | 📋 Planned  |
 
 Next feature to implement: **19**
