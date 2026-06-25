@@ -591,6 +591,22 @@
     text-decoration: underline;
 }
 
+.tx-edit-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    color: var(--accent);
+    font-size: inherit;
+    font-family: inherit;
+    vertical-align: baseline;
+}
+
+.tx-edit-btn:hover {
+    text-decoration: underline;
+}
+
 /* ------------------------------------------------------------------ */
 /* Analytics Dashboard                                                  */
 /* ------------------------------------------------------------------ */

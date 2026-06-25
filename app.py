@@ -32,7 +32,6 @@ from database.queries import (
     get_spending_trends,
     get_monthly_comparison,
     insert_expense,
-    get_expense_by_id,
     update_expense,
     delete_expense,
     get_feature_requests,
@@ -73,7 +72,6 @@ VALID_PAGES = [
     "Home",
     "Profile",
     "Analytics",
-    "Edit Expense",
     "Other",
 ]
 
@@ -356,21 +354,15 @@ def add_expense():
     return redirect(url_for("profile"))
 
 
-@app.route("/expenses/<int:id>/edit", methods=["GET", "POST"])
-def edit_expense(id):
+@app.route("/profile/edit-expense", methods=["POST"])
+def edit_expense_route():
     if not session.get("user_id"):
         return redirect(url_for("login"))
 
-    expense = get_expense_by_id(id, session["user_id"])
-    if expense is None:
-        abort(404)
-
-    if request.method == "GET":
-        return render_template(
-            "edit_expense.html",
-            expense=expense,
-            categories=VALID_CATEGORIES,
-        )
+    expense_id = request.form.get("expense_id")
+    if not expense_id:
+        flash("Expense not found.")
+        return redirect(url_for("profile"))
 
     raw_amount = request.form.get("amount", "").strip()
     category = request.form.get("category", "").strip()
@@ -382,7 +374,7 @@ def edit_expense(id):
         amount = float(raw_amount)
         if amount <= 0 or not math.isfinite(amount):
             raise ValueError
-    except ValueError:
+    except (ValueError, TypeError):
         error = "Amount must be a number greater than 0."
 
     if not error and category not in VALID_CATEGORIES:
@@ -399,14 +391,57 @@ def edit_expense(id):
 
     if error:
         flash(error)
+        # Re-render profile with modal open and form values preserved
+        user_id = session["user_id"]
+        today = date.today()
+        presets = {
+            "this_month": (today.replace(day=1).isoformat(), today.isoformat()),
+            "last_3_months": ((today - timedelta(days=90)).isoformat(), today.isoformat()),
+            "last_6_months": ((today - timedelta(days=180)).isoformat(), today.isoformat()),
+        }
+        active_preset = "all_time"
+        user = get_user_by_id(user_id)
+        stats = get_summary_stats(user_id)
+        transactions = get_recent_transactions(user_id)
+        categories = get_category_breakdown(user_id)
+        trends = get_spending_trends(user_id)
+        monthly = get_monthly_comparison(user_id)
         return render_template(
-            "edit_expense.html",
-            expense=expense,
-            form=request.form,
-            categories=VALID_CATEGORIES,
+            "profile.html",
+            user=user,
+            stats=stats,
+            transactions=transactions,
+            categories=categories,
+            trends=trends,
+            monthly=monthly,
+            valid_categories=VALID_CATEGORIES,
+            date_from="",
+            date_to="",
+            presets=presets,
+            active_preset=active_preset,
+            edit_form=request.form,
         )
 
-    update_expense(id, session["user_id"], amount, category, raw_date, description)
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE expenses SET amount=%s, category=%s, date=%s, description=%s "
+            "WHERE id = %s AND user_id = %s",
+            (amount, category, raw_date, description, expense_id, session["user_id"]),
+        )
+        updated = cur.rowcount
+        conn.commit()
+        cur.close()
+        conn.close()
+    except psycopg2.Error:
+        flash("Could not update expense. Please try again.")
+        return redirect(url_for("profile"))
+
+    if updated == 0:
+        flash("Expense not found.")
+        return redirect(url_for("profile"))
+
     flash("Expense updated.", "success")
     return redirect(url_for("profile"))
 

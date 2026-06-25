@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+{% set edit_amount = edit_form.amount if edit_form and edit_form.amount else '' %}
+{% set edit_category = edit_form.category if edit_form and edit_form.category else '' %}
+{% set edit_date = edit_form.date if edit_form and edit_form.date else '' %}
+{% set edit_description = edit_form.description if edit_form and edit_form.description else '' %}
+{% set edit_open = edit_form is not none %}
 {% block title %}My Profile — Spendly{% endblock %}
 
 {% block head %}
@@ -130,7 +135,13 @@
                         </td>
                         <td class="tx-amount">{{ tx.amount }}</td>
                         <td class="tx-actions">
-                            <a href="{{ url_for('edit_expense', id=tx.id) }}" class="tx-edit-link">Edit</a>
+                            <button class="tx-edit-btn"
+                                    data-expense='{{ tx | tojson }}'
+                                    data-date="{{ tx.raw_date }}"
+                                    data-amount="{{ tx.raw_amount }}"
+                                    aria-label="Edit expense">
+                                Edit
+                            </button>
                             <form method="POST" action="{{ url_for('delete_expense_route', id=tx.id) }}" class="tx-delete-form">
                                 <button type="submit" class="tx-delete-btn">Delete</button>
                             </form>
@@ -197,6 +208,50 @@
                 <div class="modal-footer">
                     <button type="button" class="btn-ghost" id="quick-add-modal-cancel">Cancel</button>
                     <button type="submit" class="filter-btn filter-btn--apply">Save Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Quick Edit Expense modal -->
+    <div class="modal-overlay" id="quick-edit-modal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="quick-edit-modal-title">
+            <div class="modal-header">
+                <h2 class="modal-title" id="quick-edit-modal-title">Edit Expense</h2>
+                <button class="modal-close" id="quick-edit-modal-close" aria-label="Close">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('edit_expense_route') }}" class="modal-form">
+                <input type="hidden" name="expense_id" id="edit-expense-id" value="">
+                <div class="modal-field">
+                    <label class="modal-label" for="qe-amount">Amount (₹)</label>
+                    <input class="modal-input" type="number" id="qe-amount" name="amount"
+                           step="0.01" min="0.01" placeholder="0.00"
+                           value="{{ edit_amount }}" required>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label" for="qe-category">Category</label>
+                    <select class="modal-input" id="qe-category" name="category" required>
+                        <option value="" disabled{% if not edit_category %} selected{% endif %}>Select a category</option>
+                        {% for c in valid_categories %}
+                        <option value="{{ c }}"{% if edit_category == c %} selected{% endif %}>{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label" for="qe-date">Date</label>
+                    <input class="modal-input" type="date" id="qe-date" name="date"
+                           value="{{ edit_date }}" required>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label" for="qe-description">Description <span class="optional-label">(optional)</span></label>
+                    <input class="modal-input" type="text" id="qe-description" name="description"
+                           maxlength="200" placeholder="e.g. Lunch at cafe"
+                           value="{{ edit_description }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" id="quick-edit-modal-cancel">Cancel</button>
+                    <button type="submit" class="filter-btn filter-btn--apply">Save Changes</button>
                 </div>
             </form>
         </div>
@@ -304,6 +359,79 @@
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && overlay.style.display === 'flex') close();
     });
+})();
+
+(function () {
+    var overlay = document.getElementById('quick-edit-modal');
+    if (!overlay) return;
+
+    var closeBtn = document.getElementById('quick-edit-modal-close');
+    var cancelBtn = document.getElementById('quick-edit-modal-cancel');
+    var idField = document.getElementById('edit-expense-id');
+    var amountField = document.getElementById('qe-amount');
+    var categoryField = document.getElementById('qe-category');
+    var dateField = document.getElementById('qe-date');
+    var descriptionField = document.getElementById('qe-description');
+
+    var lastFocused = null;
+
+    function open(expense, rawDate, rawAmount) {
+        lastFocused = document.activeElement;
+        if (idField) idField.value = expense.id;
+        if (amountField) {
+            if (rawAmount !== undefined && rawAmount !== null) {
+                amountField.value = rawAmount;
+            } else {
+                var fallback = expense.amount;
+                if (typeof fallback === 'string') {
+                    fallback = fallback.replace(/₹|,/g, '');
+                }
+                amountField.value = fallback;
+            }
+        }
+        if (categoryField) categoryField.value = expense.category || '';
+        if (dateField) dateField.value = rawDate || expense.date || '';
+        if (descriptionField) descriptionField.value = expense.description || '';
+
+        overlay.style.display = 'flex';
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        var firstInput = overlay.querySelector('input, select');
+        if (firstInput) firstInput.focus();
+    }
+
+    function close() {
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lastFocused) lastFocused.focus();
+    }
+
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.tx-edit-btn');
+        if (!btn) return;
+        var expense = JSON.parse(btn.getAttribute('data-expense'));
+        var rawDate = btn.getAttribute('data-date');
+        var rawAmount = btn.getAttribute('data-amount');
+        open(expense, rawDate, rawAmount);
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    if (cancelBtn) cancelBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) close();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.style.display === 'flex') close();
+    });
+
+    {% if edit_open %}
+    // Validation error — open the modal with the submitted values preserved
+    (function () {
+        var expense = { id: '', amount: '', category: '', date: '', description: '' };
+        open(expense, '', '');
+    })();
+    {% endif %}
 })();
 </script>
 {% endblock %}
