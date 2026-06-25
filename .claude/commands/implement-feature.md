@@ -99,6 +99,24 @@ Implement every step in the approved plan. Follow all rules in `CLAUDE.md`:
 - Currency in ₹
 - Dates stored as YYYY-MM-DD strings
 
+## Step 5b — Validate SRI integrity hashes
+
+After executing the plan, validate that all CDN script integrity hashes in
+`templates/base.html` still match the actual served files. SRI mismatches cause
+silent script-blocking in the browser with no server-side error.
+
+For each `<script>` tag in `base.html` that has an `integrity="sha384-..."` attribute:
+
+1. Extract the `src` URL and the current hash value
+2. Fetch the resource and compute the correct hash:
+   ```bash
+   HASH=$(curl -s <CDN_URL> | openssl dgst -sha384 -binary | openssl base64 -A)
+   echo "Expected: sha384-$HASH"
+   ```
+3. Compare the computed hash against the one in the template
+4. If they don't match, update the `integrity` attribute with the correct hash
+5. If they do match, report: "SRI hash for <CDN_URL> — valid ✓"
+
 ## Step 6 — Update status tracking
 
 After implementation is complete:

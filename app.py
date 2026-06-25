@@ -254,6 +254,7 @@ def profile():
         date_to=date_to or "",
         presets=presets,
         active_preset=active_preset,
+        edit_form=None,
     )
 
 
