@@ -34,7 +34,7 @@ Spendly solves a simple problem: tracking personal expenses without the overhead
 
 - **Auth** — register, log in, and log out with securely hashed passwords
 - **Expenses** — add, edit, and delete expenses across 7 categories: Food, Transport, Bills, Health, Entertainment, Shopping, and Other
-- **Profile** — view your full expense history with date-range filters and running totals; add or edit expenses inline via quick modals; change your password securely from the profile card
+- **Profile** — view your full expense history with date-range filters and running totals; add or edit expenses inline via quick modals; change your password securely from the profile card; analytics and profile card displayed side-by-side on desktop
 - **Analytics** — visual breakdown of spending by category and over time, embedded in the Profile page with switchable chart views (trends, categories, monthly comparison)
 - **Community** — submit feature requests, upvote ideas, and discover what other users are asking for; requests are ranked by votes and unique views
 - **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date/time tooltip on hover; click any feature row to expand an inline detail card with its description and release type badge (New Feature / Enhancement / Bug Fix); the page is kept live automatically as the harness runs
@@ -130,6 +130,7 @@ The pipeline proved capable well beyond routine feature work. When the project o
 | 14 | Add README File | 1 | ✅ Shipped |
 | 15 | Developer Roadmap Page | 7 shipped, 1 captured | 🔧 In Progress |
 | 17 | User Profile Page Updates | 3 shipped | ✅ Shipped |
-| 18 | Quick Edit Expense from Profile | 1 | 🔧 In Progress |
+| 18 | Quick Edit Expense from Profile | 1 | ✅ Shipped |
+| 19 | Profile Layout and Navbar Updates | 1 shipped, 1 planned | 🔧 In Progress |
 
-Next up: **15.6 — Roadmap Stage Metrics**, **18.1 — Quick Edit Expense Modal**
+Next up: **15.6 — Roadmap Stage Metrics**, **19.2 — Navbar User Menu**

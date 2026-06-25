@@ -138,6 +138,21 @@
     align-self: center;
 }
 
+/* Side-by-side layout for Profile Card + Analytics Dashboard on desktop */
+.profile-top-row {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.profile-top-row .profile-card {
+    flex: 0 0 min(320px, 30%);
+}
+
+.profile-top-row .analytics-dashboard {
+    flex: 1;
+}
+
 .btn-ghost {
     font-family: var(--font-body);
     font-size: 14px;
@@ -479,6 +494,14 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
+    }
+
+    .profile-top-row {
+        flex-direction: column;
+    }
+
+    .profile-top-row .profile-card {
+        flex: none;
     }
 
     .profile-card-actions {

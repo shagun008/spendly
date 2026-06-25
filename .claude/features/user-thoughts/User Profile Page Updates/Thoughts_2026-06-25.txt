@@ -1,0 +1,20 @@
+Created: 2026-06-25 00:00 EST
+
+User Profile Page Updates
+
+1. Responsive Layout Update
+- Update the Profile Card and Analytics Dashboard layout:
+  - Web/Desktop: Display the Profile Card and Analytics Dashboard side by side
+  - Mobile: Display them stacked vertically (Profile Card on top, Analytics Dashboard below)
+
+2. Navbar User Menu Update
+- Replace the user's name in the navbar with a user/person icon
+- When the user clicks the icon, open a dropdown menu containing:
+  - My Profile — takes the user to the profile page
+  - Log Out — logs them out
+- Migrate the functionality to the corresponding profile and Log Out options within the new user dropdown menu
+- Preserve all existing functionality, routes, permissions, and behaviours associated with those options
+- Ensure there is no change in behaviour from a user perspective beyond the new navigation location
+
+3. Navbar Cleanup & Functionality Migration
+- Remove the existing Log Out text items from the navbar

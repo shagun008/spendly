@@ -27,40 +27,42 @@
         <p class="profile-subtitle">Manage your account and view your spending</p>
     </div>
 
-    <!-- User info card -->
-    <div class="profile-card">
-        <div class="avatar-circle">{{ user.initials }}</div>
-        <div class="profile-card-info">
-            <h2 class="profile-name">{{ user.name }}</h2>
-            <p class="profile-email">{{ user.email }}</p>
-            <p class="profile-since">Member since {{ user.member_since }}</p>
-        </div>
-        <div class="profile-card-actions">
-            <button class="btn-ghost" id="change-password-btn">Change password</button>
-        </div>
-    </div>
-
-    <!-- Analytics Dashboard -->
-    <div class="analytics-dashboard"
-         data-trends='{{ trends | tojson }}'
-         data-monthly='{{ monthly | tojson }}'
-         data-categories='{{ categories | tojson }}'
-         data-has-expenses='{{ "true" if stats.transaction_count > 0 else "false" }}'>
-        <div class="analytics-header">
-            <h3 class="section-heading">Analytics</h3>
-            <div class="analytics-tabs" role="tablist">
-                <button class="analytics-tab analytics-tab--active" role="tab" aria-selected="true" data-view="trends">Trends</button>
-                <button class="analytics-tab" role="tab" aria-selected="false" data-view="categories">Categories</button>
-                <button class="analytics-tab" role="tab" aria-selected="false" data-view="monthly">Monthly Comparison</button>
+    <div class="profile-top-row">
+        <!-- User info card -->
+        <div class="profile-card">
+            <div class="avatar-circle">{{ user.initials }}</div>
+            <div class="profile-card-info">
+                <h2 class="profile-name">{{ user.name }}</h2>
+                <p class="profile-email">{{ user.email }}</p>
+                <p class="profile-since">Member since {{ user.member_since }}</p>
+            </div>
+            <div class="profile-card-actions">
+                <button class="btn-ghost" id="change-password-btn">Change password</button>
             </div>
         </div>
-        <div class="analytics-chart-wrap">
-            <canvas id="analytics-chart"></canvas>
+
+        <!-- Analytics Dashboard -->
+        <div class="analytics-dashboard"
+             data-trends='{{ trends | tojson }}'
+             data-monthly='{{ monthly | tojson }}'
+             data-categories='{{ categories | tojson }}'
+             data-has-expenses='{{ "true" if stats.transaction_count > 0 else "false" }}'>
+            <div class="analytics-header">
+                <h3 class="section-heading">Analytics</h3>
+                <div class="analytics-tabs" role="tablist">
+                    <button class="analytics-tab analytics-tab--active" role="tab" aria-selected="true" data-view="trends">Trends</button>
+                    <button class="analytics-tab" role="tab" aria-selected="false" data-view="categories">Categories</button>
+                    <button class="analytics-tab" role="tab" aria-selected="false" data-view="monthly">Monthly Comparison</button>
+                </div>
+            </div>
+            <div class="analytics-chart-wrap">
+                <canvas id="analytics-chart"></canvas>
+            </div>
+            <p class="analytics-empty" id="analytics-empty" hidden>
+                <i data-lucide="bar-chart-2"></i>
+                Add expenses to see your analytics
+            </p>
         </div>
-        <p class="analytics-empty" id="analytics-empty" hidden>
-            <i data-lucide="bar-chart-2"></i>
-            Add expenses to see your analytics
-        </p>
     </div>
 
     <!-- Date filter bar -->
