@@ -39,7 +39,7 @@ Rules:
 - Under 72 characters
 - Describes what the user can now do, not what the code does
 - Never add a Co-Authored-By trailer
-- Do NOT include the PR number — GitHub squash merge appends it automatically
+- Do NOT include the PR number in the commit message — it will be appended to the merge commit message after PR creation
 
 Good: "feat(15.2): expand roadmap rows inline to show feature description"
 Bad: "feat: added detail view to roadmap.html"
@@ -100,6 +100,17 @@ Report: "✓ PR created — <PR URL>"
 Use the GitHub MCP server to merge the pull request
 just created. Use regular merge (not squash) so the PR
 shows a proper diff on GitHub.
+
+Set the merge commit message to:
+```
+<original-commit-message> (#<PR_NUMBER>)
+```
+Example: If the commit was `feat(17.3): embed analytics dashboard into profile page` and the PR number is 44, the merge commit message should be:
+```
+feat(17.3): embed analytics dashboard into profile page (#44)
+```
+
+This keeps the PR number visible in the git log on main while preserving the full commit history.
 
 Report: "✓ PR merged to main"
 
@@ -325,6 +336,7 @@ Print:
 ## Rules
 - Never commit directly to main
 - Always use regular merge (not squash) so PRs show a proper diff on GitHub
+- Always set the merge commit message to include the PR number: `<original-message> (#<PR_NUMBER>)`
 - Always delete both remote and local branch after merge
 - If GitHub MCP is not connected stop and say:
   "GitHub MCP is not connected. Run /mcp to check connection."

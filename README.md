@@ -10,7 +10,7 @@ Spendly is a personal expense tracker — and a proof of concept for structured,
 
 This project is a proof of concept for AI-assisted software delivery — a repeatable pipeline that takes a feature from raw idea to production code with structured governance built into every step. Every feature was spec'd before it was built, tested before it was reviewed, and code-reviewed (in parallel, by two independent agents) before it was merged. Nothing shipped without passing through the full pipeline.
 
-- 14 features shipped across 20 spec releases
+- 15 features shipped across 21 spec releases
 - Every feature spec'd, tested, and code-reviewed before merge
 - The harness is self-documenting: every pipeline command (`/capture-thoughts`, `/plan-release`, `/create-spec`, `/implement-feature`, `/test-feature`, `/code-review-feature`, `/ship-feature`, `/deploy`) writes a timestamp to the live database — so the public `/roadmap` page reflects the real pipeline state automatically, with no manual updates
 - A full database migration (SQLite → Supabase PostgreSQL) handled end-to-end as two spec'd pipeline releases — not a manual one-off
@@ -34,7 +34,7 @@ Spendly solves a simple problem: tracking personal expenses without the overhead
 
 - **Auth** — register, log in, and log out with securely hashed passwords
 - **Expenses** — add, edit, and delete expenses across 7 categories: Food, Transport, Bills, Health, Entertainment, Shopping, and Other
-- **Profile** — view your full expense history with date-range filters and running totals; change your password securely from the profile card
+- **Profile** — view your full expense history with date-range filters and running totals; add or edit expenses inline via quick modals; change your password securely from the profile card
 - **Analytics** — visual breakdown of spending by category and over time, embedded in the Profile page with switchable chart views (trends, categories, monthly comparison)
 - **Community** — submit feature requests, upvote ideas, and discover what other users are asking for; requests are ranked by votes and unique views
 - **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date/time tooltip on hover; click any feature row to expand an inline detail card with its description and release type badge (New Feature / Enhancement / Bug Fix); the page is kept live automatically as the harness runs
@@ -129,6 +129,7 @@ The pipeline proved capable well beyond routine feature work. When the project o
 | 12 | Migration to Supabase | 2 | ✅ Shipped |
 | 14 | Add README File | 1 | ✅ Shipped |
 | 15 | Developer Roadmap Page | 7 shipped, 1 captured | 🔧 In Progress |
-| 17 | User Profile Page Updates | 2 shipped, 1 in progress | 🔧 In Progress |
+| 17 | User Profile Page Updates | 3 shipped | ✅ Shipped |
+| 18 | Quick Edit Expense from Profile | 1 | 🔧 In Progress |
 
-Next up: **15.6 — Roadmap Stage Metrics**, **17.3 — Embedded Analytics Dashboard**
+Next up: **15.6 — Roadmap Stage Metrics**, **18.1 — Quick Edit Expense Modal**

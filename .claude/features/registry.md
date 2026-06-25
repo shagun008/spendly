@@ -65,8 +65,8 @@ Release sub-rows (indented with →) show individual release status.
 | 17.1 | → Change Password | release | 17 | ✅ Shipped | 17.1-change-password.md |
 | 17.2 | → Quick Add Expense Modal | release | 17 | ✅ Shipped | 17.2-quick-add-expense-modal.md |
 | 17.3 | → Embedded Analytics Dashboard | release | 17 | ✅ Shipped | 17.3-embedded-analytics-dashboard.md |
-| 18 | Quick Edit Expense from Profile | new-feature | — | 📋 Planned | 1 release planned |
-| 18.1 | → Quick Edit Expense Modal | release | 18 | 📋 Planned | — |
+| 18 | Quick Edit Expense from Profile | new-feature | — | 👀 In Review | 1 release planned |
+| 18.1 | → Quick Edit Expense Modal | release | 18 | 👀 In Review | 18.1-quick-edit-expense-modal.md |
 
 ## Numbering Rules
 

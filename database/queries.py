@@ -71,9 +71,11 @@ def get_recent_transactions(user_id, limit=10, date_from=None, date_to=None):
         {
             "id": row["id"],
             "date": datetime.strptime(row["date"], "%Y-%m-%d").strftime("%b %d, %Y"),
+            "raw_date": row["date"],
             "description": row["description"],
             "category": row["category"],
             "amount": f"₹{row['amount']:,.2f}",
+            "raw_amount": row["amount"],
         }
         for row in rows
     ]

@@ -652,7 +652,7 @@ def seed_features():
             '2026-06-24 00:31:33.463778',
             '2026-06-24 01:09:26.160019',
             '2026-06-24 01:19:58.470165',
-            None,
+            '2026-06-24 14:31:03.123185',
         ),
         (
             '17.1',
@@ -693,14 +693,14 @@ def seed_features():
             'embedded-analytics-dashboard',
             'release',
             'new-feature',
-            None,
+            'Adds spending charts to your Profile page so you can see trends, category breakdowns, and monthly comparisons without navigating away.',
             None,
             '2026-06-23 22:07:06.527922',
-            None,
-            None,
-            None,
-            None,
-            None,
+            '2026-06-24 03:42:09.776096',
+            '2026-06-24 03:58:42.759383',
+            '2026-06-24 12:46:19.329167',
+            '2026-06-24 13:31:27.174381',
+            '2026-06-24 14:31:03.123185',
         )
     ]
 

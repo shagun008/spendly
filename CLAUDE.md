@@ -255,6 +255,6 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 14      | Add README File                                 | ✅ Shipped  |
 | 15      | Developer Roadmap Page                          | 🔧 In Progress |
 | 16      | Post-Review Improvement Loop                    | ✅ Shipped  |
-| 17      | User Profile Page Updates                      | 🔧 In Progress |
+| 17      | User Profile Page Updates                      | ✅ Shipped  |
 
-Next feature to implement: **17.3**
+Next feature to implement: **18**
