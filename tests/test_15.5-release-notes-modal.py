@@ -165,16 +165,17 @@ class TestSeedFeaturesIncludesNewColumns:
         conn.close()
         assert count > 0, f"Expected seeded rows, got {count}"
 
-    def test_seeded_rows_have_none_for_report_columns(self, _patched_get_db):
+    def test_seeded_rows_have_reports_for_releases(self, _patched_get_db):
         seed_features()
         result = queries_module.get_all_features()
+        release_numbers = {f["number"] for f in result if f["parent_number"] is not None}
         for row in result:
-            if row["number"] == "15.5":
-                assert row["test_report"] is not None, "15.5 should have test_report"
-                assert row["review_report"] is not None, "15.5 should have review_report"
+            if row["number"] in release_numbers:
+                assert row["test_report"] is not None, f"Release '{row['number']}' should have test_report"
+                assert row["review_report"] is not None, f"Release '{row['number']}' should have review_report"
             else:
-                assert row["test_report"] is None, f"Row '{row['number']}' must have test_report=None"
-                assert row["review_report"] is None, f"Row '{row['number']}' must have review_report=None"
+                assert row["test_report"] is None, f"Parent '{row['number']}' must have test_report=None"
+                assert row["review_report"] is None, f"Parent '{row['number']}' must have review_report=None"
 
     def test_all_required_keys_present_after_seeding(self, _patched_get_db):
         seed_features()
