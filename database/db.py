@@ -783,7 +783,7 @@ def seed_features():
             None,
         ),
         (
-            '19.1',
+            '19-1',
             '19',
             'Responsive Profile Layout',
             'responsive-profile-layout',
