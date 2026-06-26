@@ -258,5 +258,6 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 17      | User Profile Page Updates                      | ✅ Shipped  |
 | 18      | Quick Edit Expense from Profile                | ✅ Shipped  |
 | 19      | Profile Layout and Navbar Updates              | ✅ Shipped  |
+| 20      | Profile Card Layout & Dropdown Updates         | ✅ Shipped  |
 
-Next feature to implement: **20**
+Next feature to implement: **21**
