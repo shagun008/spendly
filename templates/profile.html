@@ -30,14 +30,34 @@
     <div class="profile-top-row">
         <!-- User info card -->
         <div class="profile-card">
-            <div class="avatar-circle">{{ user.initials }}</div>
             <div class="profile-card-info">
-                <h2 class="profile-name">{{ user.name }}</h2>
-                <p class="profile-email">{{ user.email }}</p>
-                <p class="profile-since">Member since {{ user.member_since }}</p>
+                <div class="avatar-circle">{{ user.initials }}</div>
+                <div class="profile-card-info-text">
+                    <h2 class="profile-name">{{ user.name }}</h2>
+                    <p class="profile-email">{{ user.email }}</p>
+                    <p class="profile-since">Member since {{ user.member_since }}</p>
+                </div>
             </div>
-            <div class="profile-card-actions">
-                <button class="btn-ghost" id="change-password-btn">Change password</button>
+            <div class="profile-stat-row">
+                <span class="profile-stat-icon"><i data-lucide="credit-card"></i></span>
+                <div class="profile-stat-text">
+                    <span class="profile-stat-label">Total Spent This Month</span>
+                    <span class="profile-stat-value">{{ stats.total_spent }}</span>
+                </div>
+            </div>
+            <div class="profile-stat-row">
+                <span class="profile-stat-icon"><i data-lucide="list"></i></span>
+                <div class="profile-stat-text">
+                    <span class="profile-stat-label">Transactions</span>
+                    <span class="profile-stat-value">{{ stats.transaction_count }}</span>
+                </div>
+            </div>
+            <div class="profile-stat-row">
+                <span class="profile-stat-icon"><i data-lucide="tag"></i></span>
+                <div class="profile-stat-text">
+                    <span class="profile-stat-label">Top Category</span>
+                    <span class="profile-stat-value">{{ stats.top_category }}</span>
+                </div>
             </div>
         </div>
 
@@ -91,25 +111,6 @@
         {% if date_to %} to <strong>{{ date_to }}</strong>{% endif %}
     </p>
     {% endif %}
-
-    <!-- Summary stats -->
-    <div class="stats-row">
-        <div class="stat-card">
-            <i data-lucide="credit-card" class="stat-icon"></i>
-            <span class="stat-value">{{ stats.total_spent }}</span>
-            <span class="stat-label">Total spent this month</span>
-        </div>
-        <div class="stat-card">
-            <i data-lucide="list" class="stat-icon"></i>
-            <span class="stat-value">{{ stats.transaction_count }}</span>
-            <span class="stat-label">Transactions</span>
-        </div>
-        <div class="stat-card">
-            <i data-lucide="tag" class="stat-icon"></i>
-            <span class="stat-value">{{ stats.top_category }}</span>
-            <span class="stat-label">Top category</span>
-        </div>
-    </div>
 
     <!-- Two-column grid: transactions + category breakdown -->
     <div class="profile-grid">
@@ -295,7 +296,7 @@
 <script>
 (function () {
     var overlay = document.getElementById('change-password-modal');
-    var btn = document.getElementById('change-password-btn');
+    var btn = document.getElementById('nav-change-password');
     var closeBtn = document.getElementById('modal-close');
     var cancelBtn = document.getElementById('modal-cancel');
     if (!overlay || !btn) return;
