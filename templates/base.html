@@ -27,8 +27,11 @@
             </button>
             <div class="nav-user-dropdown" id="nav-user-dropdown" role="menu" aria-hidden="true">
                 <a href="{{ url_for('profile') }}" class="nav-user-dropdown-item" role="menuitem">
-                    <i data-lucide="user" aria-hidden="true"></i> My Profile
+                    <i data-lucide="user-circle" aria-hidden="true"></i> My Profile
                 </a>
+                <button type="button" class="nav-user-dropdown-item" role="menuitem" id="nav-change-password">
+                    <i data-lucide="lock" aria-hidden="true"></i> Change Password
+                </button>
                 <a href="{{ url_for('logout') }}" class="nav-user-dropdown-item" role="menuitem">
                     <i data-lucide="log-out" aria-hidden="true"></i> Log Out
                 </a>

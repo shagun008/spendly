@@ -83,20 +83,27 @@
     background: var(--paper-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 24px;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.profile-card-info {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
+    padding-bottom: 16px;
 }
 
 .avatar-circle {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     background: var(--accent);
     color: var(--paper-card);
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,16 +111,16 @@
     letter-spacing: 0.02em;
 }
 
-.profile-card-info {
+.profile-card-info-text {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    flex: 1;
+    gap: 2px;
+    min-width: 0;
 }
 
 .profile-name {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 400;
     color: var(--ink);
     margin: 0;
@@ -133,9 +140,46 @@
     margin: 0;
 }
 
-.profile-card-actions {
-    margin-left: auto;
-    align-self: center;
+/* In-card stat rows */
+.profile-stat-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border-soft);
+}
+
+.profile-stat-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+}
+
+.profile-stat-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.profile-stat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.profile-stat-label {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--ink-muted);
+}
+
+.profile-stat-value {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
 }
 
 /* Side-by-side layout for Profile Card + Analytics Dashboard on desktop */
@@ -174,48 +218,6 @@
 .btn-disabled {
     opacity: 0.45;
     cursor: not-allowed;
-}
-
-/* Summary stats */
-.stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.stat-card {
-    background: var(--paper-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.stat-icon {
-    width: 20px;
-    height: 20px;
-    color: var(--ink-muted);
-}
-
-.stat-icon svg {
-    width: 20px;
-    height: 20px;
-}
-
-.stat-value {
-    font-family: var(--font-display);
-    font-size: 28px;
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
-    line-height: 1.1;
-}
-
-.stat-label {
-    font-family: var(--font-body);
-    font-size: 13px;
-    color: var(--ink-muted);
 }
 
 /* Two-column grid */
@@ -482,18 +484,8 @@
         padding: 32px 16px 60px;
     }
 
-    .stats-row {
-        grid-template-columns: 1fr;
-    }
-
     .profile-grid {
         grid-template-columns: 1fr;
-    }
-
-    .profile-card {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
     }
 
     .profile-top-row {
@@ -504,9 +496,13 @@
         flex: none;
     }
 
-    .profile-card-actions {
-        margin-left: 0;
-        align-self: flex-start;
+    .profile-card-info {
+        gap: 12px;
+    }
+
+    .profile-stat-row {
+        gap: 12px;
+        padding: 10px 0;
     }
 
     .profile-subtitle {
@@ -526,7 +522,6 @@
     flex-wrap: wrap;
     gap: 0.75rem;
     align-items: center;
-    margin-bottom: 1.5rem;
 }
 
 .filter-presets {
