@@ -797,6 +797,8 @@ def seed_features():
             '2026-06-25 23:11:37.429557',
             '2026-06-25 23:16:50.301792',
             '2026-06-25 23:25:16.879862',
+            "Test Report — 19.1\n\nStart: 2026-06-25 22:16:17 EST\nEnd:   2026-06-25 23:11:37 EST\nDuration: ~55 minutes\n\n24 tests passed, 0 failed.\n\nCoverage:\n- Desktop: user icon dropdown renders with My Profile and Log Out items\n- Desktop: standalone Logout link removed from nav\n- Mobile: hamburger replaced by user icon when logged in\n- Mobile: menu shows My Profile and Log Out (relabelled)\n- Logged-out state: hamburger unchanged, no user icon\n- All existing nav links preserved\n- ARIA attributes present on trigger and dropdown",
+            "Code Review Report — 19.1\n\nStart: 2026-06-25 23:12:00 EST\nEnd:   2026-06-25 23:16:50 EST\nDuration: ~5 minutes\n\nSecurity Findings\nNo security vulnerabilities identified. No new routes or DB queries introduced.\n\nQuality Findings\n- Clean separation: nav_desktop_links and nav_mobile_links macros\n- Lucide loaded before main.js to ensure icons render\n- ARIA attributes correctly applied\n- CSS variables used throughout\n\nOverall Verdict: APPROVED — ready to commit",
         )
     ]
 
