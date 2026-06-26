@@ -1,0 +1,21 @@
+Created: 2026-06-25 23:33 EST
+
+User Profile Page Updates — Dropdown Icon & Change Password
+
+1. Distinct Icons for Profile Icon vs "My Profile" Menu Item
+- Currently the user icon (in the navbar dropdown trigger) and the "My Profile" option use the same icon, which is confusing.
+- Use a different icon for the "My Profile" dropdown row — for example a person/user-circle style icon — so it is visually distinct from the dropdown trigger.
+
+2. Add "Change Password" to the Dropdown
+- Add a "Change Password" option to the user dropdown menu, placed after "My Profile" and before "Log Out".
+- Migrate the existing change-password functionality (form, route, and any logic currently triggered by the Change Password button on the profile card) into this new dropdown item.
+- Once the functionality is fully migrated, remove the "Change Password" button from the profile card.
+
+3. Profile Card Layout Tightening
+- The current profile card has a lot of empty space.
+- Rearrange so the existing profile card height contains four stacked cards inside it:
+  1. The existing profile card (user info)
+  2. Stat card: Total Spent This Month
+  3. Stat card: Transactions count
+  4. Stat card: Top Category
+- The total height should match the current single profile card — no extra vertical space.
