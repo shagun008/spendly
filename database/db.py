@@ -748,7 +748,7 @@ def seed_features():
             '2026-06-25 22:28:54.366622',
             '2026-06-25 23:11:37.429557',
             '2026-06-25 23:16:50.301792',
-            None,
+            '2026-06-26 03:25:48.814307',
         ),
         (
             '19.1',
@@ -757,14 +757,14 @@ def seed_features():
             'responsive-profile-layout',
             'release',
             'enhancement',
-            None,
+            'Makes the Profile Card and Analytics Dashboard sit side-by-side on desktop screens, stacking vertically on mobile for a better use of space.',
             None,
             '2026-06-25 22:00:54.921556',
-            None,
-            None,
-            None,
-            None,
-            None,
+            '2026-06-25 22:16:17.535622',
+            '2026-06-25 22:28:54.366622',
+            '2026-06-25 23:11:37.429557',
+            '2026-06-25 23:16:50.301792',
+            '2026-06-25 23:25:16.879862',
         ),
         (
             '19.2',
@@ -776,29 +776,11 @@ def seed_features():
             None,
             None,
             '2026-06-25 22:00:54.921556',
-            None,
-            None,
-            None,
-            None,
-            None,
-        ),
-        (
-            '19.1',
-            '19',
-            'Responsive Profile Layout',
-            'responsive-profile-layout',
-            'release',
-            'new-feature',
-            'Makes the Profile Card and Analytics Dashboard sit side-by-side on desktop screens, stacking vertically on mobile for a better use of space.',
-            None,
-            None,
-            '2026-06-25 22:16:17.535622',
-            '2026-06-25 22:28:54.366622',
-            '2026-06-25 23:11:37.429557',
-            '2026-06-25 23:16:50.301792',
-            '2026-06-25 23:25:16.879862',
-            "Test Report — 19.1\n\nStart: 2026-06-25 22:16:17 EST\nEnd:   2026-06-25 23:11:37 EST\nDuration: ~55 minutes\n\n24 tests passed, 0 failed.\n\nCoverage:\n- Desktop: user icon dropdown renders with My Profile and Log Out items\n- Desktop: standalone Logout link removed from nav\n- Mobile: hamburger replaced by user icon when logged in\n- Mobile: menu shows My Profile and Log Out (relabelled)\n- Logged-out state: hamburger unchanged, no user icon\n- All existing nav links preserved\n- ARIA attributes present on trigger and dropdown",
-            "Code Review Report — 19.1\n\nStart: 2026-06-25 23:12:00 EST\nEnd:   2026-06-25 23:16:50 EST\nDuration: ~5 minutes\n\nSecurity Findings\nNo security vulnerabilities identified. No new routes or DB queries introduced.\n\nQuality Findings\n- Clean separation: nav_desktop_links and nav_mobile_links macros\n- Lucide loaded before main.js to ensure icons render\n- ARIA attributes correctly applied\n- CSS variables used throughout\n\nOverall Verdict: APPROVED — ready to commit",
+            '2026-06-26 01:13:00.874153',
+            '2026-06-26 01:13:00.874153',
+            '2026-06-26 02:57:50.908435',
+            '2026-06-26 03:25:48.814307',
+            '2026-06-26 03:25:48.814307',
         )
     ]
 
@@ -807,8 +789,8 @@ def seed_features():
             "INSERT INTO features"
             " (number, parent_number, title, slug, type, release_subtype, description,"
             "  captured_at, planned_at, spec_at, implemented_at,"
-            "  tested_at, reviewed_at, shipped_at, test_report, review_report)"
-            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            "  tested_at, reviewed_at, shipped_at)"
+            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             row,
         )
 
