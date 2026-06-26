@@ -69,15 +69,12 @@
 
     // If logged in, swap hamburger icon for user icon
     if (isUserMode) {
-        // Replace the three spans with a user icon
         btn.innerHTML = '';
         const icon = document.createElement('i');
         icon.setAttribute('data-lucide', 'user');
         icon.classList.add('nav-hamburger-user-icon');
         btn.appendChild(icon);
         btn.classList.add('nav-user-icon-btn');
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
+        lucide.createIcons();
     }
 })();
