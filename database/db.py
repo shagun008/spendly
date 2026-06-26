@@ -807,8 +807,8 @@ def seed_features():
             "INSERT INTO features"
             " (number, parent_number, title, slug, type, release_subtype, description,"
             "  captured_at, planned_at, spec_at, implemented_at,"
-            "  tested_at, reviewed_at, shipped_at)"
-            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            "  tested_at, reviewed_at, shipped_at, test_report, review_report)"
+            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             row,
         )
 
