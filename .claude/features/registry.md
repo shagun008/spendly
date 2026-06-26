@@ -70,6 +70,8 @@ Release sub-rows (indented with →) show individual release status.
 | 19 | Profile Layout and Navbar Updates | new-feature | — | ✅ Shipped | 2 releases planned |
 | 19.1 | → Responsive Profile Layout | release | 19 | ✅ Shipped | 19.1-responsive-profile-layout.md |
 | 19.2 | → Navbar User Menu | release | 19 | ✅ Shipped | 19.2-navbar-user-menu.md |
+| 20 | Profile Card Layout & Dropdown Updates | new-feature | — | 📋 Planned | 1 release planned |
+| 20.1 | → Profile Card Layout & Dropdown Updates | release | 20 | 📋 Planned | — |
 
 ## Numbering Rules
 
