@@ -123,12 +123,9 @@ Here is what I inferred:
   Implementation ideas:   <inferred text>
   Deadlines:              <inferred text>
 
-Does this look right? Reply with any corrections, or say "looks good" to continue.
 ```
 
-Wait for the user to confirm or correct before proceeding.
-
-Use the confirmed values as the discovery field answers and proceed to Step 3.
+Use these inferred values as the discovery field answers and proceed to Step 3. If the user wants to correct any field, they can tell you before you move on — otherwise continue automatically.
 
 ---
 
@@ -303,6 +300,8 @@ Then say:
 | **Title** | `<title>` |
 | **Type** | `<new-feature \| enhancement>` |
 | **Processed thought** | `.claude/features/processed-thoughts/<assigned_number>-<slug>-<datetime>.md` |
+
+Let me know if you'd like to make any changes to the processed thought, or if you'd like to move to the next stage: `/plan-release <assigned_number>`.
 
 ---
 
