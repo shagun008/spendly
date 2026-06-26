@@ -367,7 +367,7 @@ def seed_features():
             '2026-05-01 00:00:00',
         ),
         (
-            '11-1',
+            '11.1',
             '11',
             'DB, Submission, and /features Page',
             'feature-requests-core',
@@ -383,7 +383,7 @@ def seed_features():
             '2026-05-01 00:00:00',
         ),
         (
-            '11-2',
+            '11.2',
             '11',
             'Upvoting and Trending',
             'feature-requests-voting',
@@ -399,7 +399,7 @@ def seed_features():
             '2026-05-01 00:00:00',
         ),
         (
-            '11-3',
+            '11.3',
             '11',
             'Home Page Latest Features Section',
             'home-latest-features-section',
@@ -751,7 +751,7 @@ def seed_features():
             None,
         ),
         (
-            '19-1',
+            '19.1',
             '19',
             'Responsive Profile Layout',
             'responsive-profile-layout',
@@ -767,7 +767,7 @@ def seed_features():
             None,
         ),
         (
-            '19-2',
+            '19.2',
             '19',
             'Navbar User Menu',
             'navbar-user-menu',
@@ -797,6 +797,8 @@ def seed_features():
             '2026-06-25 23:11:37.429557',
             '2026-06-25 23:16:50.301792',
             '2026-06-25 23:25:16.879862',
+            "Test Report — 19.1\n\nStart: 2026-06-25 22:16:17 EST\nEnd:   2026-06-25 23:11:37 EST\nDuration: ~55 minutes\n\n24 tests passed, 0 failed.\n\nCoverage:\n- Desktop: user icon dropdown renders with My Profile and Log Out items\n- Desktop: standalone Logout link removed from nav\n- Mobile: hamburger replaced by user icon when logged in\n- Mobile: menu shows My Profile and Log Out (relabelled)\n- Logged-out state: hamburger unchanged, no user icon\n- All existing nav links preserved\n- ARIA attributes present on trigger and dropdown",
+            "Code Review Report — 19.1\n\nStart: 2026-06-25 23:12:00 EST\nEnd:   2026-06-25 23:16:50 EST\nDuration: ~5 minutes\n\nSecurity Findings\nNo security vulnerabilities identified. No new routes or DB queries introduced.\n\nQuality Findings\n- Clean separation: nav_desktop_links and nav_mobile_links macros\n- Lucide loaded before main.js to ensure icons render\n- ARIA attributes correctly applied\n- CSS variables used throughout\n\nOverall Verdict: APPROVED — ready to commit",
         )
     ]
 
@@ -805,8 +807,8 @@ def seed_features():
             "INSERT INTO features"
             " (number, parent_number, title, slug, type, release_subtype, description,"
             "  captured_at, planned_at, spec_at, implemented_at,"
-            "  tested_at, reviewed_at, shipped_at)"
-            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            "  tested_at, reviewed_at, shipped_at, test_report, review_report)"
+            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             row,
         )
 
