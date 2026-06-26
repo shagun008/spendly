@@ -52,10 +52,7 @@
     }
 
     btn.addEventListener('click', function () {
-        const open = menu.classList.toggle('is-open');
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-        menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+        setOpen(menu.classList.toggle('is-open'));
     });
 
     // Close menu when a link inside it is clicked

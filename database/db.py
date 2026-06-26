@@ -367,7 +367,7 @@ def seed_features():
             '2026-05-01 00:00:00',
         ),
         (
-            '11-1',
+            '11.1',
             '11',
             'DB, Submission, and /features Page',
             'feature-requests-core',
@@ -383,7 +383,7 @@ def seed_features():
             '2026-05-01 00:00:00',
         ),
         (
-            '11-2',
+            '11.2',
             '11',
             'Upvoting and Trending',
             'feature-requests-voting',
@@ -399,7 +399,7 @@ def seed_features():
             '2026-05-01 00:00:00',
         ),
         (
-            '11-3',
+            '11.3',
             '11',
             'Home Page Latest Features Section',
             'home-latest-features-section',
@@ -751,7 +751,7 @@ def seed_features():
             None,
         ),
         (
-            '19-1',
+            '19.1',
             '19',
             'Responsive Profile Layout',
             'responsive-profile-layout',
@@ -767,7 +767,7 @@ def seed_features():
             None,
         ),
         (
-            '19-2',
+            '19.2',
             '19',
             'Navbar User Menu',
             'navbar-user-menu',
@@ -783,7 +783,7 @@ def seed_features():
             None,
         ),
         (
-            '19-1',
+            '19.1',
             '19',
             'Responsive Profile Layout',
             'responsive-profile-layout',

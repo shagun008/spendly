@@ -43,9 +43,9 @@ Release sub-rows (indented with →) show individual release status.
 | 10 | Mobile Nav | feature | — | ✅ Shipped | 1 release |
 | 10.1 | → Mobile Nav | release | 10 | ✅ Shipped | 10-mobile-nav |
 | 11 | Feature Requests Page and Public Feature Discovery | new-feature | — | ✅ Shipped | 3 releases planned |
-| 11-1 | → DB, Submission, and /features Page (Core) | release | 11 | ✅ Shipped | 11-1-feature-requests-core.md |
-| 11-2 | → Upvoting and Trending | release | 11 | ✅ Shipped | 11-2-feature-requests-voting.md |
-| 11-3 | → Home Page "Latest Features" Section | release | 11 | ✅ Shipped | 11-3-home-latest-features-section.md |
+| 11.1 | → DB, Submission, and /features Page (Core) | release | 11 | ✅ Shipped | 11-1-feature-requests-core.md |
+| 11.2 | → Upvoting and Trending | release | 11 | ✅ Shipped | 11-2-feature-requests-voting.md |
+| 11.3 | → Home Page "Latest Features" Section | release | 11 | ✅ Shipped | 11-3-home-latest-features-section.md |
 | 12 | Migration to Supabase | new-feature | — | ✅ Shipped | 2 releases planned |
 | 12.1 | → Swap Database Layer | release | 12 | ✅ Shipped | 12.1-supabase-db-layer.md |
 | 12.2 | → Local Data Migration | release | 12 | ✅ Shipped | 12.2-local-data-migration-to-supabase.md |
@@ -67,9 +67,9 @@ Release sub-rows (indented with →) show individual release status.
 | 17.3 | → Embedded Analytics Dashboard | release | 17 | ✅ Shipped | 17.3-embedded-analytics-dashboard.md |
 | 18 | Quick Edit Expense from Profile | new-feature | — | ✅ Shipped | 1 release |
 | 18.1 | → Quick Edit Expense Modal | release | 18 | ✅ Shipped | 18.1-quick-edit-expense-modal.md |
-| 19 | Profile Layout and Navbar Updates | new-feature | — | 🔧 In Progress | 2 releases planned |
-| 19-1 | → Responsive Profile Layout | release | 19 | ✅ Shipped | 19.1-responsive-profile-layout.md |
-| 19-2 | → Navbar User Menu | release | 19 | 🔧 In Progress | 19.2-navbar-user-menu.md |
+| 19 | Profile Layout and Navbar Updates | new-feature | — | 👀 In Review | 2 releases planned |
+| 19.1 | → Responsive Profile Layout | release | 19 | ✅ Shipped | 19.1-responsive-profile-layout.md |
+| 19.2 | → Navbar User Menu | release | 19 | 👀 In Review | 19.2-navbar-user-menu.md |
 
 ## Numbering Rules
 
