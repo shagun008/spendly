@@ -15,17 +15,42 @@
 </head>
 <body>
 
-    {% macro nav_links(base_class, cta_class, username_class) %}
+    {% macro nav_desktop_links() %}
         <a href="{{ url_for('features') }}"
-           class="{{ base_class }}{% if request.endpoint == 'features' %} nav-link--active{% endif %}">Features</a>
+           class="nav-link{% if request.endpoint == 'features' %} nav-link--active{% endif %}">Features</a>
         <a href="{{ url_for('roadmap') }}"
-           class="{{ base_class }}{% if request.endpoint == 'roadmap' %} nav-link--active{% endif %}">Roadmap</a>
+           class="nav-link{% if request.endpoint == 'roadmap' %} nav-link--active{% endif %}">Roadmap</a>
         {% if session.get("user_id") %}
-        <a href="{{ url_for('profile') }}" class="{{ base_class }} {{ username_class }}">{{ session["user_name"] }}</a>
-        <a href="{{ url_for('logout') }}" class="{{ base_class }} {{ cta_class }}">Logout</a>
+        <div class="nav-user-menu">
+            <button class="nav-user-trigger" id="nav-user-trigger" aria-expanded="false" aria-controls="nav-user-dropdown" aria-label="User menu">
+                <i data-lucide="user" class="nav-user-icon"></i>
+            </button>
+            <div class="nav-user-dropdown" id="nav-user-dropdown" role="menu" aria-hidden="true">
+                <a href="{{ url_for('profile') }}" class="nav-user-dropdown-item" role="menuitem">
+                    <i data-lucide="user" aria-hidden="true"></i> My Profile
+                </a>
+                <a href="{{ url_for('logout') }}" class="nav-user-dropdown-item" role="menuitem">
+                    <i data-lucide="log-out" aria-hidden="true"></i> Log Out
+                </a>
+            </div>
+        </div>
         {% else %}
-        <a href="{{ url_for('login') }}" class="{{ base_class }}">Sign in</a>
-        <a href="{{ url_for('register') }}" class="{{ base_class }} {{ cta_class }}">Get started</a>
+        <a href="{{ url_for('login') }}" class="nav-link">Sign in</a>
+        <a href="{{ url_for('register') }}" class="nav-link nav-cta">Get started</a>
+        {% endif %}
+    {% endmacro %}
+
+    {% macro nav_mobile_links() %}
+        <a href="{{ url_for('features') }}"
+           class="nav-mobile-link{% if request.endpoint == 'features' %} nav-link--active{% endif %}">Features</a>
+        <a href="{{ url_for('roadmap') }}"
+           class="nav-mobile-link{% if request.endpoint == 'roadmap' %} nav-link--active{% endif %}">Roadmap</a>
+        {% if session.get("user_id") %}
+        <a href="{{ url_for('profile') }}" class="nav-mobile-link">My Profile</a>
+        <a href="{{ url_for('logout') }}" class="nav-mobile-link">Log Out</a>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="nav-mobile-link">Sign in</a>
+        <a href="{{ url_for('register') }}" class="nav-mobile-link nav-mobile-cta">Get started</a>
         {% endif %}
     {% endmacro %}
 
@@ -36,15 +61,15 @@
                 <span class="brand-name">Spendly</span>
             </a>
             <div class="nav-links">
-                {{ nav_links('nav-link', 'nav-cta', 'nav-username') }}
+                {{ nav_desktop_links() }}
             </div>
-            <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false"{% if session.get("user_id") %} data-user-mode="true"{% endif %}>
                 <span></span><span></span><span></span>
             </button>
         </div>
 
         <div class="nav-mobile-menu" id="nav-mobile-menu" aria-hidden="true">
-            {{ nav_links('nav-mobile-link', 'nav-mobile-cta', 'nav-mobile-username') }}
+            {{ nav_mobile_links() }}
         </div>
     </nav>
 
