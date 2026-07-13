@@ -38,4 +38,4 @@ This feature creates a new Oxos Profile page within the authenticated Spendly ap
 - Additional business applications beyond Expense (structure supports future additions)
 
 ## Open questions
-- Route path: `/oxos` or `/platform` for the profile page
+- Route path confirmed: `/platform` for the Oxos Profile page
