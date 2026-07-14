@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Oxos Platform{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/platform.css') }}">
+{% endblock %}
+{% block brand %}
+<a href="{{ url_for('platform') }}" class="nav-brand">
+    <span class="brand-icon">◈</span>
+    <span class="brand-name">Oxos</span>
+</a>
+{% endblock %}
+{% block content %}
+    <div class="platform-container">
+        <header class="platform-header">
+            <h1 class="platform-title">Oxos Platform</h1>
+            <p class="platform-subtitle">Your central dashboard for business capabilities and platform knowledge</p>
+        </header>
+
+        <section class="platform-section">
+            <h2 class="platform-section-title">
+                <i data-lucide="briefcase" class="section-icon"></i>
+                Business Outcomes
+            </h2>
+            <div class="platform-cards">
+                <!-- Reports Card -->
+                <div class="feature-card platform-card">
+                    <div class="card-icon">
+                        <i data-lucide="bar-chart-3"></i>
+                    </div>
+                    <h3 class="feature-title">Reports</h3>
+                    <p class="feature-body">Business reports and analytics will appear here once implemented.</p>
+                </div>
+
+                <!-- Business Applications Card -->
+                <div class="feature-card platform-card">
+                    <div class="card-icon">
+                        <i data-lucide="credit-card"></i>
+                    </div>
+                    <h3 class="feature-title">Business Applications</h3>
+                    <div class="business-apps-list">
+                        <a href="{{ url_for('profile') }}" target="_blank" rel="noopener" class="business-app-link">
+                            <div class="business-app-item">
+                                <i data-lucide="wallet" class="app-icon"></i>
+                                <div class="app-info">
+                                    <span class="app-name">Expense</span>
+                                    <span class="app-description">Track and manage personal expenses</span>
+                                </div>
+                                <i data-lucide="external-link" class="external-icon"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="platform-section">
+            <h2 class="platform-section-title">
+                <i data-lucide="book-open" class="section-icon"></i>
+                Learnings
+            </h2>
+            <div class="platform-cards learnings-cards">
+                <!-- Learning 1 -->
+                <div class="learning-card">
+                    <div class="learning-header">
+                        <i data-lucide="database" class="learning-icon"></i>
+                        <span class="learning-category">Architecture</span>
+                    </div>
+                    <h3 class="learning-title">No ORMs, raw SQL only</h3>
+                    <p class="learning-body">Use raw sqlite3/psycopg2 queries for database operations. No SQLAlchemy or ORMs.</p>
+                </div>
+
+                <!-- Learning 2 -->
+                <div class="learning-card">
+                    <div class="learning-header">
+                        <i data-lucide="lock" class="learning-icon"></i>
+                        <span class="learning-category">Security</span>
+                    </div>
+                    <h3 class="learning-title">Passwords hashed with werkzeug</h3>
+                    <p class="learning-body">Always use werkzeug.security for password hashing: generate_password_hash and check_password_hash.</p>
+                </div>
+
+                <!-- Learning 3 -->
+                <div class="learning-card">
+                    <div class="learning-header">
+                        <i data-lucide="palette" class="learning-icon"></i>
+                        <span class="learning-category">Design</span>
+                    </div>
+                    <h3 class="learning-title">Use CSS variables</h3>
+                    <p class="learning-body">Never hardcode hex values. Use --ink, --paper, --accent, and other CSS variables.</p>
+                </div>
+
+                <!-- Learning 4 -->
+                <div class="learning-card">
+                    <div class="learning-header">
+                        <i data-lucide="layout-template" class="learning-icon"></i>
+                        <span class="learning-category">UI</span>
+                    </div>
+                    <h3 class="learning-title">All templates extend base.html</h3>
+                    <p class="learning-body">Every page template must extend base.html for consistent layout.</p>
+                </div>
+
+                <!-- Learning 5 -->
+                <div class="learning-card">
+                    <div class="learning-header">
+                        <i data-lucide="shield" class="learning-icon"></i>
+                        <span class="learning-category">Security</span>
+                    </div>
+                    <h3 class="learning-title">Auth guard on protected routes</h3>
+                    <p class="learning-body">Check session.get("user_id") on every protected route and redirect to /login if missing.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
