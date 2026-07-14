@@ -1,0 +1,106 @@
+Created: 2026-07-13 00:00 EST
+
+Build the Oxos Profile Page
+Create a new Oxos Profile page within the existing application. This is not the application's public homepage. It is an additional page in the authenticated application experience.
+Use the existing authentication and routing already established for the application. This page should simply participate in the existing authenticated user flow like any other page in the app.
+Follow the project's existing architecture, routing, component library, navigation, styling, and coding conventions so the page feels like a natural extension of the application.
+
+
+Page Layout
+The page should include:
+•	The application name Oxos in the top-left corner.
+•	The existing navigation on this page only include the ‘nav-user-menu’ which is already available on the other pages of the app.
+•	A responsive layout that works well across desktop and tablet.
+•	Three primary sections displayed in a clear visual hierarchy:
+1.	Business Outcomes
+2.	Context
+3.	Learnings
+The page should serve as the central profile/dashboard for the Oxos platform.
+
+1. Business Outcomes
+This section represents the business capabilities available within Oxos.
+Display two primary cards.
+Reports
+Create a Reports card that includes:
+•	Reports/dashboard icon
+•	Title: Reports
+•	Short description indicating this area contains business reports
+The navigation can remain a placeholder until reports are implemented.
+Business Applications
+Create a Business Applications card.
+For the initial implementation, there is one business application:
+Expense
+The card should include:
+•	Expense/finance icon
+•	Application name
+•	Short description
+Clicking this card should open a new tab which navigates to the existing Expense Profile page.
+Design the cards using the existing design system, including hover effects, rounded corners, subtle elevation, and consistent spacing.
+The component should be designed so additional business applications can easily be added in the future.
+
+2. Context
+The Context section provides visibility into the data systems used by Oxos.
+Initially there is one data system:
+Supabase
+Display it as an interactive card.
+Front
+Display:
+•	Database icon
+•	Supabase
+•	"Primary Data System"
+Back
+When the user clicks or flips the card, display the list of database tables.
+For the initial implementation, the table list can either be retrieved dynamically (if already supported) or temporarily hardcoded until metadata retrieval is implemented.
+Use a smooth card flip animation that matches the application's UI patterns.
+Design the component so additional data systems (Snowflake, PostgreSQL, APIs, S3, etc.) can be added without requiring structural changes.
+
+3. Learnings
+The Learnings section serves as the knowledge repository for Oxos.
+Its purpose is to capture reusable implementation knowledge from:
+•	Business Applications
+•	Reports
+•	Platform enhancements
+As new reports and business applications are developed, their implementation learnings should be surfaced here, with the newest or highest-priority learnings appearing first.
+For the initial implementation:
+•	Review the existing claude.md file.
+•	Extract the top five best practices related to the Expense project.
+•	Display them as a clean list or set of cards.
+Each learning should include:
+•	Title
+•	Brief description
+•	Optional category (Architecture, Performance, UX, Best Practice, etc.)
+Structure this section so it can later be driven from a database rather than static content.
+
+
+UX Expectations
+The Oxos Profile page should provide users with a high-level view of:
+•	Available business capabilities
+•	Platform context
+•	Organizational knowledge
+Use:
+•	Modern card-based layouts
+•	Consistent spacing and typography
+•	Responsive design
+•	Hover effects
+•	Smooth transitions and animations
+•	Reusable components that align with the existing application
+Avoid introducing new UI patterns where existing ones can be reused.
+
+
+Navigation
+•	Reuse the application's existing navigation and routing.
+•	Add the Oxos Profile page as another page within the current application structure.
+•	Do not introduce a separate authentication flow.
+•	Clicking the Expense Business Application card should open a new tab and navigate to the existing Expense Profile page.
+
+
+Extensibility
+Design this page so it scales naturally as Oxos grows.
+It should support:
+•	Multiple business applications
+•	Multiple reports
+•	Multiple data systems
+•	Dynamically managed learnings
+•	Future database-backed content
+Prioritize modular, reusable components and adhere to the existing project architecture, coding standards, and UI conventions.
+Note: This is an authenticated page within the existing application. A separate public Oxos homepage (accessible without login) will be implemented later under a different set of requirements.
