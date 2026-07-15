@@ -1,0 +1,257 @@
+/* ------------------------------------------------------------------ */
+/* Platform Page Structure */
+/* ------------------------------------------------------------------ */
+
+.platform-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.platform-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.platform-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+}
+
+.platform-subtitle {
+    font-size: 1rem;
+    color: var(--ink-muted);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* ------------------------------------------------------------------ */
+/* Section Titles */
+/* ------------------------------------------------------------------ */
+
+.platform-section-title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-icon {
+    width: 24px;
+    height: 24px;
+    stroke: var(--accent);
+    stroke-width: 2;
+}
+
+/* ------------------------------------------------------------------ */
+/* Card Grid */
+/* ------------------------------------------------------------------ */
+
+.platform-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.platform-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.platform-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ------------------------------------------------------------------ */
+/* Card Icon */
+/* ------------------------------------------------------------------ */
+
+.card-icon {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.card-icon i {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+}
+
+/* ------------------------------------------------------------------ */
+/* Business Applications */
+/* ------------------------------------------------------------------ */
+
+.business-apps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.business-app-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.business-app-link:hover {
+    text-decoration: none;
+}
+
+.business-app-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.business-app-item:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+}
+
+.app-icon {
+    width: 20px;
+    height: 20px;
+    stroke: var(--ink);
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+.app-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.app-name {
+    display: block;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 0.9rem;
+}
+
+.app-description {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    margin-top: 0.25rem;
+}
+
+.external-icon {
+    width: 14px;
+    height: 14px;
+    stroke: var(--ink-muted);
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Learnings Section */
+/* ------------------------------------------------------------------ */
+
+.platform-section {
+    margin-bottom: 3rem;
+}
+
+.platform-section:last-child {
+    margin-bottom: 0;
+}
+
+.learners-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+.learning-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.learning-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.learning-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.learning-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--accent-2);
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+.learning-category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--accent-2-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+}
+
+.learning-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+}
+
+.learning-body {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    line-height: 1.6;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+    .platform-container {
+        padding: 2rem 1.5rem;
+    }
+
+    .platform-header {
+        margin-bottom: 2rem;
+    }
+
+    .platform-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .platform-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .platform-title {
+        font-size: 1.75rem;
+    }
+
+    .learners-cards {
+        grid-template-columns: 1fr;
+    }
+}

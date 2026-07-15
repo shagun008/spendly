@@ -59,10 +59,12 @@
 
     <nav class="navbar">
         <div class="nav-inner">
+            {% block brand %}
             <a href="{{ url_for('landing') }}" class="nav-brand">
                 <span class="brand-icon">◈</span>
                 <span class="brand-name">Spendly</span>
             </a>
+            {% endblock %}
             <div class="nav-links">
                 {{ nav_desktop_links() }}
             </div>
@@ -92,7 +94,7 @@
     <footer class="footer">
         <div class="footer-inner">
             <span class="brand-icon">◈</span>
-            <span class="footer-name">Spendly</span>
+            {% block footer_name %}<span class="footer-name">Spendly</span>{% endblock %}
             <p class="footer-copy">Track every rupee. Own your finances.</p>
             <a href="/terms">Terms and Conditions</a>
             <a href="/privacy">Privacy Policy</a>

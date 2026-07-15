@@ -271,7 +271,9 @@ def change_password():
     conn = get_db()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     try:
-        cur.execute("SELECT id, password_hash FROM users WHERE id = %s", (session["user_id"],))
+        cur.execute(
+            "SELECT id, password_hash FROM users WHERE id = %s", (session["user_id"],)
+        )
         user = cur.fetchone()
 
         if user is None or not check_password_hash(user["password_hash"], current):
@@ -397,8 +399,14 @@ def edit_expense_route():
         today = date.today()
         presets = {
             "this_month": (today.replace(day=1).isoformat(), today.isoformat()),
-            "last_3_months": ((today - timedelta(days=90)).isoformat(), today.isoformat()),
-            "last_6_months": ((today - timedelta(days=180)).isoformat(), today.isoformat()),
+            "last_3_months": (
+                (today - timedelta(days=90)).isoformat(),
+                today.isoformat(),
+            ),
+            "last_6_months": (
+                (today - timedelta(days=180)).isoformat(),
+                today.isoformat(),
+            ),
         }
         active_preset = "all_time"
         user = get_user_by_id(user_id)
@@ -608,6 +616,13 @@ def roadmap():
         foundational_nums=foundational_nums,
         parent_numbers=parent_numbers,
     )
+
+
+@app.route("/platform")
+def platform():
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+    return render_template("platform.html")
 
 
 if __name__ == "__main__":

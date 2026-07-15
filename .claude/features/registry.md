@@ -72,8 +72,8 @@ Release sub-rows (indented with →) show individual release status.
 | 19.2 | → Navbar User Menu | release | 19 | ✅ Shipped | 19.2-navbar-user-menu.md |
 | 20 | Profile Card Layout & Dropdown Updates | new-feature | — | ✅ Shipped | 1 release planned |
 | 20.1 | → Profile Card Layout & Dropdown Updates | release | 20 | ✅ Shipped | 20.1-profile-card-layout-dropdown-updates.md |
-| 21 | Oxos Profile Page | new-feature | — | 📝 Spec'd | 2 releases planned |
-| 21.1 | → Oxos Profile Page MVP | release | 21 | 📝 Spec'd | 21.1-oxos-profile-page-mvp.md |
+| 21 | Oxos Profile Page | new-feature | — | 🔧 In Progress | 2 releases planned |
+| 21.1 | → Oxos Profile Page MVP | release | 21 | 🔧 In Progress | 21.1-oxos-profile-page-mvp.md |
 | 21.2 | → Context Section with Card Flip | release | 21 | 📋 Planned | — |
 
 ## Numbering Rules
