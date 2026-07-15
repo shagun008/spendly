@@ -109,8 +109,7 @@ with app.app_context():
 
 @app.route("/")
 def landing():
-    latest_features = get_feature_requests(sort="latest", limit=6)
-    return render_template("landing.html", latest_features=latest_features)
+    return render_template("platform.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -620,9 +619,13 @@ def roadmap():
 
 @app.route("/platform")
 def platform():
-    if not session.get("user_id"):
-        return redirect(url_for("login"))
     return render_template("platform.html")
+
+
+@app.route("/expense-home")
+def expense_home():
+    latest_features = get_feature_requests(sort="latest", limit=6)
+    return render_template("landing.html", latest_features=latest_features)
 
 
 if __name__ == "__main__":
