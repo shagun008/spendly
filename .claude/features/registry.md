@@ -74,7 +74,7 @@ Release sub-rows (indented with →) show individual release status.
 | 20.1 | → Profile Card Layout & Dropdown Updates | release | 20 | ✅ Shipped | 20.1-profile-card-layout-dropdown-updates.md |
 | 21 | Oxos Profile Page | new-feature | — | ✅ Shipped | 2 releases |
 | 21.1 | → Oxos Profile Page MVP | release | 21 | ✅ Shipped | 21.1-oxos-profile-page-mvp.md |
-| 21.2 | → Context Section with Card Flip | release | 21 | 👀 In Review | 21.2-oxos-context-flip.md |
+| 21.2 | → Context Section with Card Flip | release | 21 | ✅ Shipped | 21.2-oxos-context-flip.md |
 
 ## Numbering Rules
 
