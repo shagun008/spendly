@@ -25,7 +25,6 @@ import pytest
 import database.db as db_module
 from database.db import get_db, create_user, init_db
 
-
 # ------------------------------------------------------------------ #
 # Helpers                                                             #
 # ------------------------------------------------------------------ #
@@ -75,6 +74,7 @@ def _add_expense(user_id, amount, category, expense_date, description="test"):
 def app():
     """Ensure the app module is initialised."""
     import app as app_module
+
     importlib.reload(app_module)
     app_module.app.config["TESTING"] = True
     app_module.app.config["SECRET_KEY"] = "test-secret"
@@ -100,10 +100,13 @@ def test_user():
 @pytest.fixture
 def auth_client(client, test_user):
     """Test client with the test user logged in."""
-    client.post("/login", data={
-        "email": test_user["email"],
-        "password": test_user["password"],
-    })
+    client.post(
+        "/login",
+        data={
+            "email": test_user["email"],
+            "password": test_user["password"],
+        },
+    )
     return client
 
 
@@ -121,18 +124,18 @@ class TestDropdownIconsDistinct:
         # The trigger button contains a user icon
         trigger_match = _find_trigger(body)
         assert trigger_match, "nav-user-trigger button must exist"
-        assert 'data-lucide="user"' in trigger_match, (
-            "Trigger must use the Lucide 'user' icon"
-        )
+        assert (
+            'data-lucide="user"' in trigger_match
+        ), "Trigger must use the Lucide 'user' icon"
 
     def test_my_profile_uses_user_circle_icon(self, auth_client):
         """The 'My Profile' menu item must use a distinct icon from the trigger."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
         # The My Profile dropdown item must use user-circle, not user
-        assert 'data-lucide="user-circle"' in body, (
-            "My Profile item must use the distinct 'user-circle' Lucide icon"
-        )
+        assert (
+            'data-lucide="user-circle"' in body
+        ), "My Profile item must use the distinct 'user-circle' Lucide icon"
 
     def test_trigger_and_my_profile_do_not_share_icon(self, auth_client):
         """Trigger icon and My Profile icon must differ."""
@@ -141,9 +144,9 @@ class TestDropdownIconsDistinct:
         trigger = _find_trigger(body)
         assert trigger is not None
         # The trigger should NOT contain user-circle (that belongs to My Profile)
-        assert 'data-lucide="user-circle"' not in trigger, (
-            "Trigger must not use the same icon as My Profile"
-        )
+        assert (
+            'data-lucide="user-circle"' not in trigger
+        ), "Trigger must not use the same icon as My Profile"
 
 
 # ------------------------------------------------------------------ #
@@ -165,20 +168,18 @@ class TestDropdownItemsThree:
         """Dropdown must contain a 'Change Password' item with the trigger id."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert 'id="nav-change-password"' in body, (
-            "Dropdown must contain a Change Password item with id='nav-change-password'"
-        )
-        assert "Change Password" in body, (
-            "Dropdown must show 'Change Password' text"
-        )
+        assert (
+            'id="nav-change-password"' in body
+        ), "Dropdown must contain a Change Password item with id='nav-change-password'"
+        assert "Change Password" in body, "Dropdown must show 'Change Password' text"
 
     def test_change_password_uses_lock_icon(self, auth_client):
         """The Change Password item must use the Lucide 'lock' icon."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert 'data-lucide="lock"' in body, (
-            "Change Password item must use the 'lock' Lucide icon"
-        )
+        assert (
+            'data-lucide="lock"' in body
+        ), "Change Password item must use the 'lock' Lucide icon"
 
     def test_item_order_my_profile_before_change_password(self, auth_client):
         """My Profile must appear before Change Password in the dropdown."""
@@ -186,9 +187,9 @@ class TestDropdownItemsThree:
         body = resp.get_data(as_text=True)
         dropdown = _find_dropdown(body)
         assert dropdown is not None, "Dropdown must exist"
-        assert dropdown.index("My Profile") < dropdown.index("Change Password"), (
-            "My Profile must appear before Change Password"
-        )
+        assert dropdown.index("My Profile") < dropdown.index(
+            "Change Password"
+        ), "My Profile must appear before Change Password"
 
     def test_item_order_change_password_before_logout(self, auth_client):
         """Change Password must appear before Log Out in the dropdown."""
@@ -196,9 +197,9 @@ class TestDropdownItemsThree:
         body = resp.get_data(as_text=True)
         dropdown = _find_dropdown(body)
         assert dropdown is not None, "Dropdown must exist"
-        assert dropdown.index("Change Password") < dropdown.index("Log Out"), (
-            "Change Password must appear before Log Out"
-        )
+        assert dropdown.index("Change Password") < dropdown.index(
+            "Log Out"
+        ), "Change Password must appear before Log Out"
 
 
 # ------------------------------------------------------------------ #
@@ -211,21 +212,21 @@ class TestChangePasswordReachable:
         """The Change Password modal markup must be present on the profile page."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert 'id="change-password-modal"' in body, (
-            "Change Password modal markup must exist on the profile page"
-        )
+        assert (
+            'id="change-password-modal"' in body
+        ), "Change Password modal markup must exist on the profile page"
 
     def test_change_password_trigger_wired_to_modal(self, auth_client):
         """The navbar Change Password trigger must open the change-password modal."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
         # The JS must reference both the navbar trigger and the modal
-        assert "nav-change-password" in body, (
-            "JS must reference the navbar Change Password trigger"
-        )
-        assert "change-password-modal" in body, (
-            "JS must reference the change-password modal"
-        )
+        assert (
+            "nav-change-password" in body
+        ), "JS must reference the navbar Change Password trigger"
+        assert (
+            "change-password-modal" in body
+        ), "JS must reference the change-password modal"
 
 
 # ------------------------------------------------------------------ #
@@ -238,33 +239,29 @@ class TestProfileCardStatRows:
         """Profile card must contain three stat rows."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert body.count("profile-stat-row") == 3, (
-            "Profile card must contain exactly three stat rows"
-        )
+        assert (
+            body.count("profile-stat-row") == 3
+        ), "Profile card must contain exactly three stat rows"
 
     def test_stat_row_shows_total_spent_label(self, auth_client):
         """One stat row must be labelled 'Total Spent This Month'."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert "Total Spent This Month" in body, (
-            "Profile card must show 'Total Spent This Month' stat"
-        )
+        assert (
+            "Total Spent This Month" in body
+        ), "Profile card must show 'Total Spent This Month' stat"
 
     def test_stat_row_shows_transactions_label(self, auth_client):
         """One stat row must be labelled 'Transactions'."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert "Transactions" in body, (
-            "Profile card must show 'Transactions' stat"
-        )
+        assert "Transactions" in body, "Profile card must show 'Transactions' stat"
 
     def test_stat_row_shows_top_category_label(self, auth_client):
         """One stat row must be labelled 'Top Category'."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert "Top Category" in body, (
-            "Profile card must show 'Top Category' stat"
-        )
+        assert "Top Category" in body, "Profile card must show 'Top Category' stat"
 
     def test_stat_rows_inside_profile_card(self, auth_client):
         """The stat rows must live inside the profile-card container."""
@@ -272,9 +269,9 @@ class TestProfileCardStatRows:
         body = resp.get_data(as_text=True)
         card = _find_profile_card(body)
         assert card is not None, "profile-card must exist"
-        assert "profile-stat-row" in card, (
-            "Stat rows must be inside the profile-card container"
-        )
+        assert (
+            "profile-stat-row" in card
+        ), "Stat rows must be inside the profile-card container"
 
 
 # ------------------------------------------------------------------ #
@@ -287,17 +284,17 @@ class TestOldElementsRemoved:
         """The old standalone 'Change password' button must be removed."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert 'id="change-password-btn"' not in body, (
-            "Old 'Change password' button (id='change-password-btn') must be removed"
-        )
+        assert (
+            'id="change-password-btn"' not in body
+        ), "Old 'Change password' button (id='change-password-btn') must be removed"
 
     def test_standalone_stats_row_gone(self, auth_client):
         """The old standalone stats-row block must be removed."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert 'class="stats-row"' not in body, (
-            "Standalone stats-row block must be removed from the profile page"
-        )
+        assert (
+            'class="stats-row"' not in body
+        ), "Standalone stats-row block must be removed from the profile page"
 
 
 # ------------------------------------------------------------------ #
@@ -309,12 +306,12 @@ class TestAuthGuard:
     def test_anonymous_user_redirected_to_login(self, client):
         """Anonymous users must be redirected to /login when visiting /profile."""
         resp = client.get("/profile")
-        assert resp.status_code == 302, (
-            "Anonymous user must be redirected from /profile"
-        )
-        assert "/login" in resp.headers.get("Location", ""), (
-            "Anonymous user must be redirected to /login"
-        )
+        assert (
+            resp.status_code == 302
+        ), "Anonymous user must be redirected from /profile"
+        assert "/login" in resp.headers.get(
+            "Location", ""
+        ), "Anonymous user must be redirected to /login"
 
 
 # ------------------------------------------------------------------ #
@@ -336,9 +333,9 @@ class TestStatValuesWithExpenses:
         # Total spent = 150.50 + 75.00 + 200.00 = 425.50
         assert "425.50" in body, "Total spent must reflect the sum of expenses"
         # Transaction count = 3
-        assert ">3<" in body or ">3 <" in body or " 3 " in body, (
-            "Transaction count must reflect the number of expenses"
-        )
+        assert (
+            ">3<" in body or ">3 <" in body or " 3 " in body
+        ), "Transaction count must reflect the number of expenses"
         # Top category = Food (225.50 > 200.00)
         assert "Food" in body, "Top category must be the highest-spend category"
 
@@ -354,9 +351,9 @@ class TestStatValuesZeroExpenses:
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
         assert resp.status_code == 200
-        assert body.count("profile-stat-row") == 3, (
-            "Stat rows must render even with zero expenses"
-        )
+        assert (
+            body.count("profile-stat-row") == 3
+        ), "Stat rows must render even with zero expenses"
 
     def test_total_spent_shows_zero(self, auth_client):
         """Total spent must show 0.00 when the user has no expenses."""
@@ -368,9 +365,9 @@ class TestStatValuesZeroExpenses:
         """Top category must show a placeholder when the user has no expenses."""
         resp = auth_client.get("/profile")
         body = resp.get_data(as_text=True)
-        assert "—" in body, (
-            "Top category must show an em-dash placeholder with no expenses"
-        )
+        assert (
+            "—" in body
+        ), "Top category must show an em-dash placeholder with no expenses"
 
 
 # ------------------------------------------------------------------ #
@@ -381,13 +378,17 @@ class TestStatValuesZeroExpenses:
 def _find_trigger(body):
     """Return the HTML of the nav-user-trigger button, or None."""
     import re
-    m = re.search(r'<button[^>]*id="nav-user-trigger"[^>]*>(.*?)</button>', body, re.DOTALL)
+
+    m = re.search(
+        r'<button[^>]*id="nav-user-trigger"[^>]*>(.*?)</button>', body, re.DOTALL
+    )
     return m.group(1) if m else None
 
 
 def _find_dropdown(body):
     """Return the HTML of the nav-user-dropdown, or None."""
     import re
+
     m = re.search(
         r'<div[^>]*id="nav-user-dropdown"[^>]*>(.*?)</div>\s*(?:</div>|<a|</nav>)',
         body,
@@ -402,7 +403,12 @@ def _find_dropdown(body):
 def _find_profile_card(body):
     """Return the HTML of the profile-card container, or None."""
     import re
-    m = re.search(r'class="profile-card"[^>]*>(.*?)</div>\s*<div class="analytics-dashboard"', body, re.DOTALL)
+
+    m = re.search(
+        r'class="profile-card"[^>]*>(.*?)</div>\s*<div class="analytics-dashboard"',
+        body,
+        re.DOTALL,
+    )
     if not m:
         m = re.search(r'class="profile-card"[^>]*>(.*?)<!-- Analytics', body, re.DOTALL)
     return m.group(1) if m else None
