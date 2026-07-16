@@ -55,6 +55,42 @@
 
         <section class="platform-section">
             <h2 class="platform-section-title">
+                <i data-lucide="database" class="section-icon"></i>
+                Context
+            </h2>
+            <div class="platform-cards context-cards">
+                <div class="flip-card" data-flip-card tabindex="0" role="button"
+                     aria-pressed="false" aria-label="Supabase data system card, flip for table list">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <i data-lucide="database" class="flip-card-icon"></i>
+                            <h3 class="flip-card-title">Supabase</h3>
+                            <p class="flip-card-subtitle">Primary Data System</p>
+                        </div>
+                        <div class="flip-card-back">
+                            <span class="flip-card-label">Database Tables</span>
+                            <ul class="flip-card-tables">
+                                <li class="flip-card-table">
+                                    <i data-lucide="table-2"></i>
+                                    <span>users</span>
+                                </li>
+                                <li class="flip-card-table">
+                                    <i data-lucide="table-2"></i>
+                                    <span>expenses</span>
+                                </li>
+                                <li class="flip-card-table">
+                                    <i data-lucide="table-2"></i>
+                                    <span>features</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="platform-section">
+            <h2 class="platform-section-title">
                 <i data-lucide="book-open" class="section-icon"></i>
                 Learnings
             </h2>
@@ -111,6 +147,24 @@
             </div>
         </section>
     </div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-flip-card]').forEach(function(card) {
+        card.addEventListener('click', function() {
+            this.classList.toggle('flipped');
+            this.setAttribute('aria-pressed', this.classList.contains('flipped'));
+        });
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
 {% block user_dropdown %}
 <a href="{{ url_for('platform') }}" class="nav-user-dropdown-item" role="menuitem">
