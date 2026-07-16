@@ -37,7 +37,7 @@ Spendly solves a simple problem: tracking personal expenses without the overhead
 - **Profile** — view your full expense history with date-range filters and running totals; add or edit expenses inline via quick modals; change your password securely from the profile card; analytics and profile card displayed side-by-side on desktop
 - **Analytics** — visual breakdown of spending by category and over time, embedded in the Profile page with switchable chart views (trends, categories, monthly comparison)
 - **Community** — submit feature requests, upvote ideas, and discover what other users are asking for; requests are ranked by votes and unique views
-- **Roadmap** — public `/roadmap` page showing the full feature pipeline; each stage shown as a dot with a date/time tooltip on hover; click any feature row to expand an inline detail card with its description and release type badge (New Feature / Enhancement / Bug Fix); the page is kept live automatically as the harness runs
+- **Oxos Platform** — the default landing page at `/` showing business capabilities and platform learnings; includes Business Outcomes and Learnings sections with card-based UI
 - **Mobile** — fully responsive at all screen sizes with a hamburger navigation menu; logged-in users see a user menu on desktop with My Profile, Change Password, and Log Out, and a stacked user menu inside the hamburger drawer on mobile
 
 ---
@@ -132,5 +132,7 @@ The pipeline proved capable well beyond routine feature work. When the project o
 | 17 | User Profile Page Updates | 3 shipped | ✅ Shipped |
 | 18 | Quick Edit Expense from Profile | 1 | ✅ Shipped |
 | 19 | Profile Layout and Navbar Updates | 2 shipped | ✅ Shipped |
+| 20 | Profile Card Layout & Dropdown Updates | 1 shipped | ✅ Shipped |
+| 21 | Oxos Profile Page | 1 shipped | ✅ Shipped |
 
 Next up: **15.6 — Roadmap Stage Metrics**
