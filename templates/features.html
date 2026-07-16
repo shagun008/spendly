@@ -1,5 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Feature Requests — Spendly{% endblock %}
+{% block title %}Feature Requests — Oxos{% endblock %}
+
+{% block brand %}
+<a href="{{ url_for('platform') }}" class="nav-brand">
+    <span class="brand-icon">◈</span>
+    <span class="brand-name">Oxos</span>
+</a>
+{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/features.css') }}">
@@ -111,6 +118,44 @@
         <div class="fr-modal-badges" id="fr-modal-badges"></div>
         <p class="fr-modal-desc" id="fr-modal-desc"></p>
         <div class="fr-modal-meta" id="fr-modal-meta"></div>
+    </div>
+</div>
+
+{% block user_dropdown %}
+<a href="{{ url_for('platform') }}" class="nav-user-dropdown-item" role="menuitem">
+    <i data-lucide="layout-dashboard" aria-hidden="true"></i> Dashboard
+</a>
+{% endblock %}
+
+{% block footer_name %}<span class="footer-name">Oxos</span>{% endblock %}
+
+<!-- Change Password modal -->
+<div class="modal-overlay" id="change-password-modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title">Change Password</h2>
+            <button class="modal-close" id="modal-close" aria-label="Close">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <form method="POST" action="{{ url_for('change_password') }}" class="modal-form">
+            <div class="modal-field">
+                <label class="modal-label" for="current_password">Current password</label>
+                <input class="modal-input" type="password" id="current_password" name="current_password" required>
+            </div>
+            <div class="modal-field">
+                <label class="modal-label" for="new_password">New password</label>
+                <input class="modal-input" type="password" id="new_password" name="new_password" required>
+            </div>
+            <div class="modal-field">
+                <label class="modal-label" for="confirm_password">Confirm new password</label>
+                <input class="modal-input" type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-ghost" id="modal-cancel">Cancel</button>
+                <button type="submit" class="filter-btn filter-btn--apply">Change Password</button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}
@@ -286,6 +331,39 @@ function handleVote(btn) {
         })
         .catch(() => {});
 }
+</script>
+
+<script>
+(function () {
+    var overlay = document.getElementById('change-password-modal');
+    var btn = document.getElementById('nav-change-password');
+    var closeBtn = document.getElementById('modal-close');
+    var cancelBtn = document.getElementById('modal-cancel');
+    if (!overlay || !btn) return;
+
+    var lastFocused = null;
+
+    function open() {
+        lastFocused = document.activeElement;
+        overlay.style.display = 'flex';
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        var firstInput = overlay.querySelector('input');
+        if (firstInput) firstInput.focus();
+    }
+    function close() {
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lastFocused) lastFocused.focus();
+    }
+
+    btn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    cancelBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && overlay.getAttribute('aria-hidden') === 'false') close(); });
+})();
 </script>
 <script>lucide.createIcons();</script>
 {% endblock %}
