@@ -259,5 +259,6 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 18      | Quick Edit Expense from Profile                | ✅ Shipped  |
 | 19      | Profile Layout and Navbar Updates              | ✅ Shipped  |
 | 20      | Profile Card Layout & Dropdown Updates         | ✅ Shipped  |
+| 21      | Oxos Profile Page                             | ✅ Shipped  |
 
-Next feature to implement: **21**
+Next feature to implement: **22**
