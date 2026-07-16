@@ -166,7 +166,7 @@
     margin-bottom: 0;
 }
 
-.learners-cards {
+.learnings-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.25rem;
@@ -251,7 +251,7 @@
         font-size: 1.75rem;
     }
 
-    .learners-cards {
+    .learnings-cards {
         grid-template-columns: 1fr;
     }
 }
