@@ -225,6 +225,115 @@
 }
 
 /* ------------------------------------------------------------------ */
+/* Context Section - Flip Card */
+/* ------------------------------------------------------------------ */
+
+.context-cards {
+    perspective: 1000px;  /* For 3D flip effect */
+}
+
+.flip-card {
+    background: transparent;
+    cursor: pointer;
+    height: 180px;
+    position: relative;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.flip-card-front {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+}
+
+.flip-card-back {
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    transform: rotateY(180deg);
+}
+
+.flip-card-icon {
+    width: 32px;
+    height: 32px;
+    stroke: var(--accent);
+    stroke-width: 2;
+    margin-bottom: 1rem;
+}
+
+.flip-card-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+}
+
+.flip-card-subtitle {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+}
+
+.flip-card-tables {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.flip-card-table {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+}
+
+.flip-card-table:first-child {
+    padding-top: 0;
+}
+
+.flip-card-table:last-child {
+    padding-bottom: 0;
+}
+
+.flip-card-table i {
+    width: 14px;
+    height: 14px;
+    stroke: var(--ink-muted);
+    stroke-width: 2;
+}
+
+.flip-card-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+/* ------------------------------------------------------------------ */
 /* Responsive */
 /* ------------------------------------------------------------------ */
 
