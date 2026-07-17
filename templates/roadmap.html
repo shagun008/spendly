@@ -176,15 +176,6 @@
         <div class="roadmap-modal-body" id="roadmap-modal-body"></div>
     </div>
 </div>
-{% endblock %}
-
-{% block user_dropdown %}
-<a href="{{ url_for('platform') }}" class="nav-user-dropdown-item" role="menuitem">
-    <i data-lucide="layout-dashboard" aria-hidden="true"></i> Dashboard
-</a>
-{% endblock %}
-
-{% block footer_name %}<span class="footer-name">Oxos</span>{% endblock %}
 
 <!-- Change Password modal -->
 <div class="modal-overlay" id="change-password-modal" aria-hidden="true">
@@ -215,6 +206,15 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block user_dropdown %}
+<a href="{{ url_for('platform') }}" class="nav-user-dropdown-item" role="menuitem">
+    <i data-lucide="layout-dashboard" aria-hidden="true"></i> Dashboard
+</a>
+{% endblock %}
+
+{% block footer_name %}<span class="footer-name">Oxos</span>{% endblock %}
 
 {% block scripts %}
 <script>

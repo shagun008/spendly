@@ -147,37 +147,37 @@
             </div>
         </section>
     </div>
-{% endblock %}
 
-<!-- Change Password modal -->
-<div class="modal-overlay" id="change-password-modal" aria-hidden="true">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal-header">
-            <h2 class="modal-title" id="modal-title">Change Password</h2>
-            <button class="modal-close" id="modal-close" aria-label="Close">
-                <i data-lucide="x"></i>
-            </button>
+    <!-- Change Password modal -->
+    <div class="modal-overlay" id="change-password-modal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Change Password</h2>
+                <button class="modal-close" id="modal-close" aria-label="Close">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <form method="POST" action="{{ url_for('change_password') }}" class="modal-form">
+                <div class="modal-field">
+                    <label class="modal-label" for="current_password">Current password</label>
+                    <input class="modal-input" type="password" id="current_password" name="current_password" required>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label" for="new_password">New password</label>
+                    <input class="modal-input" type="password" id="new_password" name="new_password" required>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label" for="confirm_password">Confirm new password</label>
+                    <input class="modal-input" type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" id="modal-cancel">Cancel</button>
+                    <button type="submit" class="filter-btn filter-btn--apply">Change Password</button>
+                </div>
+            </form>
         </div>
-        <form method="POST" action="{{ url_for('change_password') }}" class="modal-form">
-            <div class="modal-field">
-                <label class="modal-label" for="current_password">Current password</label>
-                <input class="modal-input" type="password" id="current_password" name="current_password" required>
-            </div>
-            <div class="modal-field">
-                <label class="modal-label" for="new_password">New password</label>
-                <input class="modal-input" type="password" id="new_password" name="new_password" required>
-            </div>
-            <div class="modal-field">
-                <label class="modal-label" for="confirm_password">Confirm new password</label>
-                <input class="modal-input" type="password" id="confirm_password" name="confirm_password" required>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn-ghost" id="modal-cancel">Cancel</button>
-                <button type="submit" class="filter-btn filter-btn--apply">Change Password</button>
-            </div>
-        </form>
     </div>
-</div>
+{% endblock %}
 
 {% block scripts %}
 <script>
