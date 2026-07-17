@@ -1,6 +1,6 @@
 ---
 description: Commit, push, create PR, merge, and clean up after a feature is complete
-allowed-tools: Read, Bash, mcp__github__create_pull_request, mcp__github__merge_pull_request, mcp__github__delete_branch, Bash(railway*)
+allowed-tools: Read, Bash, mcp__github__create_pull_request, mcp__github__merge_pull_request, Bash(git push origin --delete*), Bash(railway*)
 ---
 
 ## Step 0 — Pre-flight Checks
@@ -114,10 +114,18 @@ This keeps the PR number visible in the git log on main while preserving the ful
 
 Report: "✓ PR merged to main"
 
-## Step 7 — Delete remote branch via GitHub MCP
-Use `mcp__github__delete_branch` (already in `allowed-tools`) to delete the
-remote branch — do NOT fall back to `git push origin --delete`, which
-requires a separate Bash permission prompt.
+## Step 7 — Delete remote branch
+Delete the remote feature branch. Try the GitHub MCP `mcp__github__delete_branch`
+tool first. If that tool is NOT available in the current session (this GitHub
+MCP server does not expose branch deletion), fall back to:
+
+```bash
+git push origin --delete CURRENT_BRANCH
+```
+
+This uses the user's git credentials (works even when `gh` CLI is not
+authenticated) and will trigger a normal Bash permission prompt — approve it.
+Do not block the ship if the MCP tool is missing; the git fallback is fine.
 
 Report: "✓ Remote branch deleted"
 
