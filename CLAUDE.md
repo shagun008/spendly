@@ -260,5 +260,6 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 19      | Profile Layout and Navbar Updates              | ✅ Shipped  |
 | 20      | Profile Card Layout & Dropdown Updates         | ✅ Shipped  |
 | 21      | Oxos Profile Page                             | ✅ Shipped  |
+| 22      | Readme Platform Revamp                        | ✅ Shipped  |
 
-Next feature to implement: **22**
+Next feature to implement: **23**
