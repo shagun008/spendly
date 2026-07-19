@@ -75,8 +75,8 @@ Release sub-rows (indented with →) show individual release status.
 | 21 | Oxos Profile Page | new-feature | — | ✅ Shipped | 2 releases |
 | 21.1 | → Oxos Profile Page MVP | release | 21 | ✅ Shipped | 21.1-oxos-profile-page-mvp.md |
 | 21.2 | → Context Section with Card Flip | release | 21 | ✅ Shipped | 21.2-oxos-context-flip.md |
-| 22 | Readme Platform Revamp | new-feature | — | 📋 Planned | 1 release planned |
-| 22.1 | → Readme Platform Revamp | release | 22 | 📋 Planned | — |
+| 22 | Readme Platform Revamp | new-feature | — | 👀 In Review | 22.1-readme-platform-revamp.md |
+| 22.1 | → Readme Platform Revamp | release | 22 | 👀 In Review | 22.1-readme-platform-revamp.md |
 
 ## Numbering Rules
 
