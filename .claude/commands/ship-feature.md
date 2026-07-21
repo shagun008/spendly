@@ -193,16 +193,16 @@ else:
                 print('Parent feature shipped_at stamped.')
         # Propagate pipeline timestamps from release sub-rows to parent
         # so the roadmap page shows all green dots on the parent row.
-        # Only propagate tested_at / reviewed_at when a report actually exists,
-        # so the roadmap dot does not look clickable without report content.
+        # Tested/reviewed timestamps are propagated regardless of report existence;
+        # clickability in the template depends on the presence of test_report/review_report.
         cur.execute('''
             UPDATE features parent SET
                 captured_at = COALESCE(parent.captured_at, (SELECT captured_at FROM features child WHERE child.parent_number = parent.number AND child.captured_at IS NOT NULL LIMIT 1)),
                 planned_at = COALESCE(parent.planned_at, (SELECT planned_at FROM features child WHERE child.parent_number = parent.number AND child.planned_at IS NOT NULL LIMIT 1)),
                 spec_at = COALESCE(parent.spec_at, (SELECT spec_at FROM features child WHERE child.parent_number = parent.number AND child.spec_at IS NOT NULL LIMIT 1)),
                 implemented_at = COALESCE(parent.implemented_at, (SELECT implemented_at FROM features child WHERE child.parent_number = parent.number AND child.implemented_at IS NOT NULL LIMIT 1)),
-                tested_at = COALESCE(parent.tested_at, (SELECT tested_at FROM features child WHERE child.parent_number = parent.number AND child.tested_at IS NOT NULL AND child.test_report IS NOT NULL LIMIT 1)),
-                reviewed_at = COALESCE(parent.reviewed_at, (SELECT reviewed_at FROM features child WHERE child.parent_number = parent.number AND child.reviewed_at IS NOT NULL AND child.review_report IS NOT NULL LIMIT 1))
+                tested_at = COALESCE(parent.tested_at, (SELECT tested_at FROM features child WHERE child.parent_number = parent.number AND child.tested_at IS NOT NULL LIMIT 1)),
+                reviewed_at = COALESCE(parent.reviewed_at, (SELECT reviewed_at FROM features child WHERE child.parent_number = parent.number AND child.reviewed_at IS NOT NULL LIMIT 1))
             WHERE parent.number = (SELECT parent_number FROM features WHERE number = %s)
               AND parent.parent_number IS NULL
         ''', ('FEATURE_NUMBER',))
