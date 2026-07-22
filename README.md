@@ -25,14 +25,14 @@ Everything is private to you. You register with an email and password, and only 
 
 **What it is:** A working proof-of-concept that an AI-assisted team can ship enterprise applications through a *governed, consistent pipeline* — where every change is written down as a spec, tested, and reviewed by multiple independent autonomous agents before it ever reaches production.
 
-**Why it matters:** Most AI-assisted coding produces code. This project produces *process*. Every feature — even a database migration — flows through the same disciplined steps, and the project's own public roadmap page is generated *automatically* from the pipeline's progress. There is no manual "remember to update the status doc." The system writes its own history.
+**Why it matters:** Most AI-assisted coding produces spagetti code. This project produces *process*. Every feature — even a database migration — flows through the same discipline, and the project's roadmap is generated *automatically* from the pipeline's progress as shown on the projects roadmap page. There is no manual "remember to update the status doc." The system writes its own history.
 
 **What's been proven:**
 - 20+ features shipped through the full pipeline, every one spec'd → tested → reviewed → merged.
-- A complete move to a more scalable cloud database, handled as two governed pipeline releases — not a risky manual switch.
-- A self-documenting system: the public `/roadmap` page reflects real pipeline state at all times.
+- A complete database migration (SQLite → Supabase PostgreSQL) handled as two governed pipeline releases — not a risky manual switch.
+- A self-documenting system: the `/roadmap` page reflects real pipeline state at all times.
 
-**Bottom line:** This is less a product and more a *demonstration that disciplined AI software delivery can be built, observed, and trusted.*
+**Bottom line:** This is less a *demonstration that robust AI software delivery can be built, observed, and trusted.*
 
 ---
 
@@ -151,7 +151,6 @@ The pipeline proved capable well beyond routine feature work. When the project o
 | 12 | Migration to Supabase | 2 | ✅ Shipped |
 | 14 | Add README File | 1 | ✅ Shipped |
 | 15 | Developer Roadmap Page | 7 shipped, 1 captured | 🔧 In Progress |
-| 16 | Post-Review Improvement Loop | 1 | ✅ Shipped |
 | 17 | User Profile Page Updates | 3 shipped | ✅ Shipped |
 | 18 | Quick Edit Expense from Profile | 1 | ✅ Shipped |
 | 19 | Profile Layout and Navbar Updates | 2 shipped | ✅ Shipped |

@@ -1,0 +1,16 @@
+Project has evolved from a single "Spendly expense tracker" into the "Oxos Platform"
+— a dashboard that hosts Spendly as one business application among others, and which
+showcases engineering best practices (Learnings section) and data systems (Supabase).
+
+The current README.md still reads as a single-app proof-of-concept and is engineer/
+process-centric. It also has internally inconsistent feature counts (headline says
+"14 features · 20 spec releases" while body says "15 features shipped across 21 spec
+releases"). The /platform homepage (feature 21) is already shipped and live.
+
+Goal: rewrite README.md to:
+- Lead with "platform, not a single app" framing
+- Serve three reading tracks: executives, business/product, engineers
+- Be understandable by a non-technical reader (plain English, concrete analogies)
+- Stay engaging and honest (Oxos dashboard is authenticated; public homepage is future)
+- Fix the inconsistent feature counts
+- Preserve the engineer-grade pipeline/tech-stack content
