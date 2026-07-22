@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oxos — Option F: Thinking Machines / Inking sample (Autonomous Enterprise Platform)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{
+    --ink:#111111; --ink-soft:#38383a; --ink-muted:#6a6a6e; --ink-faint:#a6a6aa;
+    --paper:#ffffff; --paper-warm:#fbfbfa; --paper-card:#ffffff;
+    --accent:#1f6f54; --accent-soft:#eef5f1;     /* restrained green, TM-sample calm */
+    --line:#ebebe8; --line-soft:#f3f3f1;
+    --radius:16px; --max:960px;
+    --serif:'Newsreader',Georgia,serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);color:var(--ink);background:var(--paper);line-height:1.65;-webkit-font-smoothing:antialiased;}
+
+  /* NAV — minimal wordmark + thin links, centered container */
+  .nav{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:50;}
+  .nav-in{max-width:var(--max);margin:0 auto;height:60px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;letter-spacing:-.01em;text-decoration:none;color:var(--ink);}
+  .brand .glyph{color:var(--accent);font-size:18px;}
+  .nav-links{display:flex;align-items:center;gap:22px;}
+  .nav-links a{text-decoration:none;color:var(--ink-muted);font-size:13.5px;font-weight:500;}
+  .nav-links a:hover{color:var(--ink);}
+
+  /* HERO — centered, serif, single CTA cluster (TM-sample shape) */
+  .hero{max-width:var(--max);margin:0 auto;padding:84px 24px 56px;text-align:center;}
+  .eyebrow{font-size:12.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;}
+  .hero h1{font-family:var(--serif);font-size:clamp(38px,5.5vw,58px);line-height:1.08;letter-spacing:-.01em;font-weight:500;margin-bottom:18px;}
+  .hero h1 em{font-style:italic;color:var(--accent);}
+  .hero p{font-size:18px;color:var(--ink-muted);max-width:580px;margin:0 auto 30px;}
+  .cta-row{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;font-size:14px;font-weight:500;}
+  .cta-primary{background:var(--ink);color:#fff;text-decoration:none;padding:11px 22px;border-radius:999px;font-weight:500;}
+  .cta-link{color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+  .cta-link i{width:15px;height:15px;}
+
+  .strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper-warm);}
+  .strip-in{max-width:var(--max);margin:0 auto;padding:18px 24px;display:flex;gap:30px;justify-content:center;flex-wrap:wrap;color:var(--ink-faint);font-size:12.5px;font-weight:600;letter-spacing:.03em;}
+
+  /* SECTION label */
+  .section{max-width:var(--max);margin:0 auto;padding:76px 24px;}
+  .sec-label{text-align:center;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:36px;}
+
+  /* GLANCE — 6-up capability grid (TM-sample "well-rounded" shape) */
+  .glance{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:64px;}
+  .tile{background:#fff;padding:28px 26px;}
+  .tile .ico{width:24px;height:24px;color:var(--accent);margin-bottom:14px;}
+  .tile h3{font-size:16px;font-weight:600;margin-bottom:7px;letter-spacing:-.01em;}
+  .tile p{font-size:13.5px;color:var(--ink-muted);}
+
+  /* COMPONENTS — 3 centered cards, airy */
+  .comps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .comp{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px;text-align:left;transition:border-color .2s,transform .2s;}
+  .comp:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .comp .num{font-family:var(--serif);font-size:14px;font-style:italic;color:var(--accent);margin-bottom:16px;}
+  .comp .ico{width:28px;height:28px;color:var(--ink);margin-bottom:14px;}
+  .comp h3{font-size:19px;font-weight:600;margin-bottom:10px;letter-spacing:-.01em;}
+  .comp p{font-size:14px;color:var(--ink-muted);}
+  .comp ul{list-style:none;margin-top:16px;}
+  .comp li{font-size:13px;color:var(--ink-soft);display:flex;gap:8px;align-items:flex-start;margin-bottom:9px;padding-top:9px;border-top:1px solid var(--line-soft);}
+  .comp li:first-child{border-top:none;padding-top:0;}
+  .comp li i{width:15px;height:15px;margin-top:3px;flex-shrink:0;color:var(--accent);}
+
+  /* SECONDARY block — "Ready to customize" equivalent */
+  .secondary{background:var(--paper-warm);border:1px solid var(--line);border-radius:var(--radius);padding:48px 32px;text-align:center;margin-top:64px;}
+  .secondary h2{font-family:var(--serif);font-size:28px;font-weight:500;margin-bottom:12px;}
+  .secondary p{color:var(--ink-muted);font-size:16px;max-width:520px;margin:0 auto 24px;}
+  .secondary .cta-row{margin:0;}
+
+  /* FOOTER — multi-column link grid (TM-sample shape) */
+  footer{border-top:1px solid var(--line);margin-top:80px;padding:48px 24px 40px;}
+  .foot-in{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;}
+  .foot-brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px;color:var(--ink);margin-bottom:12px;}
+  .foot-brand .glyph{color:var(--accent);}
+  .foot-tag{font-size:13px;color:var(--ink-muted);max-width:240px;}
+  .foot-col h4{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px;}
+  .foot-col a{display:block;text-decoration:none;color:var(--ink-soft);font-size:13.5px;margin-bottom:10px;}
+  .foot-col a:hover{color:var(--ink);}
+  .foot-base{max-width:var(--max);margin:32px auto 0;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-faint);}
+
+  .tag{position:fixed;bottom:16px;right:16px;background:var(--ink);color:#fff;font-size:11px;padding:6px 12px;border-radius:999px;letter-spacing:.05em;font-weight:600;}
+
+  @media(max-width:820px){
+    .glance{grid-template-columns:repeat(2,1fr);}
+    .comps{grid-template-columns:1fr;}
+    .foot-in{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <a href="#" class="brand"><span class="glyph">◈</span> Oxos</a>
+    <div class="nav-links">
+      <a href="#components">Platform</a>
+      <a href="#glance">Capabilities</a>
+      <a href="#customize">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">Autonomous Enterprise Platform</div>
+  <h1>Enterprise execution, <em>ready to govern.</em></h1>
+  <p>Oxos abstracts the implementation of business reports and applications behind one control plane — unifying context, governing execution, and learning with every run.</p>
+  <div class="cta-row">
+    <a href="#" class="cta-primary">Get Started</a>
+    <a href="#components" class="cta-link">Read the architecture <i data-lucide="arrow-right"></i></a>
+  </div>
+</section>
+
+<div class="strip"><div class="strip-in">
+  <span>Snowflake</span><span>Databricks</span><span>ERP</span><span>CRM</span><span>Enterprise Apps</span>
+</div></div>
+
+<section class="section" id="glance">
+  <div class="sec-label">The platform at a glance</div>
+  <div class="glance">
+    <div class="tile">
+      <i data-lucide="network" class="ico"></i>
+      <h3>Unified context</h3>
+      <p>One living map across Snowflake, Databricks, ERP, CRM and enterprise apps.</p>
+    </div>
+    <div class="tile">
+      <i data-lucide="shield-check" class="ico"></i>
+      <h3>Governed execution</h3>
+      <p>Specification-driven harness turns requirements into deterministic outcomes.</p>
+    </div>
+    <div class="tile">
+      <i data-lucide="repeat" class="ico"></i>
+      <h3>Self-improving</h3>
+      <p>A knowledge flywheel makes every execution better than the last.</p>
+    </div>
+    <div class="tile">
+      <i data-lucide="bot" class="ico"></i>
+      <h3>Autonomous or assisted</h3>
+      <p>Runs fully or partially autonomously, by your preference.</p>
+    </div>
+    <div class="tile">
+      <i data-lucide="list-checks" class="ico"></i>
+      <h3>Full traceability</h3>
+      <p>Live audit from requirements through spec, build, test, review, deploy.</p>
+    </div>
+    <div class="tile">
+      <i data-lucide="scale" class="ico"></i>
+      <h3>Enterprise trust</h3>
+      <p>Confidence no vibe-coding platform offers by default.</p>
+    </div>
+  </div>
+
+  <div class="sec-label" id="components">Three components, one control plane</div>
+  <div class="comps">
+    <div class="comp">
+      <div class="num">01</div>
+      <i data-lucide="network" class="ico"></i>
+      <h3>Enterprise Context</h3>
+      <p>Unifies fragmented organizational understanding across existing systems into a single, living layer.</p>
+      <ul>
+        <li><i data-lucide="check"></i> Connects Snowflake, Databricks, ERP, CRM, Enterprise Apps</li>
+        <li><i data-lucide="check"></i> Background agent catalogs every new or changed data asset</li>
+        <li><i data-lucide="check"></i> Always-current map of your enterprise</li>
+      </ul>
+    </div>
+    <div class="comp">
+      <div class="num">02</div>
+      <i data-lucide="shield-check" class="ico"></i>
+      <h3>Governed Execution Engine</h3>
+      <p>A specification-driven agentic harness that produces deterministic, trusted outcomes — not guesses.</p>
+      <ul>
+        <li><i data-lucide="check"></i> Runs partially or fully autonomously, by your preference</li>
+        <li><i data-lucide="check"></i> Live traceability: requirements → spec → release → build → test → review → deploy</li>
+        <li><i data-lucide="check"></i> Trust no vibe-coding platform offers by default</li>
+      </ul>
+    </div>
+    <div class="comp">
+      <div class="num">03</div>
+      <i data-lucide="repeat" class="ico"></i>
+      <h3>Knowledge Flywheel</h3>
+      <p>A fully autonomous learning loop that makes every execution better than the previous one.</p>
+      <ul>
+        <li><i data-lucide="check"></i> Captures learnings, success strategies, best practices, guardrails</li>
+        <li><i data-lucide="check"></i> Feeds experience back into the next execution's context</li>
+        <li><i data-lucide="check"></i> Compounding, not resetting, capability</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="secondary" id="customize">
+    <h2>Ready to deploy Oxos</h2>
+    <p>Bring autonomous, governed execution to your enterprise — on your data, under your control.</p>
+    <div class="cta-row">
+      <a href="#" class="cta-primary">Get Started</a>
+      <a href="#" class="cta-link">Read the whitepaper <i data-lucide="arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-in">
+    <div>
+      <div class="foot-brand"><span class="glyph">◈</span> Oxos</div>
+      <p class="foot-tag">The Autonomous Enterprise Platform. Trusted execution, by design.</p>
+    </div>
+    <div class="foot-col">
+      <h4>Platform</h4>
+      <a href="#">Enterprise Context</a>
+      <a href="#">Execution Engine</a>
+      <a href="#">Knowledge Flywheel</a>
+    </div>
+    <div class="foot-col">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Careers</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="foot-col">
+      <h4>Legal</h4>
+      <a href="#">Terms of service</a>
+      <a href="#">Privacy</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+  <div class="foot-base">Oxos © 2026 — The Autonomous Enterprise Platform</div>
+</footer>
+
+<div class="tag">OPTION F · TM-SAMPLE</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>
