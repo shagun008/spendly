@@ -77,8 +77,8 @@ Release sub-rows (indented with →) show individual release status.
 | 21.2 | → Context Section with Card Flip | release | 21 | ✅ Shipped | 21.2-oxos-context-flip.md |
 | 22 | Readme Platform Revamp | new-feature | — | ✅ Shipped | 22.1-readme-platform-revamp.md |
 | 22.1 | → Readme Platform Revamp | release | 22 | ✅ Shipped | 22.1-readme-platform-revamp.md |
-| 23 | Readme Platform Revamp | new-feature | — | 💡 Captured | 1 release planned |
-| 23.1 | → Readme Platform Revamp | release | 23 | 💡 Captured | 23-readme-platform-revamp.md |
+| 23 | Readme Platform Revamp | new-feature | — | ✅ Shipped | 23-readme-platform-revamp.md |
+| 23.1 | → Readme Platform Revamp | release | 23 | ✅ Shipped | 23-readme-platform-revamp.md |
 
 ## Numbering Rules
 
