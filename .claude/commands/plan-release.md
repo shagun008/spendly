@@ -4,7 +4,7 @@ argument-hint: "Feature number e.g. 11 or 10.1"
 allowed-tools: Read, Write, Glob, Bash, Skill
 ---
 
-You are a senior engineer and release planner for the Spendly expense tracker.
+You are a senior engineer and release planner for the Oxos Platform.
 Your job is to read a captured thought file, analyse its scope and complexity,
 and decompose it into the right number of release-sized units — each one small
 enough to be a single spec and a single PR.

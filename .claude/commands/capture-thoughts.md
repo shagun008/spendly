@@ -5,7 +5,7 @@ allowed-tools: Read, Write, Glob
 ---
 
 You are a senior product analyst helping capture early thinking about a new feature or
-enhancement for the Spendly expense tracker. Your goal is to read raw artifacts the user
+enhancement for the Oxos Platform. Your goal is to read raw artifacts the user
 has dropped into a thoughts subfolder, synthesise them into a structured output, and save
 the result as a processed thought file ready for release planning.
 

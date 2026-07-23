@@ -1,0 +1,111 @@
+Created: 2026-07-22 12:00 EST
+
+# Updating Oxos Homepage
+
+## Title
+Updating Oxos Homepage
+
+## Description
+The Oxos Platform currently shows the public /platform page where no login is required but we need to create a public-facing Oxos homepage that serves as a marketing/landing page for the platform. 
+This homepage should showcase the platform's business capabilities, data systems, and engineering best-practices to visitors who haven't signed up yet.
+
+## Key Requirements
+- Public-facing (no login required)
+- Showcases Oxos Platform capabilities
+- Acts as a launchpad for new visitors
+- Replace the current application landing experience with a new public homepage based on the existing static HTML mockup.
+
+Current State
+- The application currently opens on the /platform route by default.
+- The HTML mockup already exists at:
+ - static/mockups/home-option-f.html
+ - Authentication is already implemented for the application.
+ - /platform and the remainder of the application should remain protected behind authentication.
+
+Required Changes
+
+1. Make the new homepage the public root route
+ - Serve the contents of static/mockups/home-option-f.html as the application's homepage.
+ - The homepage should be available at /
+ - This page must be publicly accessible without authentication.
+ - Preserve the visual design as closely as possible.
+
+2. Integrate the HTML into the application - Rather than serving it as a completely isolated static file:
+ - Convert it into the application's normal page/component structure.
+ - Reuse existing layout/components where appropriate.
+ - Ensure styling, assets, fonts, and images are correctly referenced.
+ - Remove any duplicated CSS or JavaScript that already exists elsewhere in the project.
+ - Follow existing project conventions.
+
+3. Update routing - Change the application's default routing so that:
+ - / → New homepage (public)
+ - /login → Login page
+ - /platform → Existing authenticated application
+ - Any existing redirects that currently send users directly to /platform should instead send unauthenticated users to /login.
+
+4. Update the "Get Started" button - On the new homepage:
+ - The Get Started button should navigate to the existing login page / login
+ - Do not automatically authenticate the user.
+ - Preserve any existing login flow.
+
+5. Keep the rest of the application protected
+ - Everything except the public homepage (and any existing authentication pages such as login, password reset, signup if applicable) should continue to require authentication.
+ - Specifically verify: /platform, /profile, /roadmap, /features.
+
+6. Authentication flow - After successful login:
+ - Continue redirecting users into the authenticated application (normally /platform).
+ - If a user attempts to access a protected route while unauthenticated, redirect them to the login page while preserving the intended destination if the application already supports that behavior.
+
+7. Navigation
+ - Review navigation throughout the application.
+ - Update any links that currently point to /platform as the application's "home" so they behave appropriately.
+ - Examples include: application logo, home buttons, redirects after logout
+ - Ensure logout returns users to the new public homepage unless the existing UX intentionally does something different.
+
+8. SEO and metadata = Ensure the homepage includes appropriate:
+ - page title
+ - meta description
+ - favicon
+
+10. Performance - Ensure
+ - Ensure all JS are unused
+ - unused JS from the mockup is removed
+ - unused CSS is eliminated
+ - assets are optimized
+ - homepage loads efficiently
+ - no unnecessary authenticated bundles are loaded on the public homepage if code splitting is available
+
+11. Testing - Update or create tests covering:
+ - homepage renders
+ - homepage is public
+ - Get Started navigates to login
+ - protected routes still require authentication
+ - successful login reaches the authenticated application
+ - logout returns to the homepage
+
+Deliverables - Please provide:
+- A summary of all files changed.
+- An short explanation of any routing changes.
+- Any authentication changes made.
+- Any assumptions made during implementation.
+- Any follow-up recommendations.
+- Implementation should update the README file accordingly.
+
+Architecture Review
+Before making changes, review the application's routing and authentication architecture and recommend any improvements that should be made while performing this work. Examples include (but are not limited to):
+- simplifying route guards
+- separating public and authenticated layouts
+- improving redirect logic
+- removing duplicate routing
+- improving lazy loading/code splitting
+- cleaning up legacy homepage logic
+- improving asset organization
+- improving maintainability
+- improving performance
+- strengthening authentication or authorization
+- simplifying navigation structure
+
+If you identify improvements, distinguish between:
+- Required changes (needed for this task to function correctly)
+- Recommended improvements (beneficial but optional)
+- Do not introduce unnecessary refactoring unless it materially improves maintainability or is required to support the new homepage cleanly.

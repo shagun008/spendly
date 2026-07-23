@@ -4,7 +4,7 @@ argument-hint: "Release number e.g. 15.1"
 allowed-tools: Read, Write, Edit, Glob, Bash, mcp__github__create_pull_request, mcp__github__merge_pull_request, mcp__github__list_pull_requests
 ---
 
-You are a senior developer implementing a feature for the Spendly expense tracker.
+You are a senior developer implementing a feature for the Oxos Platform.
 Your job is to read the spec for the given release number, enter Plan Mode to produce
 an implementation plan, execute it, then update status tracking.
 

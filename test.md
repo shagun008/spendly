@@ -1,1 +1,1 @@
-Use this agent to write pytest test cases for Spendly features. Invoke after implementing any feature to generate tests based on the feature spec, not the implementation.
+Use this agent to write pytest test cases for Oxos Platform features. Invoke after implementing any feature to generate tests based on the feature spec, not the implementation.

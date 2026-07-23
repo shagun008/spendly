@@ -1,11 +1,11 @@
 ---
-description: Create a spec file and feature branch for the next Spendly feature
+description: Create a spec file and feature branch for the next Oxos Platform feature
 argument-hint: "Feature number and name e.g. 11 budget-alerts or 11.1 budget-alerts-mvp"
 allowed-tools: Read, Write, Glob, Bash(git:*)
 ---
 
 You are a senior developer spinning up a new feature for the
-Spendly expense tracker. Always follow the rules in CLAUDE.md.
+Oxos Platform application. Always follow the rules in CLAUDE.md.
 
 User input: $ARGUMENTS
 
@@ -123,7 +123,7 @@ short form. The entry appears on their profile immediately."
 
 ## Overview
 One paragraph describing what this feature does and why
-it exists at this stage of the Spendly roadmap. If a processed
+it exists at this stage of the Oxos Platform roadmap. If a processed
 thought file exists, draw the problem statement and success
 criteria from it to ground this in real user intent.
 
