@@ -47,7 +47,7 @@ Bad: "feat: added detail view to roadmap.html"
 ## Step 2b — README check
 Before committing, check whether README.md needs updating for this feature:
 - If the feature adds a new user-visible capability: add it to the
-  Features list in the About Spendly section
+  Features list in the About Oxos Platform section
 - If the feature adds a new entry to the roadmap: add a row to the
   Feature Roadmap table
 - If the tech stack changed: update the Tech Stack table

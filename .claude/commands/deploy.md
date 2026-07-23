@@ -1,9 +1,9 @@
 ---
-description: Deploy Spendly to Railway
+description: Deploy Oxos Platform to Railway
 allowed-tools: Bash(python3 -c), mcp__plugin_railway_railway__deploy
 ---
 
-You are deploying the Spendly expense tracker to Railway.
+You are deploying the Oxos Platform application to Railway.
 
 ## Step 0 — Pre-flight Checks
 

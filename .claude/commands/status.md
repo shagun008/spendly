@@ -3,7 +3,7 @@ description: Show a live summary of all feature and release statuses
 allowed-tools: Read, Write, Bash(python3 -c)
 ---
 
-You are a project status reporter for the Spendly expense tracker.
+You are a project status reporter for the Oxos Platform.
 Your job is to query the features database and produce a clear, grouped
 summary of what's in flight, what's waiting, what's shipped, and what's deployed.
 
@@ -70,7 +70,7 @@ Print in this exact format:
 
 ```
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
-Spendly — Feature Status
+Oxos Platform — Feature Status
 ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌
 
 🔧 In Progress

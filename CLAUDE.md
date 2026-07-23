@@ -1,6 +1,6 @@
-# Spendly — CLAUDE.md
+# Oxos Platform — CLAUDE.md
 
-Spendly is a personal expense tracking web app built with Flask and SQLite.
+This is the **Oxos Platform** — a broader dashboard showcasing business capabilities, data systems, and engineering best-practices. Spendly, a personal expense tracking web app, is the flagship application living inside the platform. The platform is built with Flask and Supabase PostgreSQL.
 This file is the single source of truth for project conventions, schema, and roadmap.
 Read it before writing any code or spec.
 
@@ -9,7 +9,7 @@ Read it before writing any code or spec.
 ## Tech Stack
 
 - **Backend:** Python 3 / Flask
-- **Database:** SQLite via `sqlite3` (no ORM)
+- **Database:** PostgreSQL via Supabase (`psycopg2`, no ORM)
 - **Auth:** `werkzeug.security` for password hashing
 - **Frontend:** Jinja2 templates, vanilla CSS, vanilla JS
 - **Icons:** Lucide (loaded via CDN in `base.html`)
@@ -52,25 +52,25 @@ tests/                  # pytest test files, one per feature spec
 
 **Table: `users`**
 
-| Column          | Type    | Constraints                        |
-|-----------------|---------|------------------------------------|
-| id              | INTEGER | PRIMARY KEY AUTOINCREMENT          |
-| name            | TEXT    | NOT NULL                           |
-| email           | TEXT    | UNIQUE NOT NULL                    |
-| password_hash   | TEXT    | NOT NULL                           |
-| created_at      | TEXT    | DEFAULT (datetime('now'))          |
+| Column          | Type         | Constraints                        |
+|-----------------|--------------|------------------------------------|
+| id              | SERIAL       | PRIMARY KEY                        |
+| name            | TEXT         | NOT NULL                           |
+| email           | TEXT         | UNIQUE NOT NULL                    |
+| password_hash   | TEXT         | NOT NULL                           |
+| created_at      | TIMESTAMP    | DEFAULT NOW()                      |
 
 **Table: `expenses`**
 
-| Column      | Type    | Constraints                            |
-|-------------|---------|----------------------------------------|
-| id          | INTEGER | PRIMARY KEY AUTOINCREMENT              |
-| user_id     | INTEGER | NOT NULL REFERENCES users(id)          |
-| amount      | REAL    | NOT NULL                               |
-| category    | TEXT    | NOT NULL                               |
-| date        | TEXT    | NOT NULL (format: YYYY-MM-DD)          |
-| description | TEXT    | nullable                               |
-| created_at  | TEXT    | DEFAULT (datetime('now'))              |
+| Column      | Type         | Constraints                            |
+|-------------|--------------|----------------------------------------|
+| id          | SERIAL       | PRIMARY KEY                            |
+| user_id     | INTEGER      | NOT NULL REFERENCES users(id)          |
+| amount      | REAL         | NOT NULL                               |
+| category    | TEXT         | NOT NULL                               |
+| date        | TEXT         | NOT NULL (format: YYYY-MM-DD)          |
+| description | TEXT         | nullable                               |
+| created_at  | TIMESTAMP    | DEFAULT NOW()                          |
 
 **Valid categories** (defined in `app.py` as `VALID_CATEGORIES`):
 `Food`, `Transport`, `Bills`, `Health`, `Entertainment`, `Shopping`, `Other`
@@ -146,13 +146,13 @@ Intermediate commits on a feature branch stay local until `/ship-feature` runs. 
 
 These rules apply to every feature. No exceptions.
 
-- **No SQLAlchemy or ORMs** — use raw `sqlite3` queries only
+- **No SQLAlchemy or ORMs** — use raw `psycopg2` queries only
 - **Parameterised queries only** — never interpolate user data into SQL strings
 - **Passwords hashed with werkzeug** — `generate_password_hash` / `check_password_hash`
 - **Use CSS variables** — never hardcode hex values
 - **All templates extend `base.html`** — use `{% extends "base.html" %}`
 - **Auth guard on every protected route** — check `session.get("user_id")` and redirect to `/login` if missing
-- **Ownership check on all expense mutations** — queries must include `AND user_id = ?` to prevent cross-user access
+- **Ownership check on all expense mutations** — queries must include `AND user_id = %s` to prevent cross-user access
 - **Flash messages for all user-facing outcomes** — success and error states
 - **Currency displayed in ₹** — format amounts as `₹{amount:,.2f}`
 - **Dates stored as `YYYY-MM-DD` strings** — validate with `datetime.strptime(value, "%Y-%m-%d")`
@@ -199,7 +199,23 @@ Branch names use slug only (no number): `feature/budget-alerts-mvp`
 /code-review-feature <spec-name> ← parallel security + quality review
          ↓
 /ship-feature                    ← commit, PR, squash merge, cleanup
+         ↓
+/deploy                          ← deploys current main to Railway
 ```
+
+| Command | What it does |
+|---|---|
+| `/capture-thoughts` | Reads free-form notes and synthesises them into a structured feature brief |
+| `/plan-release` | Decomposes a feature into release-sized units with a written plan |
+| `/create-spec` | Writes a formal spec file and creates a dedicated feature branch |
+| `/implement-feature` | Reads the spec, plans implementation, and executes it |
+| `/test-feature` | Generates pytest tests from the spec and runs them |
+| `/code-review-feature` | Launches a security reviewer and a quality reviewer in parallel |
+| `/ship-feature` | Commits, opens a pull request, squash-merges, and cleans up the branch |
+| `/deploy` | Deploys the current main branch to Railway |
+| `/dev` | Interactive workflow picker — shows the next recommended step with live registry context |
+| `/status` | Reads the live DB and prints the current status of every feature and release |
+| `/improvement-loop` | Runs a structured 5-phase improvement cycle after any pipeline stage |
 
 Status values tracked at each stage:
 - 💡 Captured — processed thought written
@@ -250,17 +266,14 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 08      | Edit expense                                    | ✅ Shipped  |
 | 09      | Delete expense                                  | ✅ Shipped  |
 | 10      | Mobile nav                                      | ✅ Shipped  |
-| 11      | Feature Requests Page and Public Feature Discovery | ✅ Shipped  |
-| 12      | Migration to Supabase                           | ✅ Shipped  |
-| 14      | Add README File                                 | ✅ Shipped  |
-| 15      | Developer Roadmap Page                          | 🔧 In Progress |
-| 16      | Post-Review Improvement Loop                    | ✅ Shipped  |
-| 17      | User Profile Page Updates                      | ✅ Shipped  |
-| 18      | Quick Edit Expense from Profile                | ✅ Shipped  |
-| 19      | Profile Layout and Navbar Updates              | ✅ Shipped  |
-| 20      | Profile Card Layout & Dropdown Updates         | ✅ Shipped  |
-| 21      | Oxos Profile Page                             | ✅ Shipped  |
-| 22      | Readme Platform Revamp                        | ✅ Shipped  |
-| 23      | Readme Platform Revamp                        | ✅ Shipped  |
+| 11      | Feature Requests and Public Discovery | 3 | ✅ Shipped  |
+| 12      | Migration to Supabase | 2 | ✅ Shipped  |
+| 14      | Add README File | 1 | ✅ Shipped  |
+| 15      | Developer Roadmap Page | 7 shipped, 1 captured | 🔧 In Progress |
+| 17      | User Profile Page Updates | 3 shipped | ✅ Shipped  |
+| 18      | Quick Edit Expense from Profile | 1 | ✅ Shipped  |
+| 19      | Profile Layout and Navbar Updates | 2 shipped | ✅ Shipped  |
+| 20      | Profile Card Layout & Dropdown Updates | 1 shipped | ✅ Shipped  |
+| 21      | Oxos Profile Page | 2 shipped | ✅ Shipped  |
 
-Next feature to implement: **24**
+Next up: **15.6 — Roadmap Stage Metrics**
