@@ -46,11 +46,12 @@ Everything is private to you. You register with an email and password, and only 
 | **See the picture** | A profile page shows your full history, filters by date range, and displays charts of where your money goes. |
 | **Stay private & secure** | Register with email + password (hashed, never stored in plain text). Your data is yours alone. |
 | **Have a say** | A community feature lets users submit and vote on ideas for what to build next. |
-| **A dashboard home** | The landing page is the Oxos Platform: a clean view of business capabilities, the data systems behind them, and curated learnings. |
+| **A public homepage** | The root URL (/) serves a marketing landing page showcasing the Oxos Platform — no login required. |
+| **A dashboard home** | The /platform route is the authenticated dashboard: a clean view of business capabilities, the data systems behind them, and curated learnings. |
 
-**Who is it for right now?** Individuals who want a lightweight, private way to track personal spending — and anyone curious to see a well-run AI-assisted engineering project from the inside.
+**Who is it for right now?** Individuals who want a lightweight, private way to track personal spending — and anyone curious to see a well-run AI-assisted engineering project from the inside. New visitors can explore the platform on the public homepage before signing up.
 
-**What's next?** A public-facing Oxos homepage is planned (separate from the current authenticated dashboard). The platform is deliberately designed so more business applications can be added alongside Spendly.
+**What's next?** The platform is deliberately designed so more business applications can be added alongside Spendly.
 
 ---
 
@@ -129,7 +130,7 @@ The pipeline proved capable well beyond routine feature work. When the project o
 
 **[https://expense-tracker-production-635c.up.railway.app](https://expense-tracker-production-635c.up.railway.app)**
 
-> Note: the Oxos Platform dashboard is part of the authenticated experience — you'll create an account (or log in) to see it. A public marketing homepage is planned for a future release.
+> Note: the Oxos Platform dashboard at /platform is part of the authenticated experience — you'll create an account (or log in) to see it. The public homepage at / is open to all visitors.
 
 ---
 

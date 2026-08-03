@@ -109,13 +109,13 @@ with app.app_context():
 
 @app.route("/")
 def landing():
-    return render_template("platform.html")
+    return render_template("home.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if session.get("user_id"):
-        return redirect(url_for("landing"))
+        return redirect(url_for("platform"))
     if request.method == "GET":
         return render_template("register.html")
 
@@ -150,7 +150,7 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if session.get("user_id"):
-        return redirect(url_for("profile"))
+        return redirect(url_for("platform"))
     if request.method == "GET":
         return render_template("login.html")
 
@@ -169,7 +169,7 @@ def login():
     session.clear()
     session["user_id"] = user["id"]
     session["user_name"] = user["name"]
-    return redirect(url_for("profile"))
+    return redirect(url_for("platform"))
 
 
 # ------------------------------------------------------------------ #

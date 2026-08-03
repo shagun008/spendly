@@ -79,8 +79,8 @@ Release sub-rows (indented with →) show individual release status.
 | 22.1 | → Readme Platform Revamp | release | 22 | ✅ Shipped | 22.1-readme-platform-revamp.md |
 | 23 | Readme Platform Revamp | new-feature | — | ✅ Shipped | 23-readme-platform-revamp.md |
 | 23.1 | → Readme Platform Revamp | release | 23 | ✅ Shipped | 23-readme-platform-revamp.md |
-| 24 | Updating Oxos Homepage | new-feature | — | 📝 Spec'd | 24.1-home-page-routing |
-| 24.1 | → Public Homepage & Routing | release | 24 | 📝 Spec'd | 24.1-home-page-routing |
+| 24 | Updating Oxos Homepage | new-feature | — | 🔧 In Progress | 24.1-home-page-routing |
+| 24.1 | → Public Homepage & Routing | release | 24 | 🔧 In Progress | 24.1-home-page-routing |
 
 ## Numbering Rules
 
