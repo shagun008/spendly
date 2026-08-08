@@ -14,13 +14,13 @@ created: 2026-08-02
 A public marketing homepage for the Oxos Platform at the root URL, replacing the current authenticated landing page so new visitors can explore the platform before signing in.
 
 ## Summary
-This feature converts the existing static HTML mockup (`home-option-f.html`) into a proper Jinja2 template served at `/`, making it the public face of the Oxos Platform. The current `/` route renders the authenticated `platform.html` template — this change separates the public homepage from the authenticated application. The work includes template creation, CSS integration, routing updates, auth-flow adjustments, navigation link updates, and SEO metadata. All protected routes (`/platform`, `/profile`, `/roadmap`, `/features`) remain behind authentication.
+This feature converts the existing static HTML mockup (`home-option-h.html`) into a proper Jinja2 template served at `/`, making it the public face of the Oxos Platform. The current `/` route renders the authenticated `platform.html` template — this change separates the public homepage from the authenticated application. The work includes template creation, CSS integration, routing updates, auth-flow adjustments, navigation link updates, and SEO metadata. All protected routes (`/platform`, `/profile`, `/roadmap`, `/features`) remain behind authentication.
 
 ## Releases
 
 ### Release 1 — Public Homepage & Routing (MVP)
 - **Scope:**
-  - Convert `home-option-f.html` mockup into a Jinja2 template (`home.html`) extending `base.html`
+  - Convert `home-option-h.html` mockup into a Jinja2 template (`home.html`) extending `base.html`
   - Move inline CSS into `static/css/home.css`, removing duplicates with existing styles
   - Replace mockup-only Lucide CDN and Google Fonts links with the existing ones in `base.html`
   - Update `/` route to serve the new homepage publicly (no auth required)

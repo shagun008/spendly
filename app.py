@@ -3,6 +3,7 @@ import os
 import psycopg2
 import psycopg2.extras
 from datetime import date, datetime, timedelta
+from functools import wraps
 from flask import (
     Flask,
     render_template,
@@ -57,6 +58,17 @@ if not _secret_key:
         "Add it to your .env file or Railway Variables."
     )
 app.secret_key = _secret_key
+
+
+def login_required(view):
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if not session.get("user_id"):
+            return redirect(url_for("login"))
+        return view(*args, **kwargs)
+
+    return wrapped
+
 
 VALID_CATEGORIES = [
     "Food",
@@ -465,8 +477,9 @@ def delete_expense_route(id):
 
 
 @app.route("/features", methods=["GET", "POST"])
+@login_required
 def features():
-    user_id = session.get("user_id")
+    user_id = session["user_id"]
     sort = request.args.get("sort", "latest")
     if sort not in VALID_SORTS:
         sort = "latest"
@@ -479,9 +492,6 @@ def features():
         status_filter = ""
 
     if request.method == "POST":
-        if not user_id:
-            return redirect(url_for("login"))
-
         page = request.form.get("page", "").strip()
         title = request.form.get("title", "").strip()
         description = request.form.get("description", "").strip()
@@ -603,6 +613,7 @@ def vote_feature_request(id):
 
 
 @app.route("/roadmap")
+@login_required
 def roadmap():
     features = get_all_features()
     foundational_nums = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"}
@@ -618,6 +629,7 @@ def roadmap():
 
 
 @app.route("/platform")
+@login_required
 def platform():
     return render_template("platform.html")
 

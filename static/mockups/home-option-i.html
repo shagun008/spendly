@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oxos — Typographic Focus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #09090b;
+      --muted: #71717a;
+      --accent: #e11d48;
+      --accent-soft: #fff1f2;
+      --card: #f4f4f5;
+      --border: #e4e4e7;
+      --radius: 12px;
+      --max: 1060px;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      height: 56px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--fg);
+      text-decoration: none;
+    }
+    .logo em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13.5px;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-cta {
+      background: var(--fg);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #27272a; }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 140px 24px 80px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(44px, 5.5vw, 76px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin-bottom: 24px;
+    }
+    .hero h1 .line {
+      display: block;
+    }
+    .hero h1 .accent {
+      color: var(--accent);
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 400px;
+      margin-bottom: 36px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .btn-primary {
+      background: var(--fg);
+      color: #fff;
+      padding: 13px 28px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: #18181b; transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--fg);
+      padding: 13px 28px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--fg); }
+
+    /* Hero card */
+    .hero-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      position: sticky;
+      top: 80px;
+    }
+    .hero-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .hero-card-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hero-card-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .hero-card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-card-row:last-child { border-bottom: none; }
+    .hero-card-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .hero-card-value {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .hero-card-value.accent { color: var(--accent); }
+
+    /* ── Section: Features ── */
+    .features {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 100px 24px;
+    }
+    .features-header {
+      margin-bottom: 64px;
+    }
+    .features-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(30px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+    }
+    .features-header h2 span {
+      color: var(--accent);
+    }
+    .features-header p {
+      color: var(--muted);
+      font-size: 15px;
+      margin-top: 14px;
+      font-weight: 300;
+      max-width: 460px;
+    }
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .feature-row {
+      display: grid;
+      grid-template-columns: 60px 1fr auto;
+      align-items: center;
+      padding: 28px 24px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .feature-row:last-child { border-bottom: none; }
+    .feature-row:hover { background: #fafafa; }
+    .feature-num {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--border);
+      line-height: 1;
+    }
+    .feature-content h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .feature-content p {
+      font-size: 13.5px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+    .feature-arrow {
+      color: var(--accent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .feature-row:hover .feature-arrow { opacity: 1; }
+
+    /* ── Section: Quote ── */
+    .quote-section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+    .quote-block {
+      background: var(--fg);
+      border-radius: 16px;
+      padding: 64px 48px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-block::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 200px;
+      height: 200px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.15;
+    }
+    .quote-block blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .quote-block cite {
+      font-size: 14px;
+      font-style: normal;
+      color: rgba(255,255,255,0.5);
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 24px;
+    }
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-left {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .footer-left strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+    .footer-right {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-right a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-right a:hover { color: var(--fg); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; gap: 40px; padding: 80px 24px 60px; }
+      .hero-card { position: static; }
+      .feature-row { grid-template-columns: 48px 1fr auto; padding: 20px 16px; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero { padding: 60px 20px 40px; }
+      .hero h1 { font-size: 40px; }
+      .features { padding: 60px 20px; }
+      .quote-block { padding: 40px 24px; }
+      .feature-row { grid-template-columns: 40px 1fr; }
+      .feature-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="logo">O<em>x</em>os</a>
+      <div class="nav-links">
+        <a href="#">Platform</a>
+        <a href="#">Features</a>
+        <a href="#">Roadmap</a>
+        <a href="#" class="nav-cta">Get started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div>
+      <div class="hero-eyebrow">The platform</div>
+      <h1>
+        <span class="line">Ship faster.</span>
+        <span class="line">Think <span class="accent">less.</span></span>
+      </h1>
+      <p>Oxos is the platform where business capabilities, data systems, and engineering practices converge. One control plane. Zero noise.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Start building</a>
+        <a href="#" class="btn-ghost">View on GitHub</a>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-header">
+        <span class="hero-card-title">Platform overview</span>
+        <span class="hero-card-badge">Live</span>
+      </div>
+      <div class="hero-card-row">
+        <span class="hero-card-label">Capabilities</span>
+        <span class="hero-card-value accent">3</span>
+      </div>
+      <div class="hero-card-row">
+        <span class="hero-card-label">Data systems</span>
+        <span class="hero-card-value">PostgreSQL</span>
+      </div>
+      <div class="hero-card-row">
+        <span class="hero-card-label">Auth</span>
+        <span class="hero-card-value">werkzeug</span>
+      </div>
+      <div class="hero-card-row">
+        <span class="hero-card-label">Frontend</span>
+        <span class="hero-card-value">Jinja2 + vanilla</span>
+      </div>
+      <div class="hero-card-row">
+        <span class="hero-card-label">Flagship app</span>
+        <span class="hero-card-value accent">Spendly</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="features-header">
+      <h2>What <span>Oxos</span> does</h2>
+      <p>Three capabilities, one platform. No bloat, no abstraction — just the essentials.</p>
+    </div>
+    <div class="features-list">
+      <div class="feature-row">
+        <span class="feature-num">01</span>
+        <div class="feature-content">
+          <h3>Business capabilities</h3>
+          <p>Reports, dashboards, and analytics — built for the way you work, not the way a vendor thinks you should.</p>
+        </div>
+        <i data-lucide="arrow-up-right" size="16" class="feature-arrow"></i>
+      </div>
+      <div class="feature-row">
+        <span class="feature-num">02</span>
+        <div class="feature-content">
+          <h3>Data systems</h3>
+          <p>Raw psycopg2 queries against Supabase PostgreSQL. No ORM, no magic — just SQL you can read and trust.</p>
+        </div>
+        <i data-lucide="arrow-up-right" size="16" class="feature-arrow"></i>
+      </div>
+      <div class="feature-row">
+        <span class="feature-num">03</span>
+        <div class="feature-content">
+          <h3>Engineering practices</h3>
+          <p>Parameterised queries, password hashing, CSS variables, a feature pipeline — the boring stuff done right.</p>
+        </div>
+        <i data-lucide="arrow-up-right" size="16" class="feature-arrow"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote -->
+  <section class="quote-section">
+    <div class="quote-block">
+      <blockquote>Build the platform once.<br>Ship every feature forever.</blockquote>
+      <cite>Oxos — the engineering platform for modern teams</cite>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left"><strong>Oxos</strong> — the platform for business capabilities, data systems, and engineering practices.</div>
+      <div class="footer-right">
+        <a href="#">Features</a>
+        <a href="#">Roadmap</a>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>

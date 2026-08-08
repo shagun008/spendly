@@ -4,6 +4,13 @@
 {% set edit_date = edit_form.date if edit_form and edit_form.date else '' %}
 {% set edit_description = edit_form.description if edit_form and edit_form.description else '' %}
 {% set edit_open = edit_form is not none %}
+
+{% block brand %}
+<a href="{{ url_for('platform') }}" class="nav-brand">
+    O<span>x</span>os
+</a>
+{% endblock %}
+
 {% block title %}My Profile — Spendly{% endblock %}
 
 {% block head %}
@@ -288,6 +295,15 @@
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block user_dropdown %}
+<a href="{{ url_for('expense_home') }}" class="nav-user-dropdown-item" role="menuitem">
+    <i data-lucide="home" aria-hidden="true"></i> Spendly home
+</a>
+<a href="{{ url_for('platform') }}" class="nav-user-dropdown-item" role="menuitem">
+    <i data-lucide="layout-dashboard" aria-hidden="true"></i> Dashboard
+</a>
 {% endblock %}
 
 {% block scripts %}

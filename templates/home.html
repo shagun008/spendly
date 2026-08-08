@@ -1,147 +1,201 @@
 {% extends "base.html" %}
 
-{% block title %}Oxos Platform{% endblock %}
+{% block title %}Oxos — The Autonomous Enterprise Platform{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-<meta name="description" content="Oxos — The Autonomous Enterprise Platform. Unified context, governed execution, and a knowledge flywheel for your enterprise.">
+<meta name="description" content="Oxos Platform — Focus on your business outcomes, not the tech stack. Letting enterprise focus on outcomes while autonomous execution handles the rest, delivered in a secure, fully governed environment.">
 {% endblock %}
 
 {% block content %}
 
-<nav class="home-nav">
-  <div class="home-nav-in">
-    <a href="{{ url_for('landing') }}" class="home-brand"><span class="glyph">&#9670;</span> Oxos</a>
-    <div class="home-nav-links">
-      <a href="#glance">Capabilities</a>
-      <a href="#customize">Get started</a>
-    </div>
-  </div>
-</nav>
-
+<!-- Hero -->
 <section class="home-hero">
-  <div class="home-eyebrow">Autonomous Enterprise Platform</div>
-  <h1>Enterprise execution, <em>ready to govern.</em></h1>
-  <p>Oxos abstracts the implementation of business reports and applications behind one control plane — unifying context, governing execution, and learning with every run.</p>
-  <div class="home-cta-row">
-    <a href="{{ url_for('login') }}" class="home-cta-primary">Get Started</a>
-    <a href="#components" class="home-cta-link">Read the architecture <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+  <div class="home-hero-main">
+    <span class="home-eyebrow">Enterprise AI platform for modern teams</span>
+    <h1><span class="home-highlight">Focus on business outcomes</span>, not the tech stack behind it</h1>
+    <p>Enabling enterprise focus on the outcomes and let autonomous execution handle the rest — delivered in a secure, fully governed environment.</p>
+    <div class="home-actions">
+      <a href="{{ url_for('login') }}" class="home-btn-primary">Get started</a>
+      <a href="{{ url_for('login') }}" class="home-btn-ghost">Sign in</a>
+    </div>
+  </div>
+  <div class="home-hero-card">
+    <div class="home-card-header">
+      <span class="home-card-title">Platform sources</span>
+      <span class="home-card-badge">Live</span>
+    </div>
+
+    <div class="home-card-group">
+      <div class="home-card-group-header">
+        <i data-lucide="briefcase" size="14"></i>
+        <span class="home-card-group-label home-card-group-label--accent">Business Apps</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="wallet" size="14"></i>
+          <span class="home-card-item-name">Spendly</span>
+        </div>
+        <span class="home-card-item-tag">Flagship</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="bar-chart-3" size="14"></i>
+          <span class="home-card-item-name">Reports</span>
+        </div>
+        <span class="home-card-item-tag grey">Coming</span>
+        <!--<span class="home-card-item-tag">New</span>-->
+      </div>
+      <!--<div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="activity" size="14"></i>
+          <span class="home-card-item-name">Analytics</span>
+        </div>
+        <span class="home-card-item-tag grey">Coming</span>
+      </div>-->
+    </div>
+
+    <div class="home-card-divider"></div>
+
+    <div class="home-card-group">
+      <div class="home-card-group-header">
+        <i data-lucide="database" size="14"></i>
+        <span class="home-card-group-label">Data Stores</span>
+      </div>
+      <!--<div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="server" size="14"></i>
+          <span class="home-card-item-name">PostgreSQL</span>
+        </div>
+        <span class="home-card-item-tag">Supabase</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="webhook" size="14"></i>
+          <span class="home-card-item-name">REST APIs</span>
+        </div>
+        <span class="home-card-item-tag grey">Ready</span>
+      </div>-->
+    </div>
+
+    <div class="home-card-divider"></div>
+
+    <div class="home-card-group">
+      <div class="home-card-group-header">
+        <i data-lucide="building-2" size="14"></i>
+        <span class="home-card-group-label">Enterprise Apps</span>
+      </div>
+      <!--<div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="plug" size="14"></i>
+          <span class="home-card-item-name">ERP</span>
+        </div>
+        <span class="home-card-item-tag grey">Connect</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="plug" size="14"></i>
+          <span class="home-card-item-name">CRM</span>
+        </div>
+        <span class="home-card-item-tag grey">Connect</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="cloud" size="14"></i>
+          <span class="home-card-item-name">Cloud Services</span>
+        </div>
+        <span class="home-card-item-tag grey">Connect</span>
+      </div>-->
+    </div>
   </div>
 </section>
 
-<div class="home-strip"><div class="home-strip-in">
-  <span>Snowflake</span><span>Databricks</span><span>ERP</span><span>CRM</span><span>Enterprise Apps</span>
-</div></div>
-
-<section class="home-section" id="glance">
-  <div class="home-sec-label">The platform at a glance</div>
-  <div class="home-glance">
-    <div class="home-tile">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg>
-      <h3>Unified context</h3>
-      <p>One living map across Snowflake, Databricks, ERP, CRM and enterprise apps.</p>
-    </div>
-    <div class="home-tile">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
-      <h3>Governed execution</h3>
-      <p>Specification-driven harness turns requirements into deterministic outcomes.</p>
-    </div>
-    <div class="home-tile">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
-      <h3>Self-improving</h3>
-      <p>A knowledge flywheel makes every execution better than the last.</p>
-    </div>
-    <div class="home-tile">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
-      <h3>Autonomous or assisted</h3>
-      <p>Runs fully or partially autonomously, by your preference.</p>
-    </div>
-    <div class="home-tile">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 5h8"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path></svg>
-      <h3>Full traceability</h3>
-      <p>Live audit from requirements through spec, build, test, review, deploy.</p>
-    </div>
-    <div class="home-tile">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"></path><path d="m19 8 3 8a5 5 0 0 1-6 0zV7"></path><path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1"></path><path d="m5 8 3 8a5 5 0 0 1-6 0zV7"></path><path d="M7 21h10"></path></svg>
-      <h3>Enterprise trust</h3>
-      <p>Confidence no vibe-coding platform offers by default.</p>
-    </div>
+<!-- How it works -->
+<section class="home-how">
+  <div class="home-how-header">
+    <h2>Three steps to clarity</h2>
+    <p>From chaos to control — in minutes, not months.</p>
   </div>
-
-  <div class="home-sec-label" id="components">Three components, one control plane</div>
-  <div class="home-comps">
-    <div class="home-comp">
-      <div class="num">01</div>
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg>
-      <h3>Enterprise Context</h3>
-      <p>Unifies fragmented organizational understanding across existing systems into a single, living layer.</p>
-      <ul>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Connects Snowflake, Databricks, ERP, CRM, Enterprise Apps</li>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Background agent catalogs every new or changed data asset</li>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Always-current map of your enterprise</li>
-      </ul>
+  <div class="home-steps">
+    <div class="home-step">
+      <div class="home-step-num">01</div>
+      <h3>Connect</h3>
+      <p>Link your enterprise data sources — databases, APIs, spreadsheets. Oxos builds a living layer that drives AI enablement.</p>
     </div>
-    <div class="home-comp">
-      <div class="num">02</div>
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
-      <h3>Governed Execution Engine</h3>
-      <p>A specification-driven agentic harness that produces deterministic, trusted outcomes — not guesses.</p>
-      <ul>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Runs partially or fully autonomously, by your preference</li>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Live traceability: requirements → spec → release → build → test → review → deploy</li>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Trust no vibe-coding platform offers by default</li>
-      </ul>
+    <div class="home-step">
+      <div class="home-step-num">02</div>
+      <h3>Build</h3>
+      <p>Builds what matters without getting lost in translation. Build reports, dashboards, and alerts that drive business outcomes.</p>
     </div>
-    <div class="home-comp">
-      <div class="num">03</div>
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>
-      <h3>Knowledge Flywheel</h3>
-      <p>A fully autonomous learning loop that makes every execution better than the previous one.</p>
-      <ul>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Captures learnings, success strategies, best practices, guardrails</li>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Feeds experience back into the next execution's context</li>
-        <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg> Compounding, not resetting, capability</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="home-secondary" id="customize">
-    <h2>Ready to deploy Oxos</h2>
-    <p>Bring autonomous, governed execution to your enterprise — on your data, under your control.</p>
-    <div class="home-cta-row">
-      <a href="{{ url_for('login') }}" class="home-cta-primary">Get Started</a>
-      <a href="#" class="home-cta-link">Read the whitepaper <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+    <div class="home-step">
+      <div class="home-step-num">03</div>
+      <h3>Observe</h3>
+      <p>Watch your metrics come alive. Real-time insights with full traceability from requirement to code and test to dashboard.</p>
     </div>
   </div>
 </section>
 
-<footer class="home-footer">
-  <div class="home-foot-in">
-    <div>
-      <div class="home-foot-brand"><span class="glyph">&#9670;</span> Oxos</div>
-      <p class="home-foot-tag">The Autonomous Enterprise Platform. Trusted execution, by design.</p>
+<!-- Data Sources -->
+<section class="home-sources">
+  <div class="home-sources-header">
+    <h2>Unified control plane</h2>
+    <p>Data, business context, and enterprise signals — at your fingertip.</p>
+  </div>
+  <div class="home-sources-grid">
+    <div class="home-source-group">
+      <div class="home-source-group-label">
+        <i data-lucide="database" size="12"></i> Data
+      </div>
+      <div class="home-source-row">
+        <span class="home-source pill-accent"><i data-lucide="table-2" size="11"></i> PostgreSQL</span>
+        <span class="home-source pill-accent"><i data-lucide="cloud" size="11"></i> Supabase</span>
+        <span class="home-source pill"><i data-lucide="file-text" size="11"></i> CSVs</span>
+        <span class="home-source pill"><i data-lucide="webhook" size="11"></i> REST</span>
+        <span class="home-source pill"><i data-lucide="code-2" size="11"></i> JSON</span>
+      </div>
+      <div class="home-source-row">
+        <span class="home-source pill"><i data-lucide="server" size="11"></i> S3</span>
+        <span class="home-source pill"><i data-lucide="zap" size="11"></i> Webhooks</span>
+      </div>
     </div>
-    <div class="home-foot-col">
-      <h4>Platform</h4>
-      <a href="#">Enterprise Context</a>
-      <a href="#">Execution Engine</a>
-      <a href="#">Knowledge Flywheel</a>
+    <div class="home-source-group">
+      <div class="home-source-group-label">
+        <i data-lucide="briefcase" size="12"></i> Business
+      </div>
+      <div class="home-source-row">
+        <!--<span class="home-source pill-accent"><i data-lucide="wallet" size="11"></i> Spendly</span>
+        <span class="home-source pill"><i data-lucide="bar-chart-3" size="11"></i> Reports</span>
+        <span class="home-source pill"><i data-lucide="activity" size="11"></i> Metrics</span>
+        <span class="home-source pill"><i data-lucide="layers" size="11"></i> Workflows</span>-->
+      </div>
+      <div class="home-source-row">
+        <!-- <span class="home-source pill"><i data-lucide="users" size="11"></i> Teams</span>
+        <span class="home-source pill"><i data-lucide="calendar" size="11"></i> Schedules</span>-->
+        <span class="home-source pill"><i data-lucide="plug" size="11"></i> ERP</span>
+        <span class="home-source pill"><i data-lucide="plug" size="11"></i> CRM</span>
+        <span class="home-source pill"><i data-lucide="shield" size="11"></i> Policy Admins</span>
+        <span class="home-source pill"><i data-lucide="shield-check" size="11"></i> Claims Admins</span>
+        <span class="home-source pill"><i data-lucide="package" size="11"></i> SCM</span>
+      </div>
     </div>
-    <div class="home-foot-col">
-      <h4>Company</h4>
-      <a href="#">About</a>
-      <a href="#">Careers</a>
-      <a href="#">Contact</a>
-    </div>
-    <div class="home-foot-col">
-      <h4>Legal</h4>
-      <a href="{{ url_for('terms') }}">Terms of service</a>
-      <a href="{{ url_for('privacy') }}">Privacy</a>
-      <a href="#">Security</a>
+    <div class="home-source-group">
+      <div class="home-source-group-label">
+        <i data-lucide="building-2" size="12"></i> Enterprise
+      </div>
+      <div class="home-source-row">
+        <span class="home-source pill"><i data-lucide="message-circle" size="11"></i> Chat</span>
+        <span class="home-source pill"><i data-lucide="mail" size="11"></i> Email</span>
+        <span class="home-source pill"><i data-lucide="file" size="11"></i> Docs</span>
+        <span class="home-source pill"><i data-lucide="ticket" size="11"></i> Tickets</span>
+      </div>
+      <div class="home-source-row">
+        <span class="home-source pill"><i data-lucide="layout" size="11"></i> JIRA</span>
+        <span class="home-source pill"><i data-lucide="git-commit" size="11"></i> Commits</span>
+        <span class="home-source pill"><i data-lucide="git-branch" size="11"></i> Git</span>
+      </div>
     </div>
   </div>
-  <div class="home-foot-base">Oxos &copy; 2026 — The Autonomous Enterprise Platform</div>
-</footer>
+</section>
 
 {% endblock %}
 

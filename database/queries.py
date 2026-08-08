@@ -213,10 +213,7 @@ def delete_expense(expense_id, user_id):
 def get_spending_trends(user_id, date_from=None, date_to=None):
     """Return daily spending totals for the line chart."""
     clause, params = _date_clause(date_from, date_to)
-    sql = (
-        "SELECT date, SUM(amount) AS total FROM expenses "
-        "WHERE user_id = %s"
-    )
+    sql = "SELECT date, SUM(amount) AS total FROM expenses " "WHERE user_id = %s"
     if clause:
         sql = sql + " " + clause
     sql = sql + " GROUP BY date ORDER BY date ASC"
@@ -625,7 +622,7 @@ def get_all_features():
         "SELECT number, parent_number, title, slug, type, release_subtype, description,"
         " captured_at, planned_at, spec_at, implemented_at,"
         " tested_at, reviewed_at, shipped_at, test_report, review_report, deployed_at"
-        " FROM features ORDER BY number ASC"
+        " FROM features WHERE number NOT LIKE 'TEST%' ORDER BY number ASC"
     )
     rows = cur.fetchall()
     cur.close()

@@ -32,6 +32,7 @@ Everything is private to you. You register with an email and password, and only 
 - A complete database migration (SQLite → Supabase PostgreSQL) handled as two governed pipeline releases — not a risky manual switch.
 - A self-documenting system: the `/roadmap` page reflects real pipeline state at all times.
 
+
 **Bottom line:** This is less a *demonstration that robust AI software delivery can be built, observed, and trusted.*
 
 ---
@@ -106,7 +107,7 @@ User notes / screenshot
 /deploy                                    ← stamps deployed_at in DB
 ```
 
-Every stage timestamp lands in the `features` table. The public `/roadmap` page reads directly from that table — so it reflects the true pipeline state at all times, with no manual updates.
+Every stage timestamp lands in the `features` table. The `/roadmap` page (logged-in) reads directly from that table — so it reflects the true pipeline state at all times, with no manual updates.
 
 | Command | What it does |
 |---|---|
