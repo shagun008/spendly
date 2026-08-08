@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}Oxos — The Autonomous Enterprise Platform{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<meta name="description" content="Oxos Platform — Focus on your business outcomes, not the tech stack. Letting enterprise focus on outcomes while autonomous execution handles the rest, delivered in a secure, fully governed environment.">
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="home-hero">
+  <div class="home-hero-main">
+    <span class="home-eyebrow">Enterprise AI platform for modern teams</span>
+    <h1><span class="home-highlight">Focus on business outcomes</span>, not the tech stack behind it</h1>
+    <p>Enabling enterprise focus on the outcomes and let autonomous execution handle the rest — delivered in a secure, fully governed environment.</p>
+    <div class="home-actions">
+      <a href="{{ url_for('login') }}" class="home-btn-primary">Get started</a>
+      <a href="{{ url_for('login') }}" class="home-btn-ghost">Sign in</a>
+    </div>
+  </div>
+  <div class="home-hero-card">
+    <div class="home-card-header">
+      <span class="home-card-title">Platform sources</span>
+      <span class="home-card-badge">Live</span>
+    </div>
+
+    <div class="home-card-group">
+      <div class="home-card-group-header">
+        <i data-lucide="briefcase" size="14"></i>
+        <span class="home-card-group-label home-card-group-label--accent">Business Apps</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="wallet" size="14"></i>
+          <span class="home-card-item-name">Spendly</span>
+        </div>
+        <span class="home-card-item-tag">Flagship</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="bar-chart-3" size="14"></i>
+          <span class="home-card-item-name">Reports</span>
+        </div>
+        <span class="home-card-item-tag grey">Coming</span>
+        <!--<span class="home-card-item-tag">New</span>-->
+      </div>
+      <!--<div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="activity" size="14"></i>
+          <span class="home-card-item-name">Analytics</span>
+        </div>
+        <span class="home-card-item-tag grey">Coming</span>
+      </div>-->
+    </div>
+
+    <div class="home-card-divider"></div>
+
+    <div class="home-card-group">
+      <div class="home-card-group-header">
+        <i data-lucide="database" size="14"></i>
+        <span class="home-card-group-label">Data Stores</span>
+      </div>
+      <!--<div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="server" size="14"></i>
+          <span class="home-card-item-name">PostgreSQL</span>
+        </div>
+        <span class="home-card-item-tag">Supabase</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="webhook" size="14"></i>
+          <span class="home-card-item-name">REST APIs</span>
+        </div>
+        <span class="home-card-item-tag grey">Ready</span>
+      </div>-->
+    </div>
+
+    <div class="home-card-divider"></div>
+
+    <div class="home-card-group">
+      <div class="home-card-group-header">
+        <i data-lucide="building-2" size="14"></i>
+        <span class="home-card-group-label">Enterprise Apps</span>
+      </div>
+      <!--<div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="plug" size="14"></i>
+          <span class="home-card-item-name">ERP</span>
+        </div>
+        <span class="home-card-item-tag grey">Connect</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="plug" size="14"></i>
+          <span class="home-card-item-name">CRM</span>
+        </div>
+        <span class="home-card-item-tag grey">Connect</span>
+      </div>
+      <div class="home-card-item">
+        <div class="home-card-item-left">
+          <i data-lucide="cloud" size="14"></i>
+          <span class="home-card-item-name">Cloud Services</span>
+        </div>
+        <span class="home-card-item-tag grey">Connect</span>
+      </div>-->
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="home-how">
+  <div class="home-how-header">
+    <h2>Three steps to clarity</h2>
+    <p>From chaos to control — in minutes, not months.</p>
+  </div>
+  <div class="home-steps">
+    <div class="home-step">
+      <div class="home-step-num">01</div>
+      <h3>Connect</h3>
+      <p>Link your enterprise data sources — databases, APIs, spreadsheets. Oxos builds a living layer that drives AI enablement.</p>
+    </div>
+    <div class="home-step">
+      <div class="home-step-num">02</div>
+      <h3>Build</h3>
+      <p>Builds what matters without getting lost in translation. Build reports, dashboards, and alerts that drive business outcomes.</p>
+    </div>
+    <div class="home-step">
+      <div class="home-step-num">03</div>
+      <h3>Observe</h3>
+      <p>Watch your metrics come alive. Real-time insights with full traceability from requirement to code and test to dashboard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Data Sources -->
+<section class="home-sources">
+  <div class="home-sources-header">
+    <h2>Unified control plane</h2>
+    <p>Data, business context, and enterprise signals — at your fingertip.</p>
+  </div>
+  <div class="home-sources-grid">
+    <div class="home-source-group">
+      <div class="home-source-group-label">
+        <i data-lucide="database" size="12"></i> Data
+      </div>
+      <div class="home-source-row">
+        <span class="home-source pill-accent"><i data-lucide="table-2" size="11"></i> PostgreSQL</span>
+        <span class="home-source pill-accent"><i data-lucide="cloud" size="11"></i> Supabase</span>
+        <span class="home-source pill"><i data-lucide="file-text" size="11"></i> CSVs</span>
+        <span class="home-source pill"><i data-lucide="webhook" size="11"></i> REST</span>
+        <span class="home-source pill"><i data-lucide="code-2" size="11"></i> JSON</span>
+      </div>
+      <div class="home-source-row">
+        <span class="home-source pill"><i data-lucide="server" size="11"></i> S3</span>
+        <span class="home-source pill"><i data-lucide="zap" size="11"></i> Webhooks</span>
+      </div>
+    </div>
+    <div class="home-source-group">
+      <div class="home-source-group-label">
+        <i data-lucide="briefcase" size="12"></i> Business
+      </div>
+      <div class="home-source-row">
+        <!--<span class="home-source pill-accent"><i data-lucide="wallet" size="11"></i> Spendly</span>
+        <span class="home-source pill"><i data-lucide="bar-chart-3" size="11"></i> Reports</span>
+        <span class="home-source pill"><i data-lucide="activity" size="11"></i> Metrics</span>
+        <span class="home-source pill"><i data-lucide="layers" size="11"></i> Workflows</span>-->
+      </div>
+      <div class="home-source-row">
+        <!-- <span class="home-source pill"><i data-lucide="users" size="11"></i> Teams</span>
+        <span class="home-source pill"><i data-lucide="calendar" size="11"></i> Schedules</span>-->
+        <span class="home-source pill"><i data-lucide="plug" size="11"></i> ERP</span>
+        <span class="home-source pill"><i data-lucide="plug" size="11"></i> CRM</span>
+        <span class="home-source pill"><i data-lucide="shield" size="11"></i> Policy Admins</span>
+        <span class="home-source pill"><i data-lucide="shield-check" size="11"></i> Claims Admins</span>
+        <span class="home-source pill"><i data-lucide="package" size="11"></i> SCM</span>
+      </div>
+    </div>
+    <div class="home-source-group">
+      <div class="home-source-group-label">
+        <i data-lucide="building-2" size="12"></i> Enterprise
+      </div>
+      <div class="home-source-row">
+        <span class="home-source pill"><i data-lucide="message-circle" size="11"></i> Chat</span>
+        <span class="home-source pill"><i data-lucide="mail" size="11"></i> Email</span>
+        <span class="home-source pill"><i data-lucide="file" size="11"></i> Docs</span>
+        <span class="home-source pill"><i data-lucide="ticket" size="11"></i> Tickets</span>
+      </div>
+      <div class="home-source-row">
+        <span class="home-source pill"><i data-lucide="layout" size="11"></i> JIRA</span>
+        <span class="home-source pill"><i data-lucide="git-commit" size="11"></i> Commits</span>
+        <span class="home-source pill"><i data-lucide="git-branch" size="11"></i> Git</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>lucide.createIcons();</script>
+{% endblock %}

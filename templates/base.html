@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
     <title>{% block title %}Spendly{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,8 +28,8 @@
             </button>
             <div class="nav-user-dropdown" id="nav-user-dropdown" role="menu" aria-hidden="true">
                 {% block user_dropdown %}
-                <a href="{{ url_for('profile') }}" class="nav-user-dropdown-item" role="menuitem">
-                    <i data-lucide="user-circle" aria-hidden="true"></i> My Profile
+                <a href="{{ url_for('platform') }}" class="nav-user-dropdown-item" role="menuitem">
+                    <i data-lucide="layout-dashboard" aria-hidden="true"></i> Dashboard
                 </a>
                 {% endblock %}
                 <button type="button" class="nav-user-dropdown-item" role="menuitem" id="nav-change-password">
@@ -40,7 +41,7 @@
             </div>
         </div>
         {% else %}
-        <a href="{{ url_for('login') }}" class="nav-link">Sign in</a>
+        <a href="{{ url_for('login') }}" class="nav-link nav-signin">Sign in</a>
         <a href="{{ url_for('register') }}" class="nav-link nav-cta">Get started</a>
         {% endif %}
     {% endmacro %}
@@ -63,8 +64,7 @@
         <div class="nav-inner">
             {% block brand %}
             <a href="{{ url_for('landing') }}" class="nav-brand">
-                <span class="brand-icon">◈</span>
-                <span class="brand-name">Spendly</span>
+                O<span>x</span>os
             </a>
             {% endblock %}
             <div class="nav-links">
@@ -93,13 +93,13 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
-        <div class="footer-inner">
-            <span class="brand-icon">◈</span>
-            {% block footer_name %}<span class="footer-name">Spendly</span>{% endblock %}
-            <p class="footer-copy">Track every rupee. Own your finances.</p>
-            <a href="/terms">Terms and Conditions</a>
-            <a href="/privacy">Privacy Policy</a>
+    <footer class="home-footer">
+        <div class="home-footer-in">
+            <div class="home-footer-brand">O<span>x</span>os</div>
+            <div class="home-footer-links">
+                <a href="{{ url_for('terms') }}">Terms</a>
+                <a href="{{ url_for('privacy') }}">Privacy</a>
+            </div>
         </div>
     </footer>
 
