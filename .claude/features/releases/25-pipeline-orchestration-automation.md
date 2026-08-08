@@ -46,15 +46,38 @@ rather than split further.
     until it passes or the 3-retry cap is hit, at which point it stops,
     summarizes the issue and its recommendation, and asks the user for
     permission to continue.
-  - Decision/permission memory: a project-local file recording what was
-    requested, why, what the user decided, and the scope of that decision
-    (one-time / current-run / project-level / permanent policy) — reused
-    across `/autom-dev` runs so the same question isn't asked twice for a
-    decision that still applies. No sensitive information is persisted.
+  - `/autom-dev` does not require `/autom-plan` to have run immediately
+    before it in the same session — it loads the target release from the
+    already-written release plan file (`.claude/features/releases/`) and
+    registry/DB state, so a previously generated plan can be picked up in a
+    later, separate session.
+  - Stage-level resumability: if a run is interrupted or a stage fails after
+    an earlier stage has already completed (e.g. `/test-feature` fails after
+    `/implement-feature` succeeded), the next `/autom-dev` invocation for
+    that release resumes from the failed/incomplete stage using the
+    already-recorded pipeline timestamps — it does not restart from
+    `/create-spec` or redo completed work.
+  - Root-cause validation guard on test/review auto-fixes: when
+    `/autom-dev` auto-fixes a failing test or review finding, it must
+    correct the underlying behavior the fix is meant to address. It must
+    not make a test pass via weaker assertions, added sleeps/retries/timing
+    hacks, reordering, or other test-only workarounds that mask the
+    original failure instead of fixing it.
+  - Decision memory and permission memory are tracked as two distinct
+    concerns, not one conflated file: decision memory records
+    architectural/product choices the user made (what was decided and why);
+    permission memory records authorization scope for actions
+    (one-time / current-run / project-level / permanent policy). A single
+    "yes, do this" from the user is recorded as scoped to that instance and
+    is never auto-promoted to a permanent authorization.
   - Structured run summary printed at the end of every `/autom-dev` run:
     stages completed, artifacts generated, files changed, tests executed,
     review findings, shipping status, decisions recorded, bugs/improvements
     discovered, and any deviations from the expected workflow.
+  - Final duplication audit as the last step of an `/autom-dev` run: before
+    reporting completion, re-check the repository for any duplicate or
+    redundant commands/skills/config/DB structures introduced during the
+    run, and remove or refactor anything unnecessary.
   - Both commands call the existing commands/skills exactly as documented —
     preserving their guardrails (including the git push policy, which stays
     scoped to `/ship-feature`'s existing steps) — and reuse the existing
