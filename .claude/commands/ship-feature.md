@@ -281,7 +281,8 @@ for r in rows:
         fmt(r['captured_at']), fmt(r['planned_at']),
         fmt(r['spec_at']), fmt(r['implemented_at']),
         fmt(r['tested_at']), fmt(r['reviewed_at']),
-        fmt(r['shipped_at']),
+        fmt(r['shipped_at']), fmt(r['test_report']),
+        fmt(r['review_report']), fmt(r['deployed_at']),
     ]
     inner = ',\n            '.join(vals)
     tuple_lines.append(f'        (\n            {inner},\n        )')
@@ -312,7 +313,7 @@ def seed_features():
             " (number, parent_number, title, slug, type, release_subtype, description,"
             "  captured_at, planned_at, spec_at, implemented_at,"
             "  tested_at, reviewed_at, shipped_at, test_report, review_report, deployed_at)"
-            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             row,
         )
 
@@ -323,10 +324,15 @@ def seed_features():
 
 db_path = 'database/db.py'
 source = open(db_path).read()
-# Replace from 'def seed_features():' to the end of its function body
+# Replace from 'def seed_features():' to the end of its function body.
+# Use a replacement FUNCTION, not a string — re.sub() interprets backslash
+# escapes (e.g. \n) in a string replacement, which corrupts any report text
+# containing embedded newlines (turns escaped \n into a real newline inside
+# a string literal, breaking the generated file's syntax).
+new_body_final = new_body.rstrip()
 new_source = re.sub(
     r'def seed_features\(\):.*?(?=\n\ndef |\n\nif |\Z)',
-    new_body.rstrip(),
+    lambda m: new_body_final,
     source,
     flags=re.DOTALL,
 )

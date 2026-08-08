@@ -268,14 +268,18 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 08      | Edit expense                                    | ✅ Shipped  |
 | 09      | Delete expense                                  | ✅ Shipped  |
 | 10      | Mobile nav                                      | ✅ Shipped  |
-| 11      | Feature Requests and Public Discovery | 3 | ✅ Shipped  |
-| 12      | Migration to Supabase | 2 | ✅ Shipped  |
-| 14      | Add README File | 1 | ✅ Shipped  |
-| 15      | Developer Roadmap Page | 7 shipped, 1 captured | 🔧 In Progress |
-| 17      | User Profile Page Updates | 3 shipped | ✅ Shipped  |
-| 18      | Quick Edit Expense from Profile | 1 | ✅ Shipped  |
-| 19      | Profile Layout and Navbar Updates | 2 shipped | ✅ Shipped  |
-| 20      | Profile Card Layout & Dropdown Updates | 1 shipped | ✅ Shipped  |
-| 21      | Oxos Profile Page | 2 shipped | ✅ Shipped  |
+| 11      | Feature Requests and Public Discovery           | ✅ Shipped  |
+| 12      | Migration to Supabase                           | ✅ Shipped  |
+| 14      | Add README File                                 | ✅ Shipped  |
+| 15      | Developer Roadmap Page                          | 🔧 In Progress |
+| 16      | Post-Review Improvement Loop                    | ✅ Shipped  |
+| 17      | User Profile Page Updates                       | ✅ Shipped  |
+| 18      | Quick Edit Expense from Profile                 | ✅ Shipped  |
+| 19      | Profile Layout and Navbar Updates               | ✅ Shipped  |
+| 20      | Profile Card Layout & Dropdown Updates          | ✅ Shipped  |
+| 21      | Oxos Profile Page                               | ✅ Shipped  |
+| 22      | Readme Platform Revamp                          | ✅ Shipped  |
+| 23      | Readme Platform Revamp                          | ✅ Shipped  |
+| 24      | Updating Oxos Homepage                          | ✅ Shipped  |
 
-Next up: **15.6 — Roadmap Stage Metrics**
+Next feature to implement: **25**

@@ -205,6 +205,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "02",
@@ -221,6 +224,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "03",
@@ -237,6 +243,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "04",
@@ -253,6 +262,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "05",
@@ -269,6 +281,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "06",
@@ -285,6 +300,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "07",
@@ -301,6 +319,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "08",
@@ -317,6 +338,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "09",
@@ -333,6 +357,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "10",
@@ -349,6 +376,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "11",
@@ -365,6 +395,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "11.1",
@@ -381,6 +414,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "11.2",
@@ -397,6 +433,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "11.3",
@@ -413,6 +452,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "12",
@@ -429,6 +471,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "12.1",
@@ -445,6 +490,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "12.2",
@@ -461,6 +509,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "14",
@@ -477,6 +528,9 @@ def seed_features():
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
             "2026-05-01 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "15",
@@ -492,6 +546,9 @@ def seed_features():
             "2026-06-08 00:00:00",
             "2026-06-08 00:00:00",
             "2026-06-08 00:00:00",
+            None,
+            None,
+            None,
             None,
         ),
         (
@@ -509,6 +566,9 @@ def seed_features():
             "2026-06-08 00:00:00",
             "2026-06-08 00:00:00",
             "2026-06-08 00:00:00",
+            None,
+            None,
+            None,
         ),
         (
             "15.2",
@@ -525,6 +585,9 @@ def seed_features():
             "2026-06-13 05:41:00",
             "2026-06-13 05:41:00",
             "2026-06-13 05:41:00",
+            None,
+            None,
+            None,
         ),
         (
             "15.3",
@@ -541,6 +604,9 @@ def seed_features():
             "2026-06-13 16:00:00",
             "2026-06-13 17:16:00",
             "2026-06-13 17:16:00",
+            None,
+            None,
+            None,
         ),
         (
             "15.4",
@@ -557,6 +623,9 @@ def seed_features():
             "2026-06-13 19:16:04.532115",
             "2026-06-13 20:22:27.361465",
             "2026-06-13 20:22:27.361465",
+            None,
+            None,
+            None,
         ),
         (
             "15.6",
@@ -565,6 +634,9 @@ def seed_features():
             "roadmap-stage-metrics",
             "release",
             "enhancement",
+            None,
+            None,
+            None,
             None,
             None,
             None,
@@ -589,6 +661,9 @@ def seed_features():
             "2026-06-21 23:32:40",
             "2026-06-21 23:45:00",
             "2026-06-22 04:24:10.226909",
+            None,
+            None,
+            None,
         ),
         (
             "16",
@@ -605,6 +680,9 @@ def seed_features():
             "2026-06-21 20:29:17.958222",
             "2026-06-21 20:40:50.997769",
             "2026-06-21 20:59:42.363131",
+            None,
+            None,
+            None,
         ),
         (
             "16.1",
@@ -621,6 +699,9 @@ def seed_features():
             "2026-06-21 20:29:17.958222",
             "2026-06-21 20:40:50.997769",
             "2026-06-21 20:59:42.363131",
+            None,
+            None,
+            None,
         ),
         (
             "15.7",
@@ -637,6 +718,9 @@ def seed_features():
             "2026-06-23 17:59:21.818737",
             "2026-06-23 18:47:57.169846",
             "2026-06-23 19:12:48.412956",
+            None,
+            None,
+            None,
         ),
         (
             "17",
@@ -653,6 +737,9 @@ def seed_features():
             "2026-06-24 01:09:26.160019",
             "2026-06-24 01:19:58.470165",
             "2026-06-24 14:31:03.123185",
+            None,
+            None,
+            None,
         ),
         (
             "17.1",
@@ -669,6 +756,9 @@ def seed_features():
             "2026-06-24 01:09:26.160019",
             "2026-06-24 01:19:58.470165",
             "2026-06-24 01:54:49.633550",
+            None,
+            None,
+            None,
         ),
         (
             "17.2",
@@ -685,6 +775,9 @@ def seed_features():
             "2026-06-24 02:43:08.711972",
             "2026-06-24 02:59:26.356579",
             "2026-06-24 03:12:08.676480",
+            None,
+            None,
+            None,
         ),
         (
             "17.3",
@@ -701,6 +794,9 @@ def seed_features():
             "2026-06-24 12:46:19.329167",
             "2026-06-24 13:31:27.174381",
             "2026-06-24 14:31:03.123185",
+            None,
+            None,
+            None,
         ),
         (
             "18",
@@ -717,6 +813,9 @@ def seed_features():
             "2026-06-24 22:32:02.931707",
             "2026-06-24 23:02:48.354359",
             "2026-06-25 01:18:18.091977",
+            None,
+            None,
+            None,
         ),
         (
             "18.1",
@@ -733,6 +832,9 @@ def seed_features():
             "2026-06-24 22:32:02.931707",
             "2026-06-24 23:02:48.354359",
             "2026-06-25 01:18:18.091977",
+            None,
+            None,
+            None,
         ),
         (
             "19",
@@ -749,6 +851,9 @@ def seed_features():
             "2026-06-25 23:11:37.429557",
             "2026-06-25 23:16:50.301792",
             "2026-06-26 03:25:48.814307",
+            None,
+            None,
+            None,
         ),
         (
             "19.1",
@@ -765,6 +870,9 @@ def seed_features():
             "2026-06-25 23:11:37.429557",
             "2026-06-25 23:16:50.301792",
             "2026-06-25 23:25:16.879862",
+            None,
+            None,
+            None,
         ),
         (
             "19.2",
@@ -781,6 +889,9 @@ def seed_features():
             "2026-06-26 02:57:50.908435",
             "2026-06-26 03:25:48.814307",
             "2026-06-26 03:25:48.814307",
+            None,
+            None,
+            None,
         ),
         (
             "20",
@@ -797,6 +908,9 @@ def seed_features():
             "2026-06-26 04:37:14.821303",
             "2026-06-26 04:45:47.318681",
             "2026-06-26 12:37:51.365421",
+            None,
+            None,
+            None,
         ),
         (
             "20.1",
@@ -813,6 +927,9 @@ def seed_features():
             "2026-06-26 04:37:14.821303",
             "2026-06-26 04:45:47.318681",
             "2026-06-26 12:37:51.365421",
+            None,
+            None,
+            None,
         ),
         (
             "21",
@@ -829,6 +946,9 @@ def seed_features():
             "2026-07-16 02:25:08.565522",
             "2026-07-16 02:21:19.663518",
             "2026-07-16 12:03:18.992508",
+            None,
+            None,
+            None,
         ),
         (
             "21.1",
@@ -845,6 +965,9 @@ def seed_features():
             "2026-07-16 02:25:08.565522",
             "2026-07-16 02:21:19.663518",
             "2026-07-16 02:21:19.663518",
+            None,
+            None,
+            None,
         ),
         (
             "21.2",
@@ -861,6 +984,9 @@ def seed_features():
             "2026-07-16 04:08:00",
             "2026-07-16 04:15:30",
             "2026-07-16 12:03:18.992508",
+            None,
+            None,
+            None,
         ),
         (
             "22",
@@ -877,6 +1003,9 @@ def seed_features():
             "2026-07-18 21:53:30.442038",
             "2026-07-18 23:47:25.786916",
             "2026-07-19 02:39:04.572047",
+            None,
+            None,
+            None,
         ),
         (
             "22.1",
@@ -893,6 +1022,9 @@ def seed_features():
             "2026-07-18 21:53:30.442038",
             "2026-07-18 23:47:25.786916",
             "2026-07-19 02:39:04.572047",
+            None,
+            None,
+            None,
         ),
         (
             "24",
@@ -908,6 +1040,9 @@ def seed_features():
             "2026-08-02 23:20:00",
             "2026-08-03 00:00:00",
             "2026-08-03 00:00:00",
+            "2026-08-08 05:00:56.239518",
+            None,
+            None,
             None,
         ),
         (
@@ -922,8 +1057,11 @@ def seed_features():
             None,
             "2026-08-02 23:20:00",
             "2026-08-02 23:20:00",
-            "2026-08-03 00:00:00",
-            "2026-08-03 00:00:00",
+            "2026-08-08 04:44:53.294426",
+            "2026-08-08 04:56:55.940990",
+            "2026-08-08 05:00:56.239518",
+            "Test Report — 24.1-home-page-routing\n\nStart: 2026-08-08 00:38:01 EDT\nEnd:   2026-08-08 00:38:54 EDT\nDuration: 0.9 minutes\n\n45 tests passed, 0 failed.\n\nTests written: tests/test_24.1-home-page-routing.py\nSpec: .claude/specs/24.1-home-page-routing.md\n\nCoverage:\n- Homepage is publicly accessible (logged out and logged in), renders HTML, extends base.html, and is distinct from the authenticated platform page\n- Homepage is a static marketing page (no form inputs, POST not allowed)\n- /platform route exists, unchanged, and distinct from home\n- Protected routes (/profile, /roadmap, /features, expense mutations) still redirect to /login when logged out; /platform guard behavior unchanged\n- Logout redirects to root, clears session, and the landing page is reachable\n- Navigation links (logo, base template brand) link to root\n- Get Started button links to /login with descriptive link text (no click-here style text)\n- SEO metadata present: title tag, non-generic title, meta description with content\n- Favicon referenced on homepage and other pages, points to a static asset\n- No unused mockup JS: Lucide CDN loaded exactly once, no duplicate chart/unrelated bundles\n- Inline CSS extracted to home.css: linked once, served successfully, no inline style block\n- Lucide and Google Fonts reuse existing CDN/links from base.html (no duplicates)\n- Edge cases: trailing slash variants, 404 on unknown paths, HEAD request handling\n",
+            'Code Review Report — 24.1-home-page-routing\n\nStart: 2026-08-08 00:50:00 EDT\nEnd:   2026-08-08 00:56:27 EDT\nDuration: 6.5 minutes\n\nSecurity Findings\nNo blocking issues.\n- login_required decorator is a clean, standard Flask pattern (safe session.get, @wraps, url_for redirect).\n- Removing the inline "if not user_id: return redirect(...)" from /features POST is not a regression — the decorator now guards GET too, which is strictly broader coverage than before.\n- No new XSS surface — home.html is fully static, no | safe, no debug=True.\n- Sibling /features/<id>/... routes (edit/delete/vote) retain their ownership checks; nothing weakened.\n- database/queries.py changes are string-formatting cleanup around already-parameterized queries — no injection risk.\n- Pre-existing platform-wide gap (not new to this diff): no CSRF tokens on POST forms — worth tracking separately, not a blocker here.\n\nQuality Findings\n1. Inconsistent login_required adoption — applied to /features, /roadmap, /platform, but /profile, /profile/change-password, /profile/add-expense, /profile/edit-expense, /expenses/<id>/delete, /features/<id>/edit|delete|view|vote still use the old inline session.get(...) guard. Two competing patterns for the same job.\n2. Dead conditional in /features (app.py:519,521) — get_own_feature_requests(user_id) if user_id else [] can never take the else branch anymore now that @login_required guarantees user_id.\n3. Leftover commented-out mockup markup in templates/home.html (lines 47, 49-55, 65-78, 88-108, 166-169, 172-173) — six blocks of dead HTML survived the mockup conversion, contradicting the spec\'s "stripped of mockup-only... unused" requirement.\n4. Orphaned {% block footer_name %} overrides in platform.html, roadmap.html, features.html — the block no longer exists in base.html\'s new footer, so these silently do nothing; the .footer-name CSS class is also gone from style.css.\n5. get_all_features() TEST% filter (database/queries.py:625) looks like it\'s compensating for test suites (e.g. test_15.3-harness-integration...) that insert TEST-* rows into the shared live table without reliable teardown, rather than being genuinely in scope for this feature. The more durable fix is consistent test teardown, not a permanent filter in the production query.\n6. Minor polish: hardcoded #fff / #163d22 in home.css instead of CSS variables (project convention); stray blank line in README.\n\nCombined Action Plan\n1. (Medium, quality) Delete leftover commented-out markup blocks in templates/home.html.\n2. (Medium, quality) Delete the three orphaned footer_name block overrides.\n3. (Low, quality) Remove the now-impossible else branches around user_id in /features.\n4. (Low, quality) Extend @login_required to the remaining protected routes for consistency (follow-up, not blocking).\n5. (Low, quality) Revisit the TEST% filter in get_all_features() — consider fixing test teardown instead.\n6. (Polish) Swap hardcoded hex colors in home.css for CSS variables; fix stray README blank line.\n\nOverall Verdict\nAPPROVED WITH SUGGESTIONS — no security blockers, all Definition-of-Done items functionally met; the quality items above are real but non-blocking cleanup, safe to address in a follow-up rather than before shipping.\n',
             None,
         ),
     ]
@@ -934,7 +1072,7 @@ def seed_features():
             " (number, parent_number, title, slug, type, release_subtype, description,"
             "  captured_at, planned_at, spec_at, implemented_at,"
             "  tested_at, reviewed_at, shipped_at, test_report, review_report, deployed_at)"
-            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             row,
         )
 
