@@ -24,7 +24,6 @@ import database.db as db_module
 from database.db import init_db, seed_features
 import database.queries as queries_module
 
-
 # ------------------------------------------------------------------ #
 # Fixtures — same isolation strategy as test_15.2 / test_15.5       #
 # ------------------------------------------------------------------ #
@@ -33,12 +32,18 @@ import database.queries as queries_module
 @pytest.fixture
 def _patched_get_db(monkeypatch):
     """Open a real Postgres connection, monkeypatch get_db in both
-    database modules, and TRUNCATE features at setup + teardown."""
+    database modules.  TRUNCATE once at setup for a clean slate, then
+    commit() is a no-op for the rest of the test so nothing — including
+    commits made internally by db.py/queries.py helpers — is ever actually
+    persisted.  A single real rollback() at teardown discards everything."""
     init_db()
     _real_conn = db_module.get_db()
 
     class _NoCloseProxy:
         def close(self):
+            pass
+
+        def commit(self):
             pass
 
         def __getattr__(self, name):
@@ -60,10 +65,6 @@ def _patched_get_db(monkeypatch):
     yield conn
 
     _real_conn.rollback()
-    cur = _real_conn.cursor()
-    cur.execute("TRUNCATE features RESTART IDENTITY CASCADE")
-    _real_conn.commit()
-    cur.close()
     _real_conn.close()
 
 
@@ -166,23 +167,23 @@ class TestGroupRowPresence:
         """A row with class 'roadmap-group-row' must be present in the rendered
         roadmap page."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-row" in body, (
-            "A group row with class 'roadmap-group-row' must be present"
-        )
+        assert (
+            "roadmap-group-row" in body
+        ), "A group row with class 'roadmap-group-row' must be present"
 
     def test_group_row_label(self, seeded_client):
         """The group row must show the 'Foundational Features' label."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "Foundational Features" in body, (
-            "The group row must contain the 'Foundational Features' label"
-        )
+        assert (
+            "Foundational Features" in body
+        ), "The group row must contain the 'Foundational Features' label"
 
     def test_group_row_data_group_attribute(self, seeded_client):
         """The group row must carry data-group='foundational'."""
         body = _body(seeded_client.get("/roadmap"))
-        assert 'data-group="foundational"' in body, (
-            "The group row must carry data-group='foundational'"
-        )
+        assert (
+            'data-group="foundational"' in body
+        ), "The group row must carry data-group='foundational'"
 
 
 # ------------------------------------------------------------------ #
@@ -194,9 +195,9 @@ class TestGroupRowCount:
     def test_group_row_has_count_badge(self, seeded_client):
         """The group row must contain an element with class 'roadmap-group-count'."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-count" in body, (
-            "The group row must contain a .roadmap-group-count badge"
-        )
+        assert (
+            "roadmap-group-count" in body
+        ), "The group row must contain a .roadmap-group-count badge"
 
     def test_group_row_count_shows_10(self, seeded_client):
         """The count badge must display '10' for the ten foundational features."""
@@ -209,10 +210,10 @@ class TestGroupRowCount:
         assert tag_end != -1
         next_open = body.find("<", tag_end + 1)
         assert next_open != -1
-        count_text = body[tag_end + 1:next_open].strip()
-        assert count_text == "10", (
-            f"Group count badge must show '10', got '{count_text}'"
-        )
+        count_text = body[tag_end + 1 : next_open].strip()
+        assert (
+            count_text == "10"
+        ), f"Group count badge must show '10', got '{count_text}'"
 
 
 # ------------------------------------------------------------------ #
@@ -224,9 +225,9 @@ class TestGroupRowChevron:
     def test_group_row_has_chevron(self, seeded_client):
         """The group row must contain a chevron icon for the expand/collapse indicator."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-chevron" in body, (
-            "The group row must contain a .roadmap-group-chevron element"
-        )
+        assert (
+            "roadmap-group-chevron" in body
+        ), "The group row must contain a .roadmap-group-chevron element"
 
     def test_group_chevron_uses_lucide(self, seeded_client):
         """The group chevron must use the Lucide 'chevron-down' icon via data-lucide."""
@@ -238,9 +239,9 @@ class TestGroupRowChevron:
         group_end = body.find("</tr>", idx)
         assert group_end != -1
         group_html = body[idx:group_end]
-        assert 'data-lucide="chevron-down"' in group_html, (
-            "The group chevron must use data-lucide='chevron-down'"
-        )
+        assert (
+            'data-lucide="chevron-down"' in group_html
+        ), "The group chevron must use data-lucide='chevron-down'"
 
 
 # ------------------------------------------------------------------ #
@@ -256,17 +257,17 @@ class TestGroupRowDefaultState:
         assert idx != -1, "Group row class must exist"
         tag_start = body.rfind("<tr", 0, idx)
         tag_end = body.find(">", idx)
-        group_tag = body[tag_start:tag_end + 1]
-        assert 'aria-expanded="false"' in group_tag, (
-            "The group row must have aria-expanded='false' (collapsed by default)"
-        )
+        group_tag = body[tag_start : tag_end + 1]
+        assert (
+            'aria-expanded="false"' in group_tag
+        ), "The group row must have aria-expanded='false' (collapsed by default)"
 
     def test_no_row_is_expanded_initially(self, seeded_client):
         """No expandable row (parent or group) should be aria-expanded='true' on page load."""
         body = _body(seeded_client.get("/roadmap"))
-        assert 'aria-expanded="true"' not in body, (
-            "No row should be expanded (aria-expanded='true') on initial page load"
-        )
+        assert (
+            'aria-expanded="true"' not in body
+        ), "No row should be expanded (aria-expanded='true') on initial page load"
 
 
 # ------------------------------------------------------------------ #
@@ -278,9 +279,9 @@ class TestDataParentGroupAttribute:
     def test_feature_01_has_data_parent_group(self, seeded_client):
         """Feature 01 must carry data-parent-group='foundational'."""
         body = _body(seeded_client.get("/roadmap"))
-        assert 'data-parent-group="foundational"' in body, (
-            "Feature 01 must carry data-parent-group='foundational'"
-        )
+        assert (
+            'data-parent-group="foundational"' in body
+        ), "Feature 01 must carry data-parent-group='foundational'"
 
     def test_all_features_01_to_10_have_data_parent_group(self, seeded_client):
         """All features 01-10 must carry data-parent-group='foundational'."""
@@ -304,20 +305,11 @@ class TestDataParentGroupAttribute:
         tbody_end = body.find("</tbody>")
         assert tbody_start != -1 and tbody_end != -1, "tbody must be present"
         tbody = body[tbody_start:tbody_end]
-        # Features 11, 12, 14, 15, 16 are in the seed data — none should have data-parent-group
-        for num in ["11", "12", "14", "15", "16"]:
-            # Find the row for this feature number and check it does not have the attribute
-            idx = body.find(f'class="roadmap-row ')
-            # Search for the specific number cell
-            # Look for the feature number in a td and check its row
-            # We'll search for the number followed by the attribute absence
-            # A simpler approach: count total in tbody is exactly 10
-            pass
-        # The count-based assertion in the previous test already covers this.
         # Verify no feature number >= 11 has the attribute by scanning each row.
         import re
+
         # Find all <tr ...> tags in tbody
-        tr_pattern = re.compile(r'<tr[^>]*>', re.DOTALL)
+        tr_pattern = re.compile(r"<tr[^>]*>", re.DOTALL)
         tr_tags = tr_pattern.findall(tbody)
         for tag in tr_tags:
             if 'data-parent-group="foundational"' in tag:
@@ -325,14 +317,23 @@ class TestDataParentGroupAttribute:
                 # Extract the feature number from the tag or nearby content
                 # The number cell is the first <td> after the <tr tag
                 tag_pos = tbody.find(tag)
-                after_tag = tbody[tag_pos + len(tag):]
+                after_tag = tbody[tag_pos + len(tag) :]
                 # Find the first <td>...</td> content which is the number
-                td_match = re.search(r'<td[^>]*>(.*?)</td>', after_tag)
+                td_match = re.search(r"<td[^>]*>(.*?)</td>", after_tag)
                 if td_match:
                     num_text = td_match.group(1).strip()
-                    assert num_text in {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"}, (
-                        f"Row with number '{num_text}' must not have data-parent-group='foundational'"
-                    )
+                    assert num_text in {
+                        "01",
+                        "02",
+                        "03",
+                        "04",
+                        "05",
+                        "06",
+                        "07",
+                        "08",
+                        "09",
+                        "10",
+                    }, f"Row with number '{num_text}' must not have data-parent-group='foundational'"
 
 
 # ------------------------------------------------------------------ #
@@ -359,11 +360,13 @@ class TestDataParentAttribute:
             parent_number="P01",
         )
         body = _body(client.get("/roadmap"))
-        assert 'data-parent="P01"' in body, (
-            "Release sub-row must carry data-parent='P01'"
-        )
+        assert (
+            'data-parent="P01"' in body
+        ), "Release sub-row must carry data-parent='P01'"
 
-    def test_multiple_release_rows_have_correct_data_parent(self, client, _patched_get_db):
+    def test_multiple_release_rows_have_correct_data_parent(
+        self, client, _patched_get_db
+    ):
         """Multiple release sub-rows under the same parent each carry data-parent."""
         _insert_feature(
             _patched_get_db,
@@ -391,9 +394,9 @@ class TestDataParentAttribute:
         body = _body(client.get("/roadmap"))
         # Both release rows should have data-parent="P02"
         count = body.count('data-parent="P02"')
-        assert count == 2, (
-            f"Both release rows must carry data-parent='P02', found {count}"
-        )
+        assert (
+            count == 2
+        ), f"Both release rows must carry data-parent='P02', found {count}"
 
     def test_release_row_without_parent_no_data_parent(self, client, _patched_get_db):
         """A release row with no parent_number must NOT carry data-parent."""
@@ -408,10 +411,11 @@ class TestDataParentAttribute:
         # Strip <script>...</script> before checking — JS uses data-parent as a
         # selector string, which is not the same as an HTML attribute.
         import re as _re
+
         html_only = _re.sub(r"<script[^>]*>.*?</script>", "", body, flags=_re.DOTALL)
-        assert 'data-parent="' not in html_only, (
-            "No data-parent HTML attribute should exist when there are no release rows"
-        )
+        assert (
+            'data-parent="' not in html_only
+        ), "No data-parent HTML attribute should exist when there are no release rows"
 
 
 # ------------------------------------------------------------------ #
@@ -423,16 +427,16 @@ class TestDetailRowRemoved:
     def test_no_detail_row_in_html(self, seeded_client):
         """No 'roadmap-detail-row' elements must exist in the rendered HTML."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-detail-row" not in body, (
-            "Detail rows must be completely removed from the template"
-        )
+        assert (
+            "roadmap-detail-row" not in body
+        ), "Detail rows must be completely removed from the template"
 
     def test_no_detail_card_in_html(self, seeded_client):
         """No 'roadmap-detail-card' elements must exist in the rendered HTML."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-detail-card" not in body, (
-            "Detail cards must be completely removed from the template"
-        )
+        assert (
+            "roadmap-detail-card" not in body
+        ), "Detail cards must be completely removed from the template"
 
 
 # ------------------------------------------------------------------ #
@@ -460,9 +464,9 @@ class TestParentRowMarkup:
             parent_number="C01",
         )
         body = _body(client.get("/roadmap"))
-        assert "roadmap-parent-row" in body, (
-            "A feature row with child releases must carry class 'roadmap-parent-row'"
-        )
+        assert (
+            "roadmap-parent-row" in body
+        ), "A feature row with child releases must carry class 'roadmap-parent-row'"
 
     def test_parent_row_aria_expanded_false(self, client, _patched_get_db):
         """A parent row must have aria-expanded='false' in its initial state."""
@@ -482,9 +486,9 @@ class TestParentRowMarkup:
             parent_number="C02",
         )
         body = _body(client.get("/roadmap"))
-        assert 'aria-expanded="false"' in body, (
-            'A parent feature row must have aria-expanded="false" on initial load'
-        )
+        assert (
+            'aria-expanded="false"' in body
+        ), 'A parent feature row must have aria-expanded="false" on initial load'
 
     def test_parent_row_aria_controls(self, client, _patched_get_db):
         """The parent row must have aria-controls pointing to its parent id."""
@@ -504,9 +508,9 @@ class TestParentRowMarkup:
             parent_number="C03",
         )
         body = _body(client.get("/roadmap"))
-        assert 'aria-controls="parent-C03"' in body, (
-            'Parent row for feature C03 must have aria-controls="parent-C03"'
-        )
+        assert (
+            'aria-controls="parent-C03"' in body
+        ), 'Parent row for feature C03 must have aria-controls="parent-C03"'
 
     def test_non_parent_row_no_roadmap_parent_row_class(self, client, _patched_get_db):
         """A top-level feature row with no children must NOT carry 'roadmap-parent-row'."""
@@ -521,9 +525,9 @@ class TestParentRowMarkup:
         tbody_start = body.find("<tbody>")
         tbody_end = body.find("</tbody>")
         tbody = body[tbody_start:tbody_end] if tbody_start != -1 else ""
-        assert "roadmap-parent-row" not in tbody, (
-            "A feature row with no children must NOT carry class 'roadmap-parent-row'"
-        )
+        assert (
+            "roadmap-parent-row" not in tbody
+        ), "A feature row with no children must NOT carry class 'roadmap-parent-row'"
 
 
 # ------------------------------------------------------------------ #
@@ -535,44 +539,44 @@ class TestInlineJSToggle:
     def test_script_block_present(self, seeded_client):
         """The /roadmap page must contain a <script> block with toggle logic."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "<script>" in body or "<script " in body, (
-            "GET /roadmap must include a <script> block containing the toggle logic"
-        )
+        assert (
+            "<script>" in body or "<script " in body
+        ), "GET /roadmap must include a <script> block containing the toggle logic"
 
     def test_script_references_roadmap_group_row(self, seeded_client):
         """The inline script must query for '.roadmap-group-row'."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-row" in body, (
-            "The inline JS must reference '.roadmap-group-row' for group toggle"
-        )
+        assert (
+            "roadmap-group-row" in body
+        ), "The inline JS must reference '.roadmap-group-row' for group toggle"
 
     def test_script_references_roadmap_parent_row(self, seeded_client):
         """The inline script must query for '.roadmap-parent-row'."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-parent-row" in body, (
-            "The inline JS must reference '.roadmap-parent-row' for parent accordion"
-        )
+        assert (
+            "roadmap-parent-row" in body
+        ), "The inline JS must reference '.roadmap-parent-row' for parent accordion"
 
     def test_script_references_data_parent_group(self, seeded_client):
         """The inline script must reference data-parent-group='foundational'."""
         body = _body(seeded_client.get("/roadmap"))
-        assert 'data-parent-group="foundational"' in body, (
-            "The inline JS must reference data-parent-group='foundational' for group selection"
-        )
+        assert (
+            'data-parent-group="foundational"' in body
+        ), "The inline JS must reference data-parent-group='foundational' for group selection"
 
     def test_script_references_aria_expanded(self, seeded_client):
         """The inline script must read/write 'aria-expanded' for toggle state."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "aria-expanded" in body, (
-            "The inline JS must reference 'aria-expanded' to manage toggle state"
-        )
+        assert (
+            "aria-expanded" in body
+        ), "The inline JS must reference 'aria-expanded' to manage toggle state"
 
     def test_lucide_create_icons_called(self, seeded_client):
         """The page must call lucide.createIcons() to render chevron SVGs."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "lucide.createIcons()" in body or "lucide.createIcons" in body, (
-            "The page must call lucide.createIcons() so chevron SVGs are rendered"
-        )
+        assert (
+            "lucide.createIcons()" in body or "lucide.createIcons" in body
+        ), "The page must call lucide.createIcons() so chevron SVGs are rendered"
 
 
 # ------------------------------------------------------------------ #
@@ -584,23 +588,23 @@ class TestPublicAccessRegression:
     def test_get_roadmap_returns_200_unauthenticated(self, seeded_client):
         """GET /roadmap must return 200 for an unauthenticated request."""
         resp = seeded_client.get("/roadmap")
-        assert resp.status_code == 200, (
-            "GET /roadmap must return 200 for unauthenticated visitors"
-        )
+        assert (
+            resp.status_code == 200
+        ), "GET /roadmap must return 200 for unauthenticated visitors"
 
     def test_get_roadmap_does_not_redirect_to_login(self, seeded_client):
         """GET /roadmap must not redirect unauthenticated visitors to /login."""
         resp = seeded_client.get("/roadmap")
-        assert resp.status_code != 302, (
-            "GET /roadmap must not redirect unauthenticated visitors to /login"
-        )
+        assert (
+            resp.status_code != 302
+        ), "GET /roadmap must not redirect unauthenticated visitors to /login"
 
     def test_get_roadmap_does_not_return_500(self, seeded_client):
         """GET /roadmap must not raise a 500 error after 15.7 template changes."""
         resp = seeded_client.get("/roadmap")
-        assert resp.status_code != 500, (
-            "GET /roadmap must not raise a 500 error after 15.7 template changes"
-        )
+        assert (
+            resp.status_code != 500
+        ), "GET /roadmap must not raise a 500 error after 15.7 template changes"
 
 
 # ------------------------------------------------------------------ #
@@ -617,24 +621,24 @@ class TestSeededDataIntegration:
     def test_seeded_page_has_group_row(self, seeded_client):
         """With seeded data, a group row must be present."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-row" in body, (
-            "A group row must be present with seeded data"
-        )
+        assert (
+            "roadmap-group-row" in body
+        ), "A group row must be present with seeded data"
 
     def test_seeded_page_has_parent_rows(self, seeded_client):
         """With seeded data, parent features (11, 12, 15) must have
         roadmap-parent-row class."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-parent-row" in body, (
-            "Parent feature rows must carry 'roadmap-parent-row' with seeded data"
-        )
+        assert (
+            "roadmap-parent-row" in body
+        ), "Parent feature rows must carry 'roadmap-parent-row' with seeded data"
 
     def test_seeded_page_no_detail_rows(self, seeded_client):
         """With seeded data, no detail rows should exist."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-detail-row" not in body, (
-            "No detail rows must exist with seeded data after 15.7 changes"
-        )
+        assert (
+            "roadmap-detail-row" not in body
+        ), "No detail rows must exist with seeded data after 15.7 changes"
 
     def test_seeded_page_has_table(self, seeded_client):
         """The roadmap table must render with seeded data."""
@@ -646,6 +650,6 @@ class TestSeededDataIntegration:
     def test_seeded_page_has_aria_expanded_false(self, seeded_client):
         """On initial page load all expandable rows start collapsed."""
         body = _body(seeded_client.get("/roadmap"))
-        assert 'aria-expanded="false"' in body, (
-            'All parent rows must have aria-expanded="false" on initial load'
-        )
+        assert (
+            'aria-expanded="false"' in body
+        ), 'All parent rows must have aria-expanded="false" on initial load'

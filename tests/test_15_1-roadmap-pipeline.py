@@ -7,10 +7,14 @@ tests isolated we monkeypatch ``database.db.get_db`` AND the copy of that name
 already imported into ``database.queries`` so that every DB call within a test
 uses the same connection object.
 
-Isolation is achieved by TRUNCATE, not rollback.  The helper functions in db.py
-and queries.py call ``conn.commit()`` internally, so a single outer rollback
-cannot undo their side effects.  Instead, the ``_patched_get_db`` fixture truncates
-the ``features`` table at both setup and teardown, giving every test a clean slate.
+Isolation is achieved by a single real TRUNCATE at setup plus a no-op ``commit()``
+for the rest of the test.  The helper functions in db.py and queries.py call
+``conn.commit()`` internally, so a plain SAVEPOINT/rollback cannot work either —
+any commit by app code (e.g. inside ``seed_features()``) releases every savepoint
+on that connection.  Instead, the ``_patched_get_db`` fixture's proxy makes
+``commit()`` a no-op after the initial setup TRUNCATE, so nothing a test or the
+app code under test does is ever actually persisted; a single real ``rollback()``
+at teardown discards it all.
 
 app.py is reloaded via ``importlib.reload`` so the module-level ``init_db()`` /
 ``seed_features()`` calls hit the patched function.  Because ``seed_features()``
@@ -62,19 +66,6 @@ import database.db as db_module
 from database.db import init_db, seed_features
 import database.queries as queries_module
 
-
-@pytest.fixture(scope="module", autouse=True)
-def _reseed_after_module():
-    """Re-seed the live DB after all tests in this module complete.
-
-    Tests TRUNCATE the features table using the real DATABASE_URL, which wipes
-    production data. This fixture restores the seed rows once all tests are done
-    so the roadmap page is not left empty.
-    """
-    yield
-    seed_features()
-
-
 # ------------------------------------------------------------------ #
 # Required stage keys returned by _feature_row / get_all_features()  #
 # ------------------------------------------------------------------ #
@@ -121,10 +112,13 @@ def _patched_get_db(monkeypatch):
     (and the copy already imported in ``database.queries``) so that every DB call
     within a test uses the same connection.
 
-    Isolation strategy: truncate the features table at both setup and teardown so
-    each test starts with a clean slate.  We do NOT rely on rollback because the
-    helper functions in db.py and queries.py call ``conn.commit()`` internally,
-    making transaction-based rollback ineffective for data isolation.
+    Isolation strategy: TRUNCATE once at setup for a clean slate, then patch
+    ``commit()`` to a no-op for the rest of the test so nothing — including
+    commits made internally by db.py/queries.py helpers such as
+    ``seed_features()`` — is ever actually persisted.  A single real
+    ``rollback()`` at teardown discards everything.  Plain SAVEPOINT/rollback
+    does not work here: any commit by app code releases every savepoint on
+    the connection, so the no-op-commit approach is required instead.
 
     Yields the connection itself so helpers can run raw SQL if needed.
     """
@@ -134,10 +128,14 @@ def _patched_get_db(monkeypatch):
     _real_conn = db_module.get_db()
 
     class _NoCloseProxy:
-        """Delegates to _real_conn but no-ops close() so production helpers
-        cannot close the shared connection mid-test."""
+        """Delegates to _real_conn but no-ops close() and commit() so nothing
+        a test or the app code under test does is ever persisted; the only
+        real commit/rollback happens once in this fixture's own setup/teardown."""
 
         def close(self):
+            pass
+
+        def commit(self):
             pass
 
         def __getattr__(self, name):
@@ -151,7 +149,7 @@ def _patched_get_db(monkeypatch):
     monkeypatch.setattr(db_module, "get_db", _fake_get_db)
     monkeypatch.setattr(queries_module, "get_db", _fake_get_db)
 
-    # Clean slate before the test
+    # Clean slate before the test — the only real commit in this fixture
     cur = _real_conn.cursor()
     cur.execute("TRUNCATE features RESTART IDENTITY CASCADE")
     _real_conn.commit()
@@ -159,15 +157,8 @@ def _patched_get_db(monkeypatch):
 
     yield conn
 
-    # Recover from any aborted transaction before teardown
+    # Discard everything the test did — commit() was a no-op throughout
     _real_conn.rollback()
-
-    # Clean up after the test so no rows leak into subsequent tests
-    cur = _real_conn.cursor()
-    cur.execute("TRUNCATE features RESTART IDENTITY CASCADE")
-    _real_conn.commit()
-    cur.close()
-
     _real_conn.close()
 
 

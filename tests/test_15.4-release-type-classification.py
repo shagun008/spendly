@@ -37,23 +37,6 @@ from database.db import init_db, seed_features
 import database.queries as queries_module
 
 # ------------------------------------------------------------------ #
-# Module-scoped reseed — restores live DB after all tests complete    #
-# ------------------------------------------------------------------ #
-
-
-@pytest.fixture(scope="module", autouse=True)
-def _reseed_after_module():
-    """Re-seed the live DB after all tests in this module complete.
-
-    Tests TRUNCATE the features table using the real DATABASE_URL, which wipes
-    production data.  This fixture restores the seed rows once all tests are
-    done so the roadmap page is not left empty.
-    """
-    yield
-    seed_features()
-
-
-# ------------------------------------------------------------------ #
 # Constants                                                            #
 # ------------------------------------------------------------------ #
 
@@ -97,18 +80,25 @@ def _patched_get_db(monkeypatch):
     database.db and database.queries so every DB call within a test uses the
     same connection.
 
-    Isolation: TRUNCATE at setup and teardown — rollback cannot undo commits
-    made inside the helper functions.
+    Isolation: TRUNCATE once at setup for a clean slate, then commit() is a
+    no-op for the rest of the test so nothing — including commits made
+    internally by db.py/queries.py helpers such as seed_features() — is ever
+    actually persisted.  A single real rollback() at teardown discards
+    everything.  Plain SAVEPOINT/rollback does not work here: any commit by
+    app code releases every savepoint on the connection.
     """
     init_db()
 
     _real_conn = db_module.get_db()
 
     class _NoCloseProxy:
-        """Delegates to _real_conn but no-ops close() so helpers cannot close
-        the shared connection mid-test."""
+        """Delegates to _real_conn but no-ops close() and commit() so helpers
+        cannot close the shared connection or persist changes mid-test."""
 
         def close(self):
+            pass
+
+        def commit(self):
             pass
 
         def __getattr__(self, name):
@@ -130,12 +120,6 @@ def _patched_get_db(monkeypatch):
     yield conn
 
     _real_conn.rollback()
-
-    cur = _real_conn.cursor()
-    cur.execute("TRUNCATE features RESTART IDENTITY CASCADE")
-    _real_conn.commit()
-    cur.close()
-
     _real_conn.close()
 
 
