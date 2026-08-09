@@ -122,6 +122,8 @@ Every stage timestamp lands in the `features` table. The `/roadmap` page (logged
 | `/dev` | Interactive workflow picker — shows the next recommended step with live registry context |
 | `/status` | Reads the live DB and prints the current status of every feature and release |
 | `/improvement-loop` | Runs a structured 5-phase improvement cycle after any pipeline stage; auto-detects the trigger stage from conversation context; captures learnings to log |
+| `/autom-plan` | Orchestrates `/capture-thoughts` → `/plan-release`, presents the release plan, then stops before implementation |
+| `/autom-dev` | Orchestrates `/create-spec` → `/implement-feature` → `/test-feature` → `/code-review-feature` → `/ship-feature` for one explicit release, with bounded auto-fix retries |
 
 The pipeline proved capable well beyond routine feature work. When the project outgrew SQLite and required a migration to Supabase PostgreSQL — including data migration scripts, not just schema changes — that work was handled as two spec'd pipeline releases (12.1 and 12.2), subject to the same governance as every other feature. Infrastructure changes treated as first-class deliverables, not one-off tasks.
 
@@ -158,5 +160,6 @@ The pipeline proved capable well beyond routine feature work. When the project o
 | 19 | Profile Layout and Navbar Updates | 2 shipped | ✅ Shipped |
 | 20 | Profile Card Layout & Dropdown Updates | 1 shipped | ✅ Shipped |
 | 21 | Oxos Profile Page | 2 shipped | ✅ Shipped |
+| 25 | Pipeline Orchestration Automation | 1 shipped | ✅ Shipped |
 
 Next up: **15.6 — Roadmap Stage Metrics**
