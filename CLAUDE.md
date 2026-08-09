@@ -218,6 +218,14 @@ Branch names use slug only (no number): `feature/budget-alerts-mvp`
 | `/dev` | Interactive workflow picker — shows the next recommended step with live registry context |
 | `/status` | Reads the live DB and prints the current status of every feature and release |
 | `/improvement-loop` | Runs a structured 5-phase improvement cycle after any pipeline stage |
+| `/autom-plan` | Orchestrates `/capture-thoughts` → `/plan-release`, presents the release plan, then stops before implementation |
+| `/autom-dev` | Orchestrates `/create-spec` → `/implement-feature` → `/test-feature` → `/code-review-feature` → `/ship-feature` for one explicit release, with bounded auto-fix retries |
+
+`/autom-plan` and `/autom-dev` are optional orchestrators over the same
+seven-command pipeline above — they call the existing commands exactly as
+documented and never replace running them individually. `/implement-feature`'s
+plan-mode approval and `/code-review-feature`'s review-approval prompt still
+pause a run exactly as they do when invoked manually.
 
 Status values tracked at each stage:
 - 💡 Captured — processed thought written
@@ -281,5 +289,6 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 22      | Readme Platform Revamp                          | ✅ Shipped  |
 | 23      | Readme Platform Revamp                          | ✅ Shipped  |
 | 24      | Updating Oxos Homepage                          | ✅ Shipped  |
+| 25      | Pipeline Orchestration Automation               | 👀 In Review |
 
 Next feature to implement: **25**

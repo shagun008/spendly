@@ -132,7 +132,7 @@ Open questions carried from the source thoughts:
 ## Release pressure / deadlines
 Not specified.
 
-A few suggestions
+## Recommendations
 Use two automations, not one. Your instinct here is right. Planning is a natural human checkpoint; implementation is where autonomous execution is most valuable.
 Make one release the default execution boundary. If /plan-release produces 3 releases, don't let the automation consume the entire context window attempting all 3. Run /autom-dev release-x.1, then /autom-dev release-x.2, etc.
 Don't make /autom-dev dependent on /autom-plan being immediately prior. It should be able to consume a previously generated release plan. That makes interrupted sessions recoverable.
