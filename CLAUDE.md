@@ -289,6 +289,6 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 22      | Readme Platform Revamp                          | ✅ Shipped  |
 | 23      | Readme Platform Revamp                          | ✅ Shipped  |
 | 24      | Updating Oxos Homepage                          | ✅ Shipped  |
-| 25      | Pipeline Orchestration Automation               | 👀 In Review |
+| 25      | Pipeline Orchestration Automation               | ✅ Shipped  |
 
-Next feature to implement: **25**
+Next feature to implement: **26**
