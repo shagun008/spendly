@@ -80,18 +80,25 @@ SHIPPED_TS = "2026-05-01 00:00:00"
 def _patched_get_db(monkeypatch):
     """
     Open a single real Postgres connection and monkeypatch get_db in both
-    database.db and database.queries.  Truncate the features table at
-    setup and teardown for full isolation between tests.
+    database.db and database.queries.  TRUNCATE once at setup for a clean
+    slate, then commit() is a no-op for the rest of the test so nothing —
+    including commits made internally by db.py/queries.py helpers — is
+    ever actually persisted.  A single real rollback() at teardown discards
+    everything.
     """
     init_db()
 
     _real_conn = db_module.get_db()
 
     class _NoCloseProxy:
-        """Delegates everything to _real_conn but suppresses close() calls so
-        internal helpers cannot close the shared connection mid-test."""
+        """Delegates everything to _real_conn but suppresses close() and
+        commit() calls so internal helpers cannot close the shared connection
+        or persist changes mid-test."""
 
         def close(self):
+            pass
+
+        def commit(self):
             pass
 
         def __getattr__(self, name):
@@ -113,12 +120,6 @@ def _patched_get_db(monkeypatch):
     yield conn
 
     _real_conn.rollback()
-
-    cur = _real_conn.cursor()
-    cur.execute("TRUNCATE features RESTART IDENTITY CASCADE")
-    _real_conn.commit()
-    cur.close()
-
     _real_conn.close()
 
 
@@ -339,9 +340,7 @@ class TestRoadmapDetailPublicAccess:
 
 
 class TestParentRowMarkup:
-    def test_parent_row_class_on_feature_with_children(
-        self, client, _patched_get_db
-    ):
+    def test_parent_row_class_on_feature_with_children(self, client, _patched_get_db):
         """A top-level feature row with child releases must carry
         class 'roadmap-parent-row'."""
         _insert_feature(
@@ -361,8 +360,7 @@ class TestParentRowMarkup:
         )
         body = _body(client.get("/roadmap"))
         assert "roadmap-parent-row" in body, (
-            "A feature row with child releases must carry "
-            "class 'roadmap-parent-row'"
+            "A feature row with child releases must carry " "class 'roadmap-parent-row'"
         )
 
     def test_aria_expanded_false_on_parent_row(self, client, _patched_get_db):
@@ -406,8 +404,7 @@ class TestParentRowMarkup:
         )
         body = _body(client.get("/roadmap"))
         assert 'aria-controls="parent-C03"' in body, (
-            "Parent row for feature C03 must have "
-            'aria-controls="parent-C03"'
+            "Parent row for feature C03 must have " 'aria-controls="parent-C03"'
         )
 
     def test_aria_controls_dots_replaced_with_dashes(self, client, _patched_get_db):
@@ -515,16 +512,16 @@ class TestGroupRowMarkup:
     def test_group_row_class_present(self, seeded_client):
         """A group row with class 'roadmap-group-row' must exist."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-row" in body, (
-            "A group row with class 'roadmap-group-row' must be present"
-        )
+        assert (
+            "roadmap-group-row" in body
+        ), "A group row with class 'roadmap-group-row' must be present"
 
     def test_group_row_has_data_group_foundational(self, seeded_client):
         """The group row must carry data-group='foundational'."""
         body = _body(seeded_client.get("/roadmap"))
-        assert 'data-group="foundational"' in body, (
-            "The group row must carry data-group='foundational'"
-        )
+        assert (
+            'data-group="foundational"' in body
+        ), "The group row must carry data-group='foundational'"
 
     def test_group_row_has_aria_expanded_false(self, seeded_client):
         """The group row must have aria-expanded='false' (collapsed by default)."""
@@ -537,40 +534,40 @@ class TestGroupRowMarkup:
         # Look for aria-expanded in the vicinity (before the class, on the same tag)
         tag_start = body.rfind("<tr", 0, idx)
         tag_end = body.find(">", idx)
-        group_tag = body[tag_start:tag_end + 1]
-        assert 'aria-expanded="false"' in group_tag, (
-            "The group row must have aria-expanded='false' (collapsed by default)"
-        )
+        group_tag = body[tag_start : tag_end + 1]
+        assert (
+            'aria-expanded="false"' in group_tag
+        ), "The group row must have aria-expanded='false' (collapsed by default)"
 
     def test_group_row_has_chevron(self, seeded_client):
         """The group row must contain a chevron icon."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-chevron" in body, (
-            "The group row must contain a .roadmap-group-chevron element"
-        )
+        assert (
+            "roadmap-group-chevron" in body
+        ), "The group row must contain a .roadmap-group-chevron element"
 
     def test_group_row_has_label(self, seeded_client):
         """The group row must contain the 'Foundational Features' label."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "Foundational Features" in body, (
-            "The group row must contain the 'Foundational Features' label"
-        )
+        assert (
+            "Foundational Features" in body
+        ), "The group row must contain the 'Foundational Features' label"
 
     def test_group_row_has_count_badge(self, seeded_client):
         """The group row must contain a count badge."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-count" in body, (
-            "The group row must contain a .roadmap-group-count badge"
-        )
+        assert (
+            "roadmap-group-count" in body
+        ), "The group row must contain a .roadmap-group-count badge"
 
     def test_features_01_to_10_have_data_parent_group(self, seeded_client):
         """Features 01–10 must carry data-parent-group='foundational'."""
         body = _body(seeded_client.get("/roadmap"))
         # Features 01-10 should have data-parent-group="foundational"
         for num in ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"]:
-            assert f'data-parent-group="foundational"' in body, (
-                f"Feature {num} must carry data-parent-group='foundational'"
-            )
+            assert (
+                'data-parent-group="foundational"' in body
+            ), f"Feature {num} must carry data-parent-group='foundational'"
 
     def test_features_11_plus_no_data_parent_group(self, seeded_client):
         """Features 11+ must NOT carry data-parent-group='foundational'."""
@@ -663,16 +660,16 @@ class TestDetailRowRemoved:
     def test_no_detail_row_in_html(self, seeded_client):
         """No 'roadmap-detail-row' elements must exist in the rendered HTML."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-detail-row" not in body, (
-            "Detail rows must be completely removed from the template"
-        )
+        assert (
+            "roadmap-detail-row" not in body
+        ), "Detail rows must be completely removed from the template"
 
     def test_no_detail_card_in_html(self, seeded_client):
         """No 'roadmap-detail-card' elements must exist in the rendered HTML."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-detail-card" not in body, (
-            "Detail cards must be completely removed from the template"
-        )
+        assert (
+            "roadmap-detail-card" not in body
+        ), "Detail cards must be completely removed from the template"
 
 
 # ------------------------------------------------------------------ #
@@ -730,24 +727,22 @@ class TestInlineJSToggle:
 class TestSeededDataIntegration:
     def test_seeded_page_returns_200(self, seeded_client):
         resp = seeded_client.get("/roadmap")
-        assert (
-            resp.status_code == 200
-        ), "GET /roadmap must return 200 with seeded data"
+        assert resp.status_code == 200, "GET /roadmap must return 200 with seeded data"
 
     def test_seeded_page_has_group_row(self, seeded_client):
         """With seeded data, a group row must be present."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-group-row" in body, (
-            "A group row must be present with seeded data"
-        )
+        assert (
+            "roadmap-group-row" in body
+        ), "A group row must be present with seeded data"
 
     def test_seeded_page_has_parent_rows(self, seeded_client):
         """With seeded data, parent features (e.g. 11, 12, 15) must have
         roadmap-parent-row class."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-parent-row" in body, (
-            "Parent feature rows must carry 'roadmap-parent-row' with seeded data"
-        )
+        assert (
+            "roadmap-parent-row" in body
+        ), "Parent feature rows must carry 'roadmap-parent-row' with seeded data"
 
     def test_seeded_page_has_aria_expanded_false(self, seeded_client):
         """On initial page load all expandable rows start collapsed."""
@@ -769,6 +764,6 @@ class TestSeededDataIntegration:
     def test_seeded_page_no_detail_rows(self, seeded_client):
         """With seeded data, no detail rows should exist."""
         body = _body(seeded_client.get("/roadmap"))
-        assert "roadmap-detail-row" not in body, (
-            "No detail rows must exist with seeded data after 15.7 changes"
-        )
+        assert (
+            "roadmap-detail-row" not in body
+        ), "No detail rows must exist with seeded data after 15.7 changes"
