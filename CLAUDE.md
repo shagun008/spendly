@@ -279,7 +279,7 @@ When a new or updated thought appears in `user-thoughts/`, always run the full p
 | 11      | Feature Requests and Public Discovery           | ✅ Shipped  |
 | 12      | Migration to Supabase                           | ✅ Shipped  |
 | 14      | Add README File                                 | ✅ Shipped  |
-| 15      | Developer Roadmap Page                          | 🔧 In Progress |
+| 15      | Developer Roadmap Page                          | 💡 Captured |
 | 16      | Post-Review Improvement Loop                    | ✅ Shipped  |
 | 17      | User Profile Page Updates                       | ✅ Shipped  |
 | 18      | Quick Edit Expense from Profile                 | ✅ Shipped  |
