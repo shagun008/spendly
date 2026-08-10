@@ -76,6 +76,10 @@ Release sub-rows (indented with →) show individual release status.
 | 21 | Oxos Profile Page | new-feature | — | ✅ Shipped | 2 releases |
 | 21.1 | → Oxos Profile Page MVP | release | 21 | ✅ Shipped | 21.1-oxos-profile-page-mvp.md |
 | 21.2 | → Context Section with Card Flip | release | 21 | ✅ Shipped | 21.2-oxos-context-flip.md |
+| 21.3 | → Live Learnings Section | enhancement | 21 | 📋 Planned | 3 releases planned |
+| 21.3.1 | → Live Learnings from Automation Journals | release | 21.3 | 📋 Planned | — |
+| 21.3.2 | → Upvoting | release | 21.3 | 📋 Planned | — |
+| 21.3.3 | → AI Endorsement Star | release | 21.3 | 📋 Planned | — |
 | 22 | Readme Platform Revamp | new-feature | — | ✅ Shipped | 22.1-readme-platform-revamp.md |
 | 22.1 | → Readme Platform Revamp | release | 22 | ✅ Shipped | 22.1-readme-platform-revamp.md |
 | 23 | Readme Platform Revamp | new-feature | — | ✅ Shipped | 23-readme-platform-revamp.md |
