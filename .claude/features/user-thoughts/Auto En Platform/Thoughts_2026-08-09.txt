@@ -1,0 +1,129 @@
+Created: 2026-08-09 22:00 EST
+
+The Learnings section on the /platform page is currently static — it's five
+hardcoded <div class="learning-card"> blocks in templates/platform.html,
+manually transcribed from CLAUDE.md's Implementation Rules when the Oxos
+Profile Page feature (21) was built. The route (app.py) passes no data to
+the template at all.
+
+1. Objective
+The Learnings section on the /platform page should evolve from a collection of static cards into a live, continuously updated knowledge section.
+The goal is for Learnings to automatically reflect the decisions, insights, and relevant learnings generated during project implementation runs, without requiring someone to manually maintain the Learnings page.
+
+2. Source of Learnings
+Currently, the Learnings section displays a number of static cards.
+Questions to clarify (answered)
+•	Where were the existing learning cards originally derived from? — They were manually transcribed from CLAUDE.md's Implementation Rules section when feature 21 (Oxos Profile Page) was built. Before the automation folder existed, this manual CLAUDE.md-editing was the only way learnings got captured at all.
+•	What is the current source of truth for those learnings? — CLAUDE.md today; going forward, the features/automation folder.
+Proposed source of truth
+The new Learnings section should be driven by the project's features/automation folder.
+The automation folder contains artifacts generated during implementation runs, including:
+•	Decisions
+•	Permissions
+•	Implementation-specific learnings
+•	Other relevant project knowledge or metadata
+The system should use these files as the source for generating the live Learnings content.
+
+Current state / coverage gap
+The automation folder feature was only just implemented as part of release 15.8, immediately before this thought was captured — it is a stepping stone this release put in place, not a pre-existing system. As of today there is exactly one run journal in the folder: `15.8-run.md`. That's expected, not a bug: `/autom-dev` is currently the only command that writes to this folder (per its Step 2 in autom-dev.md), so only releases orchestrated through `/autom-dev` get a journal — releases built by manually chaining the individual commands (`/create-spec`, `/implement-feature`, etc., which covers most of the roadmap's history) produced no automation artifact. Any live-Learnings feature built on top of this folder will have very thin historical coverage at launch and will only get richer as more releases run through `/autom-dev`. CLAUDE.md remains the only record of pre-15.8 learnings.
+
+Security requirement
+The Learnings UI must not expose confidential information, secrets, keys, credentials, or other sensitive implementation details.
+
+3. Live Learnings Based on Implementation Runs
+Each implementation/feature run generates a new file in the automation folder.
+The file is associated with the release or implementation run for that run.
+Each new implementation can introduce:
+•	New decisions
+•	New permissions
+•	New learnings
+•	Other relevant implementation knowledge
+
+Expected behaviour
+Whenever a new implementation is completed and the automation folder is updated with a new artifact:
+1.	The new artifact should be detected.
+2.	Relevant learnings should be extracted.
+3.	The Learnings section should be updated automatically.
+4.	New learning cards should be added without requiring manual UI updates.
+5.	Existing learnings should remain available for historical reference.
+This makes Learnings a living record of the project's implementation history and accumulated knowledge.
+
+4. Learning Card Metadata
+Each learning displayed on the platform should include lightweight metadata tags.
+
+Tag 1 - Implementation / Release
+Each learning should identify the implementation from which it originated.
+The tag should contain:
+•	Release number
+•	A short implementation name or description
+Example:
+Release 24 - Auth Improvements
+The tag should be compact and easy to scan.
+ 
+Tag 2 - Type
+Depending on the information provided in the automation file - one-time / current-run / project-level / permanent policy.
+ 
+Tag 3 - Author
+Each learning should identify the person responsible for triggering the dev workflow phase.
+The author should be determined from the user logged into the application who initiated the run.
+If the dev workflow was triggered from the backend manually then the user can be Admin.
+If the learning was system generated then the user would be system.
+Example:
+By Alex
+Or
+By Admin
+By System
+This provides accountability and context around where a particular learning originated.
+ 
+Tag 4 – User Upvotes
+Each learning should have an up-arrow voting mechanism.
+The up arrow represents endorsement of the learning by the user.
+Example:
+↑ 18
+A user clicking the up arrow should increment the learning's endorsement count.
+The up arrow is preferred over a thumbs-up icon because it provides a more professional, product-oriented visual language and is consistent with ranking/endorsement systems.
+ 
+Tag 5 – AI Star
+Each learning should have an star voting mechanism.
+The star represents endorsement weight of the learning by AI.
+Example:
+* 15
+If value be generated using a formula by AI and represents that AI things. It should be based on a formula e.g. weighted averages and should be updated for all learnings after each implementation run. Looking for suggestions on this approach – how it derive the weight and ensure it updates after every release.
+The star is preferred over a thumbs-up icon because it provides a more professional, product-oriented visual language and is consistent with ranking/endorsement systems. Happy to take other suggestions if any.
+Welcome suggestions of any other tags that will be helpful, if all of these are good enough or others that may be useful but don’t want to over-crowd the tags.
+
+5. Learning Ranking
+Learnings should be sorted by the number of upvotes and number of star, with the most endorsed learnings appearing first.
+This allows the Learnings section to become self-organizing.
+Over time, the most useful or important insights should naturally rise to the top based on collective endorsement.
+
+6. Overall Experience
+The intended end state is for Learnings to function as a live, versioned project knowledge base which is referred before every implementation to ensure decisions don’t have to be repeated unless required.
+The system should provide:
+Automation artifacts → Extract relevant knowledge → Generate/update Learnings → Add metadata tags → Sort by collective user and AI endorsement
+This creates a feedback loop where every implementation contributes new knowledge, and the most valuable knowledge becomes increasingly visible.
+ 
+7. Key Requirements Summary
+Requirement	Behavior
+Source	Automation folder
+Updates	Automatically after each implementation run
+Historical data	Preserve learnings from previous releases
+Sensitive data	Never expose confidential keys, secrets, or credentials
+Implementation tag	Show release/implementation number and optionally short name
+Type tag	Show the type of learning as mentioned in the file
+Author tag	Show logged-in user who triggered the implementation
+Voting	Up-arrow only
+Vote count	Display number of endorsements
+Star	Represents AI endorsement
+Start count	Display weight of the endorsement
+Ranking	Sort descending by upvote count
+Primary goal	Create a live, self-organizing project knowledge base
+
+Product principle
+Every implementation should leave the project smarter than it was before.
+The Learnings section should capture that accumulated knowledge automatically and make the most valuable insights easy to discover.
+
+Note: there's also a small existing CSS class mismatch on this section
+(wrapper uses "learners-cards" but the stylesheet defines
+".learnings-cards") — worth fixing while touching this area, though it's
+a separate cosmetic issue from the static-to-live change.
